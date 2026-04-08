@@ -1,0 +1,81 @@
+<div class="home-container">
+  <header class="header">
+    <h1 class="main-title">Mapa de Galiza</h1>
+  </header>
+
+
+
+<div class="home-map-container">
+  <div class="map-wrapper">
+    <div id="map"></div>
+
+    <div class="opacity-card">
+      <div class="label-row">
+        <span class="material-icons" (click)="toggleHelp($event)">help_outline</span>
+        <span>HISTORIA</span>
+      </div>
+      @if(showHelp){
+      <div class="help-balloon" >
+        <p>Estás vendo as <strong>Minutas Cartográficas</strong> do IGN, debuxos feitos á man realizados entre <strong>1910 e 1970</strong>.</p>
+        <div class="balloon-arrow"></div>
+      </div>
+    }
+      <div class="slider-container">
+        <input type="range" min="0" max="1" step="0.01" [(ngModel)]="opacity" (input)="updateOpacity()" [style.--value]="(opacity * 100) + '%'">
+      </div>
+      <div class="percentage">{{ (opacity * 100).toFixed(0) }}%</div>
+    </div>
+  </div>
+
+
+  <div class="map-legend">
+    <div class="legend-item"><div class="dot marker-lugar"></div><span class="material-icons sm">castle</span><span>Lugar</span></div>
+    <div class="legend-item"><div class="dot marker-asociacion"></div><span class="material-icons sm">groups</span><span>Asociación</span></div>
+    <div class="legend-item"><div class="dot marker-evento"></div><span class="material-icons sm">theater_comedy</span><span>Evento</span></div>
+  </div>
+
+  <div class="place-card" *ngIf="selectedPlace">
+    <div class="card-header">
+      <span class="badge" [ngClass]="selectedPlace.tipo">{{ selectedPlace.tipo.toUpperCase() }}</span>
+      <button class="close-btn" (click)="selectedPlace = null">×</button>
+    </div>
+    <div class="card-body">
+      <h2>{{ selectedPlace.nome }}</h2>
+      <p class="desc">{{ selectedPlace.descripcion }}</p>
+      <div class="info-grid">
+        <div class="info-box">
+          <span class="material-icons">directions_run</span>
+          <div><strong>Bailes</strong><p>{{ selectedPlace.bailes?.join(', ') }}</p></div>
+        </div>
+        <div class="info-box">
+          <span class="material-icons">audiotrack</span>
+          <div><strong>Música</strong><p>{{ selectedPlace.cancions?.join(', ') }}</p></div>
+        </div>
+      </div>
+      <button class="explore-btn">Ver detalles</button>
+    </div>
+  </div>
+
+<div class="search-container">
+  <div class="search-box">
+    <span class="material-icons">search</span>
+    <input type="text" [(ngModel)]="searchTerm" (input)="onSearch()" placeholder="Buscar marcador...">
+  </div>
+  @if (searchResults.length >0) {
+  <ul class="search-results" >
+    @for (res of searchResults; track $index) {
+    <li  (click)="seleccionarDesdeBuscador(res)">
+      <span class="material-icons">{{ res.icono }}</span>
+      <div class="res-info">
+        <span class="res-name">{{ res.nome }}</span>
+        <span class="res-type">{{ res.tipo }}</span>
+      </div>
+    </li>
+  }
+  </ul>
+}
+</div>
+</div>
+
+
+</div>

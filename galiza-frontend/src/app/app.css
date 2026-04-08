@@ -1,0 +1,69 @@
+@import "tailwindcss";
+@plugin "daisyui";
+/* Espacio para que el menú no tape el contenido */
+main.with-menu {
+  padding-bottom: 90px;
+}
+
+/* El contenedor del menú pegado abajo */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+
+  background-color: #fbf9f4; /* Tono crema exacto de tu imagen */
+
+  display: flex;
+  justify-content: space-evenly; /* Distribuye el espacio entre botones */
+  align-items: center;
+
+  /* Bordes redondeados solo arriba */
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+
+  /* Padding interno (el bottom extra es para los iPhone con la rayita abajo) */
+  padding: 15px 5px;
+  padding-bottom: calc(15px + env(safe-area-inset-bottom));
+
+  /* Sombra sutil superior */
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.03);
+  z-index: 9999;
+}
+
+/* Los botones */
+.nav-item {
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  color: #8D8375; /* Color gris/pardo de los inactivos */
+
+  /* Tamaño fijo para crear la "píldora" perfecta al activarse */
+  width: 80px;
+  height: 60px;
+  border-radius: 30px;
+
+  transition: all 0.3s ease;
+}
+
+.nav-item .material-icons {
+  font-size: 26px;
+  margin-bottom: 4px;
+}
+
+.nav-item .label {
+  /* Tipografía Serif para que se vea igual a la foto */
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+/* --- ESTADO ACTIVO (La magia de la imagen) --- */
+.nav-item.active {
+  background-color: #fad37969; /* Fondo melocotón/amarillo pastel */
+  color: #93331d; /* Texto e icono en tono marrón rojizo */
+}

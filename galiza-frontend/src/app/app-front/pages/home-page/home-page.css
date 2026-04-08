@@ -1,0 +1,393 @@
+/* --- CONTENEDOR PRINCIPAL Y ESTRUCTURA --- */
+.home-container{
+  height: 90vh;
+  background-color: #f9f7f2;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.home-map-container {
+  flex: 1;
+  position: relative;
+  height: 90vh;
+  background-color: #f9f7f2;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  margin-top: 50px;
+}
+
+.header {
+  padding: 10px;
+  text-align: center;
+}
+
+.main-title {
+  font-family: 'Georgia', serif;
+  color: #93331d;
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+/* --- ENTORNO DEL MAPA --- */
+.map-wrapper {
+  flex: 0.75; /* Ajustado para que ocupe el espacio disponible */
+  margin: 0 15px;
+  position: relative;
+  border-radius: 25px 25px 0 0;
+  overflow: hidden;
+  border: 1px solid #ddd;
+}
+
+#map {
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+
+}
+
+/* --- CONTROL DE OPACIDAD (SLIDER) --- */
+.opacity-card {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 10px;
+  border-radius: 12px;
+  width: 115px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.slider-container input {
+  width: 100%;
+  cursor: pointer;
+  margin: 0;
+  display: block;
+
+}
+
+/* --- PERSONALIZACIÓN DEL SLIDER --- */
+.slider-container input[type="range"] {
+  -webkit-appearance: none; /* Quita el estilo por defecto de Chrome/Safari */
+  width: 100%;
+  height: 4px;
+  background: #ddd; /* Color de la barra de fondo */
+  border-radius: 5px;
+  outline: none;
+  margin: 10px 0;
+  background: linear-gradient(to right, #93331d 0%, #93331d var(--value), #ddd var(--value), #ddd 100%);
+}
+
+/* El "botón" o círculo que arrastras (Chrome, Safari, Edge, Opera) */
+.slider-container input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: #93331d;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  transition: transform 0.1s ease;
+}
+
+.slider-container input[type="range"]::-webkit-slider-thumb:active {
+  transform: scale(1.2); /* Se agranda un poco al tocarlo */
+}
+
+
+.label-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  color: #93331d;
+  font-weight: bold;
+}
+
+.percentage {
+  text-align: center;
+  font-size: 10px;
+  font-weight: bold;
+  color: #555;
+}
+
+/* --- MARCADO DINÁMICO (PINES DEL MAPA) --- */
+.marker-pin {
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  transition: width 0.2s, height 0.2s; /* Suaviza el cambio de tamaño por zoom */
+}
+
+/* Selector combinado para forzar el color en el mapa */
+.marker-pin.marker-lugar { background-color: #B34A32 !important; }
+.marker-pin.marker-asociacion { background-color: #D4A017 !important; }
+.marker-pin.marker-evento { background-color: #8C2A1C !important; }
+
+.marker-pin span {
+  transform: rotate(45deg);
+  color: white;
+}
+
+/* --- LEYENDA (DEBAJO DEL MAPA) --- */
+.map-legend {
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+  background: white;
+  margin: 0 15px 40px 15px; /* Margen inferior para el menú de la App */
+  border-radius: 0 0 25px 25px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  border-top: 1px solid #eee;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: bold;
+  color: #555;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+/* Colores de los puntos de la leyenda */
+.dot.marker-lugar { background-color: #B34A32; }
+.dot.marker-asociacion { background-color: #D4A017; }
+.dot.marker-evento { background-color: #8C2A1C; }
+
+/* --- CARD DE INFORMACIÓN (EMERGENTE) --- */
+.place-card {
+  position: fixed;
+  bottom: 110px;
+  left: 20px;
+  right: 20px;
+  background: #fbf9f4;
+  border-radius: 18px;
+  padding: 15px 20px;
+  z-index: 2000;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+  border: 1px solid #FCE3AD;
+  animation: slideUp 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Etiquetas de la Card */
+.badge {
+  font-size: 9px;
+  font-weight: bold;
+  padding: 4px 10px;
+  border-radius: 8px;
+  color: white;
+  text-transform: uppercase;
+  display: inline-block;
+  margin-bottom: 5px;
+}
+
+.badge.lugar { background: #B34A32; }
+.badge.asociacion { background: #D4A017; }
+.badge.evento { background: #8C2A1C; }
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-body h2 {
+  font-family: 'Georgia', serif;
+  font-size: 1.3rem;
+  color: #333;
+  margin: 5px 0;
+}
+
+.desc {
+  font-size: 11px;
+  color: #666;
+  line-height: 1.4;
+  margin-bottom: 12px;
+}
+
+/* Rejilla de detalles */
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.info-box {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.info-box span {
+  color: #93331d;
+  font-size: 18px;
+}
+
+.info-box strong {
+  font-size: 10px;
+  display: block;
+  color: #444;
+}
+
+.info-box p {
+  font-size: 9px;
+  margin: 0;
+  color: #777;
+  line-height: 1.2;
+}
+
+/* Botones */
+.explore-btn {
+  width: 100%;
+  background: #93331d;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.explore-btn:active {
+  background: #722615;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #ccc;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.close-btn:hover {
+  color: #93331d;
+}
+/* --- BUSCADOR ESTILO FLOTANTE PEQUEÑO --- */
+.search-container {
+  /* Controla la distancia con el mapa (arriba) y la leyenda (abajo) */
+  margin: -10px 30px 5px 30px;
+  position: relative;
+  z-index: 100;
+}
+
+.search-box {
+  background: white;
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-radius: 50px; /* Bordes muy redondeados como en tu imagen */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  border: 1px solid rgba(0,0,0,0.05);
+  gap: 10px;
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+  background: transparent;
+  color: #666;
+}
+
+.search-box span {
+  color: #93331d; /* Color del icono de la lupa */
+  font-size: 18px;
+}
+
+/* --- LISTA DE RESULTADOS (Hacia arriba para no tapar la leyenda) --- */
+.search-results {
+  position: absolute;
+  top: 105%; /* Aparece justo encima del buscador */
+  left: 0;
+  right: 0;
+  background: white;
+  border-radius: 15px;
+  list-style: none;
+  padding: 5px 0;
+  max-height: 180px;
+  overflow-y: auto;
+  box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
+  border: 1px solid #eee;
+}
+
+.search-results li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 15px;
+  border-bottom: 1px solid #f9f9f9;
+  cursor: pointer;
+}
+
+.res-name {
+  font-size: 13px;
+  font-weight: bold;
+  color: #333;
+  display: block;
+}
+
+.res-type {
+  font-size: 10px;
+  color: #999;
+  text-transform: uppercase;
+}
+/* --- ANIMACIÓN DEL BOCADILLO DE AYUDA (EXTRA) --- */
+.help-balloon {
+  position: absolute;
+  right: 125px;
+  top: 0;
+  width: 160px;
+  background: #93331d;
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 10px;
+  z-index: 2100;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.balloon-arrow {
+  position: absolute;
+  right: -8px;
+  top: 12px;
+  width: 0;
+  height: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-left: 8px solid #93331d;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateX(5px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+

@@ -1,0 +1,41 @@
+<main [class.with-menu]="showMenu">
+  <router-outlet></router-outlet>
+</main>
+@if(showMenu){
+<nav class="bottom-nav">
+
+  <a class="nav-item" routerLink="/home" routerLinkActive="active">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+      <path fill="currentColor"
+        d="m15 21l-6-2.1l-4.65 1.8q-.5.2-.925-.112T3 19.75v-14q0-.325.188-.575T3.7 4.8L9 3l6 2.1l4.65-1.8q.5-.2.925.113T21 4.25v14q0 .325-.187.575t-.513.375zm-1-2.45V6.85l-4-1.4v11.7z" />
+    </svg>
+    <span class="label">INICIO</span>
+  </a>
+
+  <a class="nav-item" routerLink="/busqueda" routerLinkActive="active">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+      <path fill="currentColor"
+        d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5A6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5S14 7.01 14 9.5S11.99 14 9.5 14" />
+    </svg>
+    <span class="label">BUSQUEDA</span>
+  </a>
+
+  <a class="nav-item" routerLink="/recomendacion" routerLinkActive="active">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+      <path fill="currentColor"
+        d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2m-2 5h-3v5.5a2.5 2.5 0 0 1-5 0a2.5 2.5 0 0 1 2.5-2.5c.57 0 1.08.19 1.5.51V5h4zM4 6H2v14c0 1.1.9 2 2 2h14v-2H4z" />
+    </svg>
+    <span class="label">LIBRARÍA</span>
+  </a>
+
+  <a class="nav-item" routerLink="/profile" routerLinkActive="active">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+      <path fill="currentColor" fill-rule="evenodd"
+        d="M8 7a4 4 0 1 1 8 0a4 4 0 0 1-8 0m0 6a5 5 0 0 0-5 5a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3a5 5 0 0 0-5-5z"
+        clip-rule="evenodd" />
+    </svg>
+    <span class="label">PERFIL</span>
+  </a>
+
+</nav>
+}
