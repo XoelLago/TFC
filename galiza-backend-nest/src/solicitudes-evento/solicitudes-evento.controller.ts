@@ -19,16 +19,16 @@ export class SolicitudesEventoController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.solicitudesEventoService.findOne(+id);
+    return this.solicitudesEventoService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateSolicitudesEventoDto: UpdateSolicitudesEventoDto) {
-    return this.solicitudesEventoService.update(+id, updateSolicitudesEventoDto);
+    return this.solicitudesEventoService.update(id, updateSolicitudesEventoDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.solicitudesEventoService.remove(+id);
+    return this.solicitudesEventoService.remove(id);
   }
 }

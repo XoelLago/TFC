@@ -19,16 +19,16 @@ export class LugaresController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.lugaresService.findOne(+id);
+    return this.lugaresService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateLugareDto: UpdateLugareDto) {
-    return this.lugaresService.update(+id, updateLugareDto);
+    return this.lugaresService.update(id, updateLugareDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.lugaresService.remove(+id);
+    return this.lugaresService.remove(id);
   }
 }

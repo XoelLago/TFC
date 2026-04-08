@@ -1,26 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { CreatePuntoDto } from './dto/create-punto.dto';
-import { UpdatePuntoDto } from './dto/update-punto.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Punto } from './entities/puntos.schema';
 
 @Injectable()
 export class PuntosService {
-  create(createPuntoDto: CreatePuntoDto) {
-    return 'This action adds a new punto';
-  }
-
-  findAll() {
-    return `This action returns all puntos`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} punto`;
-  }
-
-  update(id: number, updatePuntoDto: UpdatePuntoDto) {
-    return `This action updates a #${id} punto`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} punto`;
-  }
+  constructor(@InjectModel(Punto.name) private model: Model<Punto>) {}
+  async create(dto: any) { return new this.model(dto).save(); }
+  async findAll() { return this.model.find().populate('lugar movimientos').exec(); }
+  async findOne(id: string) { return this.model.findById(id).populate('lugar movimientos').exec(); }
+  async update(id: string, dto: any) { return this.model.findByIdAndUpdate(id, dto, { new: true }).exec(); }
+  async remove(id: string) { return this.model.findByIdAndDelete(id).exec(); }
 }

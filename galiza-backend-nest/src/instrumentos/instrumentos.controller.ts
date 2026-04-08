@@ -19,16 +19,16 @@ export class InstrumentosController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.instrumentosService.findOne(+id);
+    return this.instrumentosService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateInstrumentoDto: UpdateInstrumentoDto) {
-    return this.instrumentosService.update(+id, updateInstrumentoDto);
+    return this.instrumentosService.update(id, updateInstrumentoDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.instrumentosService.remove(+id);
+    return this.instrumentosService.remove(id);
   }
 }

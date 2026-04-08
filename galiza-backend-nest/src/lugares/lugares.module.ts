@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { LugaresService } from './lugares.service';
 import { LugaresController } from './lugares.controller';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Lugar, LugarSchema } from './lugares.schema';
+import { Lugar, LugarSchema } from './entities/lugares.schema';
 
 @Module({
   imports: [

@@ -1,26 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { CreateProvinciaDto } from './dto/create-provincia.dto';
-import { UpdateProvinciaDto } from './dto/update-provincia.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Provincia } from './entities/provincias.schema';
 
 @Injectable()
 export class ProvinciasService {
-  create(createProvinciaDto: CreateProvinciaDto) {
-    return 'This action adds a new provincia';
-  }
-
-  findAll() {
-    return `This action returns all provincias`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} provincia`;
-  }
-
-  update(id: number, updateProvinciaDto: UpdateProvinciaDto) {
-    return `This action updates a #${id} provincia`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} provincia`;
-  }
+  constructor(@InjectModel(Provincia.name) private model: Model<Provincia>) {}
+  async create(dto: any) { return new this.model(dto).save(); }
+  async findAll() { return this.model.find().exec(); }
+  async findOne(id: string) { return this.model.findById(id).exec(); }
+  async update(id: string, dto: any) { return this.model.findByIdAndUpdate(id, dto, { new: true }).exec(); }
+  async remove(id: string) { return this.model.findByIdAndDelete(id).exec(); }
 }

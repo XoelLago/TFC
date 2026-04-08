@@ -19,16 +19,16 @@ export class AsociacionesController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.asociacionesService.findOne(+id);
+    return this.asociacionesService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateAsociacioneDto: UpdateAsociacioneDto) {
-    return this.asociacionesService.update(+id, updateAsociacioneDto);
+    return this.asociacionesService.update(id, updateAsociacioneDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.asociacionesService.remove(+id);
+    return this.asociacionesService.remove(id);
   }
 }

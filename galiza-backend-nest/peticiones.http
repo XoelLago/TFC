@@ -1,0 +1,70 @@
+### 1. REGISTRAR USUARIO NORMAL
+POST http://localhost:3000/usuarios
+Content-Type: application/json
+
+{
+  "nombre": "Pepe",
+  "contrasena": "123456",
+  "rol": "USER"
+}
+
+###
+
+### 2. REGISTRAR USUARIO ADMIN
+POST http://localhost:3000/usuarios
+Content-Type: application/json
+
+{
+  "nombre": "XoelAdmin",
+  "contrasena": "admin123",
+  "rol": "admin"
+}
+
+###
+
+### 3. LOGIN CON USUARIO NORMAL (Copia el token que te devuelva)
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "nombre": "Pepe",
+  "contrasena": "123456"
+}
+
+###
+
+### 4. LOGIN CON ADMIN (Copia este otro token para probar permisos)
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "nombre": "Xoellaago",
+  "contrasena": "123456"
+}
+
+###
+
+### 5. PROBAR ACCESO (VER PROVINCIAS)
+# Esta debería funcionar con CUALQUIER token (Normal o Admin)
+GET http://localhost:3000/provincias
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OWQ2MTg3OTViMDcyMmRlNjcxZDlmOGUiLCJub21icmUiOiJQZXBlIiwicm9sIjoiVVNFUiIsImlhdCI6MTc3NTYzODcyOCwiZXhwIjoxNzc1NjQ1OTI4fQ.8PK5Ud1wxk4rRJMpyPBaZiBuKSxFAOmFnZkZpUAnhk0
+
+###
+
+### 6. PROBAR PORTERO ADMIN (CREAR PROVINCIA)
+# Si pegas aquí el token de PEPE (User), te debe dar 403 Forbidden
+# Si pegas aquí el token de XOEL (Admin), te debe dar 201 Created
+POST http://localhost:3000/provincias
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OWQ2MTVmOGUzMThhNTE1NDNiYjk5ZGQiLCJub21icmUiOiJYb2VsbGFhZ28iLCJyb2wiOiJBRE1JTiIsImlhdCI6MTc3NTYzODk2MCwiZXhwIjoxNzc1NjQ2MTYwfQ.biIrqrSyYUnLL9-Xm-L60dJ7ZtK24IJWy8HzFNqNWg0
+Content-Type: application/json
+
+{
+  "nombre": "Ourense",
+  "codigo": "OU"
+}
+
+###
+
+### 7. PROBAR BORRADO (SOLO ADMIN)
+DELETE http://localhost:3000/provincias/ID_DE_LA_PROVINCIA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OWQ2MTVmOGUzMThhNTE1NDNiYjk5ZGQiLCJub21icmUiOiJYb2VsbGFhZ28iLCJyb2wiOiJBRE1JTiIsImlhdCI6MTc3NTYzODg0NiwiZXhwIjoxNzc1NjQ2MDQ2fQ.73iXqHjry_tz7VQrkDRoYCIURqMfH2VzwoldoNEZaws

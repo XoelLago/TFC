@@ -1,26 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { CreateMovimientoDto } from './dto/create-movimiento.dto';
-import { UpdateMovimientoDto } from './dto/update-movimiento.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Movimiento } from './entities/movimiento.schema';
 
 @Injectable()
 export class MovimientosService {
-  create(createMovimientoDto: CreateMovimientoDto) {
-    return 'This action adds a new movimiento';
-  }
-
-  findAll() {
-    return `This action returns all movimientos`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} movimiento`;
-  }
-
-  update(id: number, updateMovimientoDto: UpdateMovimientoDto) {
-    return `This action updates a #${id} movimiento`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} movimiento`;
-  }
+  constructor(@InjectModel(Movimiento.name) private model: Model<Movimiento>) {}
+  async create(dto: any) { return new this.model(dto).save(); }
+  async findAll() { return this.model.find().exec(); }
+  async findOne(id: string) { return this.model.findById(id).exec(); }
+  async update(id: string, dto: any) { return this.model.findByIdAndUpdate(id, dto, { new: true }).exec(); }
+  async remove(id: string) { return this.model.findByIdAndDelete(id).exec(); }
 }

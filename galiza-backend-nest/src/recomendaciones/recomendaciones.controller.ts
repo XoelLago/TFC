@@ -19,16 +19,16 @@ export class RecomendacionesController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.recomendacionesService.findOne(+id);
+    return this.recomendacionesService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateRecomendacioneDto: UpdateRecomendacioneDto) {
-    return this.recomendacionesService.update(+id, updateRecomendacioneDto);
+    return this.recomendacionesService.update(id, updateRecomendacioneDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.recomendacionesService.remove(+id);
+    return this.recomendacionesService.remove(id);
   }
 }

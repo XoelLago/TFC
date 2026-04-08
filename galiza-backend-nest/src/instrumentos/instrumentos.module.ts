@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { InstrumentosService } from './instrumentos.service';
 import { InstrumentosController } from './instrumentos.controller';
-import { Instrumento, InstrumentoSchema } from './instrumentos.schema';
+import { Instrumento, InstrumentoSchema } from './entities/instrumentos.schema';
 import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({

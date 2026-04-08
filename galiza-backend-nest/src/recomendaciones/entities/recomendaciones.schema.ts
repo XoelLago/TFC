@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { TipoRecomendacion } from '../common/enums';
+import { TipoRecomendacion } from '../../common/enums';
 
 @Schema({ timestamps: true })
 export class Recomendacion extends Document {

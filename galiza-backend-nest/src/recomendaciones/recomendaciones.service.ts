@@ -1,26 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { CreateRecomendacioneDto } from './dto/create-recomendacione.dto';
-import { UpdateRecomendacioneDto } from './dto/update-recomendacione.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Recomendacion } from './entities/recomendaciones.schema';
 
 @Injectable()
 export class RecomendacionesService {
-  create(createRecomendacioneDto: CreateRecomendacioneDto) {
-    return 'This action adds a new recomendacione';
-  }
-
-  findAll() {
-    return `This action returns all recomendaciones`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} recomendacione`;
-  }
-
-  update(id: number, updateRecomendacioneDto: UpdateRecomendacioneDto) {
-    return `This action updates a #${id} recomendacione`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} recomendacione`;
-  }
+  constructor(@InjectModel(Recomendacion.name) private model: Model<Recomendacion>) {}
+  async create(dto: any) { return new this.model(dto).save(); }
+  async findAll() { return this.model.find().exec(); }
+  async findOne(id: string) { return this.model.findById(id).exec(); }
+  async update(id: string, dto: any) { return this.model.findByIdAndUpdate(id, dto, { new: true }).exec(); }
+  async remove(id: string) { return this.model.findByIdAndDelete(id).exec(); }
 }

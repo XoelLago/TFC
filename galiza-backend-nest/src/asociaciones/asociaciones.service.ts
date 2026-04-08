@@ -1,26 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAsociacioneDto } from './dto/create-asociacione.dto';
-import { UpdateAsociacioneDto } from './dto/update-asociacione.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Asociacion } from './asociaciones.schema';
 
 @Injectable()
 export class AsociacionesService {
-  create(createAsociacioneDto: CreateAsociacioneDto) {
-    return 'This action adds a new asociacione';
-  }
-
-  findAll() {
-    return `This action returns all asociaciones`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} asociacione`;
-  }
-
-  update(id: number, updateAsociacioneDto: UpdateAsociacioneDto) {
-    return `This action updates a #${id} asociacione`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} asociacione`;
-  }
+  constructor(@InjectModel(Asociacion.name) private model: Model<Asociacion>) {}
+  async create(dto: any) { return new this.model(dto).save(); }
+  async findAll() { return this.model.find().populate('lugar').exec(); }
+  async findOne(id: string) { return this.model.findById(id).populate('lugar').exec(); }
+  async update(id: string, dto: any) { return this.model.findByIdAndUpdate(id, dto, { new: true }).exec(); }
+  async remove(id: string) { return this.model.findByIdAndDelete(id).exec(); }
 }

@@ -1,26 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { CreateLugareDto } from './dto/create-lugare.dto';
-import { UpdateLugareDto } from './dto/update-lugare.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Lugar } from './entities/lugares.schema';
 
 @Injectable()
 export class LugaresService {
-  create(createLugareDto: CreateLugareDto) {
-    return 'This action adds a new lugare';
-  }
-
-  findAll() {
-    return `This action returns all lugares`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} lugare`;
-  }
-
-  update(id: number, updateLugareDto: UpdateLugareDto) {
-    return `This action updates a #${id} lugare`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} lugare`;
-  }
+  constructor(@InjectModel(Lugar.name) private model: Model<Lugar>) {}
+  async create(dto: any) { return new this.model(dto).save(); }
+  async findAll() { return this.model.find().populate('provincia').exec(); }
+  async findOne(id: string) { return this.model.findById(id).populate('provincia').exec(); }
+  async update(id: string, dto: any) { return this.model.findByIdAndUpdate(id, dto, { new: true }).exec(); }
+  async remove(id: string) { return this.model.findByIdAndDelete(id).exec(); }
 }

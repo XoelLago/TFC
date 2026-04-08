@@ -13,6 +13,7 @@ import { RecomendacionesModule } from './recomendaciones/recomendaciones.module'
 import { EventosModule } from './eventos/eventos.module';
 import { SolicitudesEventoModule } from './solicitudes-evento/solicitudes-evento.module';
 import { UsuariosModule } from './usuarios/usuarios.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import { UsuariosModule } from './usuarios/usuarios.module';
     
     // 2. Conexión asíncrona (Espera a que se cargue el .env)
     MongooseModule.forRootAsync({
-      imports: [ConfigModule],
+      imports: [ConfigModule,AuthModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         uri: configService.get<string>('MONGO_URI'),

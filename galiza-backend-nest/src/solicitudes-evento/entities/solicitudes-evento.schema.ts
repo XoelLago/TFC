@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
-import { EstadoSolicitud } from '../common/enums';
+import { EstadoSolicitud } from '../../common/enums';
+
 
 @Schema({ timestamps: true })
 export class SolicitudEvento extends Document {

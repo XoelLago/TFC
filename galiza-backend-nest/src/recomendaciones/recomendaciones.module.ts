@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { RecomendacionesService } from './recomendaciones.service';
 import { RecomendacionesController } from './recomendaciones.controller';
-import { Recomendacion, RecomendacionSchema } from './recomendaciones.schema';
 import { MongooseModule } from '@nestjs/mongoose';
+import { Recomendacion, RecomendacionSchema } from './entities/recomendaciones.schema';
 
 @Module({
   imports: [

@@ -1,26 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { CreateBaileDto } from './dto/create-baile.dto';
-import { UpdateBaileDto } from './dto/update-baile.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Baile } from './entities/bailes.schema';
 
 @Injectable()
 export class BailesService {
-  create(createBaileDto: CreateBaileDto) {
-    return 'This action adds a new baile';
-  }
-
-  findAll() {
-    return `This action returns all bailes`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} baile`;
-  }
-
-  update(id: number, updateBaileDto: UpdateBaileDto) {
-    return `This action updates a #${id} baile`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} baile`;
-  }
+  constructor(@InjectModel(Baile.name) private model: Model<Baile>) {}
+  async create(dto: any) { return new this.model(dto).save(); }
+  async findAll() { return this.model.find().populate('provincia lugares instrumentos').exec(); }
+  async findOne(id: string) { return this.model.findById(id).populate('provincia lugares instrumentos').exec(); }
+  async update(id: string, dto: any) { return this.model.findByIdAndUpdate(id, dto, { new: true }).exec(); }
+  async remove(id: string) { return this.model.findByIdAndDelete(id).exec(); }
 }

@@ -1,26 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { CreateSolicitudesEventoDto } from './dto/create-solicitudes-evento.dto';
-import { UpdateSolicitudesEventoDto } from './dto/update-solicitudes-evento.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { SolicitudEvento } from './entities/solicitudes-evento.schema';
 
 @Injectable()
 export class SolicitudesEventoService {
-  create(createSolicitudesEventoDto: CreateSolicitudesEventoDto) {
-    return 'This action adds a new solicitudesEvento';
-  }
-
-  findAll() {
-    return `This action returns all solicitudesEvento`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} solicitudesEvento`;
-  }
-
-  update(id: number, updateSolicitudesEventoDto: UpdateSolicitudesEventoDto) {
-    return `This action updates a #${id} solicitudesEvento`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} solicitudesEvento`;
-  }
+  constructor(@InjectModel(SolicitudEvento.name) private model: Model<SolicitudEvento>) {}
+  async create(dto: any) { return new this.model(dto).save(); }
+  async findAll() { return this.model.find().populate('lugar usuario').exec(); }
+  async findOne(id: string) { return this.model.findById(id).populate('lugar usuario').exec(); }
+  async update(id: string, dto: any) { return this.model.findByIdAndUpdate(id, dto, { new: true }).exec(); }
+  async remove(id: string) { return this.model.findByIdAndDelete(id).exec(); }
 }

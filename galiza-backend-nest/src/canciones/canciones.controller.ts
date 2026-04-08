@@ -19,16 +19,16 @@ export class CancionesController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.cancionesService.findOne(+id);
+    return this.cancionesService.findOne( id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCancioneDto: UpdateCancioneDto) {
-    return this.cancionesService.update(+id, updateCancioneDto);
+    return this.cancionesService.update(id, updateCancioneDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.cancionesService.remove(+id);
+    return this.cancionesService.remove(id);
   }
 }

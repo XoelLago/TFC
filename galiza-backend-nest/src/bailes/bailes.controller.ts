@@ -19,16 +19,16 @@ export class BailesController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.bailesService.findOne(+id);
+    return this.bailesService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateBaileDto: UpdateBaileDto) {
-    return this.bailesService.update(+id, updateBaileDto);
+    return this.bailesService.update(id, updateBaileDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.bailesService.remove(+id);
+    return this.bailesService.remove( id);
   }
 }
