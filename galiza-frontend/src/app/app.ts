@@ -12,15 +12,17 @@ export class App {
   protected readonly title = signal('tfcApp');
 
 showMenu = false;
+constructor(private router: Router) {
+  this.router.events.pipe(
+    filter(event => event instanceof NavigationEnd)
+  ).subscribe((event: any) => {
+    const url = event.urlAfterRedirects;
 
-  constructor(private router: Router) {
-    // Escuchamos los cambios de ruta
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe((event: any) => {
-      this.showMenu = !event.urlAfterRedirects.includes('/login');
-    });
-  }
+    // El menú solo se muestra si NO es login Y NO es registro
+    this.showMenu = !url.includes('/login') && !url.includes('/registro');
 
+    console.log('¿Mostrar menú?', this.showMenu); // Para que lo veas en consola
+  });
+}
 
 }

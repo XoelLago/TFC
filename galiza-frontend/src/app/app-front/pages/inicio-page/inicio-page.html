@@ -21,7 +21,7 @@
         <label>NOMBRE DE USUARIO</label>
         <div class="input-container">
           <span class="material-symbols-outlined icon-left">person</span>
-          <input type="text" placeholder="ej. dancer_ritual" [(ngModel)]="nombre" name="nombre" required>
+          <input type="text" placeholder="ej. dancer_ritual" [(ngModel)]="credenciales.nombre" name="nombre" required>
         </div>
       </div>
 
@@ -29,7 +29,8 @@
         <label>CONTRASEÑA</label>
         <div class="input-container">
           <span class="material-symbols-outlined icon-left">lock</span>
-          <input type="password" placeholder="••••••••" [(ngModel)]="contrasena" name="contrasena" required>
+          <input type="password" placeholder="••••••••" [(ngModel)]="credenciales.contrasena" name="contrasena"
+            required>
           <span class="material-symbols-outlined icon-right">visibility</span>
         </div>
       </div>
@@ -41,15 +42,12 @@
         <a href="#" class="forgot-link">¿Olvidaste tu contraseña?</a>
       </div>
       <div class="footer">
-        <button type="submit" class="btn-submit">
+        <button type="submit" class="btn-submit" [disabled]="loading">
           @if(!loading){
           <span>LOG IN</span>
           }
           @if(loading){
-          <button class="btn">
-            <span class="loading loading-spinner"></span>
-            cargando...
-          </button>
+          <span>Cargando...</span>
           }
         </button>
         @if(errorMsg){
@@ -58,7 +56,7 @@
         </p>
         }
         <p class="footer-text">
-          ¿No tienes una cuenta? <a href="#" class="register-link">Regístrate</a>
+          ¿No tienes una cuenta? <a routerLink="/registro" class="register-link">Regístrate</a>
         </p>
       </div>
     </form>

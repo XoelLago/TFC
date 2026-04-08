@@ -6,23 +6,25 @@ import { isPlatformBrowser } from '@angular/common';
 export class AuthGuard implements CanActivate {
   constructor(
     private router: Router,
-    @Inject(PLATFORM_ID) private platformId: Object // Inyectamos el ID de plataforma
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   canActivate(): boolean | UrlTree {
-    // 1. Verificamos si estamos en el navegador
+    // Verificamos si estamos en el navegador
     if (isPlatformBrowser(this.platformId)) {
-      const token = localStorage.getItem('token');
+
+      // CAMBIO CLAVE: Ahora buscamos 'access_token'
+      const token = localStorage.getItem('access_token');
+
       if (token) {
-        return true;
+        return true; // Hay token, ¡pasa al Home!
       }
-    } else {
-      // 2. Si estamos en el servidor, dejamos pasar "falsamente"
-      // para que el cliente lo verifique después.
-      return true;
+
+      // No hay token, te mando al login
+      return this.router.parseUrl('/login');
     }
 
-    // 3. Si llega aquí es que está en el navegador y NO hay token
-    return this.router.parseUrl('/login');
+    // Si es el servidor (SSR), dejamos pasar para que el navegador decida luego
+    return true;
   }
 }

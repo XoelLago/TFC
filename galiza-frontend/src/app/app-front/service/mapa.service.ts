@@ -15,7 +15,7 @@ export class MapaService {
     if (!termino.trim()) return of([]);
 
     const resultado = this.data.filter(place =>
-      place.nombre.toLowerCase().includes(termino.toLowerCase()) ||
+      place.nome.toLowerCase().includes(termino.toLowerCase()) ||
       place.tipo.toLowerCase().includes(termino.toLowerCase())
     );
 

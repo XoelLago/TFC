@@ -1,1 +1,186 @@
-<p>profile-page works!</p>,
+<div class="main-page">
+
+  <section class="hero-section">
+    <div class="overlay">
+      <div class="header-content">
+        <span class="brand-tagline">Centro de Perfil</span>
+        <h1 class="logo-title">RITUAL & RHYTHM</h1>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section">
+
+    <div class="profile-header-top">
+      <div class="icon-badge">
+        <span class="material-icons" *ngIf="seccionActual === 'principal'">person</span>
+        <span class="material-icons" *ngIf="seccionActual === 'cuenta'">badge</span>
+        <span class="material-icons" *ngIf="seccionActual === 'seguridad'">lock</span>
+        <span class="material-icons" *ngIf="['admin', 'admin-usuarios', 'admin-eventos'].includes(seccionActual)">admin_panel_settings</span>
+      </div>
+
+      <h2 class="form-title">
+        {{
+          seccionActual === 'principal'
+          ? (usuario?.nombre || nombreDeRespaldo)
+          : (seccionActual === 'cuenta' ? 'Mi Cuenta' :
+             seccionActual === 'seguridad' ? 'Seguridad' : 'Administración')
+        }}
+      </h2>
+
+      <p class="form-subtitle">
+        {{
+          seccionActual.includes('admin')
+          ? 'Panel de control del sistema'
+          : (seccionActual === 'principal' ? 'Dancer & Storyteller' : 'Gestiona tus datos personales')
+        }}
+      </p>
+    </div>
+
+    <div class="settings-wrapper" [ngSwitch]="seccionActual">
+
+      <div *ngSwitchCase="'principal'" class="menu-layout menu-fade">
+        <div class="spacer"></div>
+
+        <div class="options-bottom">
+          <button class="settings-btn" (click)="cambiarSeccion('cuenta')">
+            <span class="material-icons icon-left">settings</span>
+            Mi Cuenta
+            <span class="material-icons icon-right">chevron_right</span>
+          </button>
+
+          <button class="settings-btn" (click)="cambiarSeccion('seguridad')">
+            <span class="material-icons icon-left">verified_user</span>
+            Seguridad
+            <span class="material-icons icon-right">chevron_right</span>
+          </button>
+
+          <button class="settings-btn admin-highlight"
+                  (click)="cambiarSeccion('admin')"
+                  *ngIf="usuario.rol?.toUpperCase() === 'ADMIN'">
+            <span class="material-icons icon-left" style="color: #d4af37;">admin_panel_settings</span>
+            Administrar
+            <span class="material-icons icon-right">chevron_right</span>
+          </button>
+
+          <button class="settings-btn logout-item-btn" (click)="onLogout()">
+            <span class="material-icons icon-left">logout</span>
+            Cerrar Sesión
+          </button>
+        </div>
+      </div>
+
+      <div *ngSwitchCase="'admin'" class="menu-layout menu-fade">
+        <div class="spacer"></div>
+        <div class="options-bottom">
+          <button class="settings-btn back-btn" (click)="volver()">
+            <span class="material-icons icon-left">arrow_back</span>
+            Volver al menú
+          </button>
+
+          <button class="settings-btn" (click)="cambiarSeccion('admin-usuarios')">
+            <span class="material-icons icon-left">group</span>
+            Gestionar Usuarios
+            <span class="material-icons icon-right">chevron_right</span>
+          </button>
+
+          <button class="settings-btn" (click)="cambiarSeccion('admin-eventos')">
+            <span class="material-icons icon-left">event</span>
+            Gestionar Eventos
+            <span class="material-icons icon-right">chevron_right</span>
+          </button>
+        </div>
+      </div>
+
+      <div *ngSwitchCase="'admin-usuarios'" class="menu-layout menu-fade">
+        <div class="spacer"></div>
+        <div class="options-bottom">
+          <button class="settings-btn back-btn" (click)="cambiarSeccion('admin')">
+            <span class="material-icons icon-left">arrow_back</span>
+            Volver a Admin
+          </button>
+
+          <div class="info-group">
+            <label>BASE DE DATOS DE USUARIOS</label>
+            <div class="static-data">La lista está actualmente vacía.</div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngSwitchCase="'admin-eventos'" class="menu-layout menu-fade">
+        <div class="spacer"></div>
+        <div class="options-bottom">
+          <button class="settings-btn back-btn" (click)="cambiarSeccion('admin')">
+            <span class="material-icons icon-left">arrow_back</span>
+            Volver a Admin
+          </button>
+
+          <div class="info-group">
+            <label>PRÓXIMOS EVENTOS</label>
+            <div class="static-data">No hay eventos registrados.</div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngSwitchCase="'cuenta'" class="menu-layout menu-fade">
+        <div class="spacer"></div>
+
+        <div class="options-bottom">
+          <button class="settings-btn back-btn" (click)="volver()">
+            <span class="material-icons icon-left">arrow_back</span>
+            Volver al menú
+          </button>
+
+          <div class="login-form">
+            <div class="form-group">
+              <label>NOMBRE DE USUARIO</label>
+              <div class="input-container">
+                <span class="material-icons" style="color: #93331d; font-size: 1.2rem;">edit</span>
+                <input
+                  type="text"
+                  [(ngModel)]="usuarioEditado.nombre"
+                  placeholder="Introduce tu nuevo nombre..."
+                >
+              </div>
+            </div>
+          </div>
+
+          <button
+            class="settings-btn logout-item-btn"
+            (click)="actualizarNombre()"
+            [disabled]="cargando || !usuarioEditado.nombre"
+          >
+            <span class="material-icons icon-left">
+              {{ cargando ? 'sync' : 'save' }}
+            </span>
+            {{ cargando ? 'Guardando...' : 'Confirmar Cambios' }}
+          </button>
+        </div>
+      </div>
+
+      <div *ngSwitchCase="'seguridad'" class="menu-layout menu-fade">
+        <div class="spacer"></div>
+
+        <div class="options-bottom">
+          <button class="settings-btn back-btn" (click)="volver()">
+            <span class="material-icons icon-left">arrow_back</span>
+            Volver al menú
+          </button>
+
+          <div class="info-group">
+            <label>CONTRASEÑA</label>
+            <div class="static-data">••••••••••••</div>
+          </div>
+
+          <button class="settings-btn">
+            <span class="material-icons icon-left">key</span>
+            Cambiar Contraseña
+          </button>
+        </div>
+      </div>
+
+    </div> <div class="footer">
+      <p class="form-subtitle">V2.4.0 • Ritual & Rhythm</p>
+    </div>
+  </section>
+</div>
