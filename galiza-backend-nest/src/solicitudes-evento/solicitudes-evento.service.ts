@@ -1,14 +1,34 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { SolicitudEvento } from './entities/solicitudes-evento.schema';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { SolicitudEvento } from './entities/solicitudes-evento.entity';
 
 @Injectable()
 export class SolicitudesEventoService {
-  constructor(@InjectModel(SolicitudEvento.name) private model: Model<SolicitudEvento>) {}
-  async create(dto: any) { return new this.model(dto).save(); }
-  async findAll() { return this.model.find().populate('lugar usuario').exec(); }
-  async findOne(id: string) { return this.model.findById(id).populate('lugar usuario').exec(); }
-  async update(id: string, dto: any) { return this.model.findByIdAndUpdate(id, dto, { new: true }).exec(); }
-  async remove(id: string) { return this.model.findByIdAndDelete(id).exec(); }
+  constructor(
+    @InjectRepository(SolicitudEvento)
+    private readonly repository: Repository<SolicitudEvento>,
+  ) {}
+
+  async create(dto: any) {
+    const nuevaSolicitud = this.repository.create(dto);
+    return await this.repository.save(nuevaSolicitud);
+  }
+
+  async findAll() {
+    return await this.repository.find();
+  }
+
+  async findOne(id: number) { // MySQL usa IDs numéricos
+    return await this.repository.findOneBy({ id });
+  }
+
+  async update(id: number, dto: any) {
+    await this.repository.update(id, dto);
+    return this.findOne(id);
+  }
+
+  async remove(id: number) {
+    return await this.repository.delete(id);
+  }
 }

@@ -1,15 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
 import { LugaresService } from './lugares.service';
-import { CreateLugareDto } from './dto/create-lugare.dto';
-import { UpdateLugareDto } from './dto/update-lugare.dto';
 
 @Controller('lugares')
 export class LugaresController {
   constructor(private readonly lugaresService: LugaresService) {}
 
   @Post()
-  create(@Body() createLugareDto: CreateLugareDto) {
-    return this.lugaresService.create(createLugareDto);
+  create(@Body() createDto: any) {
+    return this.lugaresService.create(createDto);
   }
 
   @Get()
@@ -18,17 +16,17 @@ export class LugaresController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.lugaresService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateLugareDto: UpdateLugareDto) {
-    return this.lugaresService.update(id, updateLugareDto);
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateDto: any) {
+    return this.lugaresService.update(id, updateDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: number) {
     return this.lugaresService.remove(id);
   }
 }

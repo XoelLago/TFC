@@ -1,15 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
 import { InstrumentosService } from './instrumentos.service';
-import { CreateInstrumentoDto } from './dto/create-instrumento.dto';
-import { UpdateInstrumentoDto } from './dto/update-instrumento.dto';
 
 @Controller('instrumentos')
 export class InstrumentosController {
   constructor(private readonly instrumentosService: InstrumentosService) {}
 
   @Post()
-  create(@Body() createInstrumentoDto: CreateInstrumentoDto) {
-    return this.instrumentosService.create(createInstrumentoDto);
+  create(@Body() createDto: any) {
+    return this.instrumentosService.create(createDto);
   }
 
   @Get()
@@ -18,17 +16,17 @@ export class InstrumentosController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.instrumentosService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateInstrumentoDto: UpdateInstrumentoDto) {
-    return this.instrumentosService.update(id, updateInstrumentoDto);
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateDto: any) {
+    return this.instrumentosService.update(id, updateDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: number) {
     return this.instrumentosService.remove(id);
   }
 }

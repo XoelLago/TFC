@@ -1,15 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common'; // <-- Asegúrate de importar ParseIntPipe
 import { SolicitudesEventoService } from './solicitudes-evento.service';
-import { CreateSolicitudesEventoDto } from './dto/create-solicitudes-evento.dto';
-import { UpdateSolicitudesEventoDto } from './dto/update-solicitudes-evento.dto';
 
 @Controller('solicitudes-evento')
 export class SolicitudesEventoController {
   constructor(private readonly solicitudesEventoService: SolicitudesEventoService) {}
 
   @Post()
-  create(@Body() createSolicitudesEventoDto: CreateSolicitudesEventoDto) {
-    return this.solicitudesEventoService.create(createSolicitudesEventoDto);
+  create(@Body() createDto: any) {
+    return this.solicitudesEventoService.create(createDto);
   }
 
   @Get()
@@ -17,18 +15,19 @@ export class SolicitudesEventoController {
     return this.solicitudesEventoService.findAll();
   }
 
+  // AQUÍ ESTÁ EL TRUCO: Añadir ParseIntPipe en el @Param
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.solicitudesEventoService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSolicitudesEventoDto: UpdateSolicitudesEventoDto) {
-    return this.solicitudesEventoService.update(id, updateSolicitudesEventoDto);
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateDto: any) {
+    return this.solicitudesEventoService.update(id, updateDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: number) {
     return this.solicitudesEventoService.remove(id);
   }
 }

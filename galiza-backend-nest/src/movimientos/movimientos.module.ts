@@ -1,13 +1,11 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { MovimientosService } from './movimientos.service';
 import { MovimientosController } from './movimientos.controller';
-import { MongooseModule } from '@nestjs/mongoose';
-import { Movimiento, MovimientoSchema } from './entities/movimiento.schema';
+import { Movimiento } from './entities/movimiento.entity';
 
 @Module({
-  imports: [
-  MongooseModule.forFeature([{ name: Movimiento.name, schema: MovimientoSchema }])
-],
+  imports: [TypeOrmModule.forFeature([Movimiento])],
   controllers: [MovimientosController],
   providers: [MovimientosService],
 })

@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, ChangeDetectorRef, OnInit } from "@angular/core"; // 1. Añadimos ChangeDetectorRef
+import { Component, ChangeDetectorRef, OnInit } from "@angular/core";
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from "@angular/router";
 import { FrontUserService } from "../../service/front-user.service";
@@ -19,39 +19,46 @@ export class InicioPage implements OnInit {
 
   errorMsg = '';
   loading = false;
+  showPassword = false; // Variable para controlar la visibilidad de la contraseña
 
   constructor(
     private frontUserService: FrontUserService,
     private router: Router,
-    private cdr: ChangeDetectorRef // 2. Inyectamos el detector de cambios
+    private cdr: ChangeDetectorRef // Inyectamos el detector de cambios
   ) {}
 
   ngOnInit() {
+    // Si ya está logueado, lo mandamos al home directamente
     if (this.frontUserService.isLoggedIn()) {
       this.router.navigate(['/home']);
     }
   }
 
   onLogin() {
-    this.loading = true;
-    this.errorMsg = '';
+  if (this.loading) return; // Evita múltiples clics si ya está cargando
 
-    this.frontUserService.login(this.credenciales).subscribe({
-      next: (res) => {
-        this.loading = false;
-        this.router.navigate(['/home']);
-        // No hace falta forzar cambios aquí porque la navegación ya lo hace
-      },
-      error: (err) => {
-        this.loading = false;
-        this.errorMsg = 'Usuario o contraseña incorrectos';
-        console.error('Error en login:', err);
+  this.loading = true;
+  this.errorMsg = '';
 
-        // 3. ¡ESTO ES LO IMPORTANTE!
-        // Forzamos a Angular a que actualice la vista (el @if) ahora mismo.
-        this.cdr.detectChanges();
-      }
-    });
+  this.frontUserService.login(this.credenciales).subscribe({
+    next: (res) => {
+      this.loading = false;
+      // Navegamos directamente. El FrontUserService ya se encargó de guardar token y user.
+      this.router.navigate(['/home']);
+    },
+    error: (err) => {
+      this.loading = false;
+      this.errorMsg = 'Usuario o contraseña incorrectos';
+
+      // Aseguramos que el mensaje de error se muestre inmediatamente
+      this.cdr.detectChanges();
+    }
+  });
+}
+
+  // Función para alternar ver/ocultar contraseña
+  togglePassword() {
+    this.showPassword = !this.showPassword;
   }
 
   logout() {

@@ -1,14 +1,34 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { Instrumento } from './entities/instrumentos.schema';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Instrumento } from './entities/instrumento.entity';
 
 @Injectable()
 export class InstrumentosService {
-  constructor(@InjectModel(Instrumento.name) private model: Model<Instrumento>) {}
-  async create(dto: any) { return new this.model(dto).save(); }
-  async findAll() { return this.model.find().exec(); }
-  async findOne(id: string) { return this.model.findById(id).exec(); }
-  async update(id: string, dto: any) { return this.model.findByIdAndUpdate(id, dto, { new: true }).exec(); }
-  async remove(id: string) { return this.model.findByIdAndDelete(id).exec(); }
+  constructor(
+    @InjectRepository(Instrumento)
+    private readonly repository: Repository<Instrumento>,
+  ) {}
+
+  async create(dto: any) {
+    const nuevo = this.repository.create(dto);
+    return await this.repository.save(nuevo);
+  }
+
+  async findAll() {
+    return await this.repository.find();
+  }
+
+  async findOne(id: number) {
+    return await this.repository.findOneBy({ id });
+  }
+
+  async update(id: number, dto: any) {
+    await this.repository.update(id, dto);
+    return this.findOne(id);
+  }
+
+  async remove(id: number) {
+    return await this.repository.delete(id);
+  }
 }

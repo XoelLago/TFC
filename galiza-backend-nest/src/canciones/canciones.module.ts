@@ -1,13 +1,11 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { CancionesService } from './canciones.service';
 import { CancionesController } from './canciones.controller';
-import { Cancion, CancionSchema } from './entities/canciones.schema';
-import { MongooseModule } from '@nestjs/mongoose';
+import { Cancion } from './entities/cancione.entity';
 
 @Module({
-  imports: [
-  MongooseModule.forFeature([{ name: Cancion.name, schema: CancionSchema }])
-],
+  imports: [TypeOrmModule.forFeature([Cancion])],
   controllers: [CancionesController],
   providers: [CancionesService],
 })

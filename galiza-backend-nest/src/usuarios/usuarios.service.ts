@@ -4,104 +4,125 @@ import {
   InternalServerErrorException, 
   NotFoundException 
 } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
-import { UpdateUsuarioDto } from './dto/update-usuario.dto';
-import { Usuario } from './entities/usuarios.schema';
+import { Usuario } from './entities/usuario.entity';
+import { UpdateUsuarioDto } from './dto/update-usuarios.dto';
+import { Rol } from '../common/enums'; // Asegúrate de que la ruta sea correcta
 
 @Injectable()
 export class UsuariosService {
   constructor(
-    @InjectModel(Usuario.name) private usuarioModel: Model<Usuario>,
+    @InjectRepository(Usuario)
+    private readonly usuarioRepository: Repository<Usuario>,
   ) {}
 
   /**
    * CREAR USUARIO (Registro público)
-   * Encripta la contraseña y fuerza el rol 'user' por defecto.
+   * Nota: Forzamos el rol a USER para evitar que alguien se registre como ADMIN.
    */
- async create(createUsuarioDto: CreateUsuarioDto): Promise<Usuario> {
-  const { nombre, contrasena } = createUsuarioDto;
-  
-  // LOG 1: Ver qué llega del Front
-  console.log('Intentando registrar a:', nombre);
+  async create(createUsuarioDto: CreateUsuarioDto): Promise<Usuario> {
+    const { nombre, contrasena } = createUsuarioDto;
 
-  try {
-    const salt = await bcrypt.genSalt(10);
-    const hashedContrasena = await bcrypt.hash(contrasena, salt);
+    try {
+      // 1. Encriptación
+      const salt = await bcrypt.genSalt(10);
+      const hashedContrasena = await bcrypt.hash(contrasena, salt);
 
-    const nuevoUsuario = new this.usuarioModel({
-      nombre,
-      contrasena: hashedContrasena,
-      rol: createUsuarioDto.rol || 'USER',
-    });
+      // 2. Creación de instancia
+      // Sobrescribimos el rol a 'USER' explícitamente por seguridad
+      const nuevoUsuario = this.usuarioRepository.create({
+        ...createUsuarioDto,
+        contrasena: hashedContrasena,
+        rol: Rol.USER, // <-- Aquí forzamos que sea USER
+      });
 
-    const guardado = await nuevoUsuario.save();
-    console.log('USUARIO GUARDADO OK:', guardado.nombre);
-    return guardado;
-  } catch (error) {
-    // LOG 2: Ver el error real de MongoDB
-    console.error('ERROR REAL DE MONGO:', error);
-    
-    if (error && typeof error === 'object' && 'code' in error && error.code === 11000) {
-      throw new ConflictException('El nombre de usuario ya existe');
+      // 3. Guardado en DB
+      return await this.usuarioRepository.save(nuevoUsuario);
+
+    } catch (error) {
+      // Manejo de errores de duplicado en MySQL
+      if (typeof error === 'object' && error !== null) {
+        const err = error as { code?: string; errno?: number };
+        if (err.code === 'ER_DUP_ENTRY' || err.errno === 1062) {
+          throw new ConflictException('El nombre de usuario ya existe');
+        }
+      }
+      throw new InternalServerErrorException('Error en el servidor de base de datos');
     }
-    throw new InternalServerErrorException('Error en el servidor');
   }
-}
 
   /**
    * BUSCAR PARA LOGIN (AuthService)
-   * El select('+contrasena') es CLAVE porque en el Schema pusimos select: false
    */
   async findByNombreWithPassword(nombre: string): Promise<Usuario | null> {
-    return this.usuarioModel
-      .findOne({ nombre })
-      .select('+contrasena') // Forzamos que traiga la contraseña para comparar
-      .exec();
+    try {
+      return await this.usuarioRepository.findOne({
+        where: { nombre },
+        select: ['id', 'nombre', 'contrasena', 'rol'] 
+      });
+    } catch (error) {
+      console.error('Error de conexión con la base de datos:', error);
+      throw error;
+    }
   }
 
   /**
    * OBTENER TODOS
    */
   async findAll(): Promise<Usuario[]> {
-    return this.usuarioModel.find().exec();
+    return await this.usuarioRepository.find();
   }
 
   /**
    * BUSCAR POR ID
    */
-  async findOne(id: string): Promise<Usuario> {
-    const usuario = await this.usuarioModel.findById(id).exec();
+  async findOne(id: number): Promise<Usuario> {
+    const usuario = await this.usuarioRepository.findOneBy({ id });
     if (!usuario) throw new NotFoundException('Usuario no encontrado');
     return usuario;
   }
 
   /**
-   * ACTUALIZAR (UsuariosController)
+   * ACTUALIZAR
+   * Aquí el Admin sí podría cambiar el rol si quisiera
    */
-  async update(id: string, updateUsuarioDto: UpdateUsuarioDto): Promise<Usuario> {
-    // Si se actualiza la contraseña, hay que volver a encriptarla
+  async update(id: number, updateUsuarioDto: UpdateUsuarioDto): Promise<Usuario> {
     if (updateUsuarioDto.contrasena) {
       const salt = await bcrypt.genSalt(10);
       updateUsuarioDto.contrasena = await bcrypt.hash(updateUsuarioDto.contrasena, salt);
     }
 
-    const usuarioActualizado = await this.usuarioModel
-      .findByIdAndUpdate(id, updateUsuarioDto, { new: true })
-      .exec();
+    const resultado = await this.usuarioRepository.update(id, updateUsuarioDto);
+    
+    if (resultado.affected === 0) {
+      throw new NotFoundException('No se pudo encontrar el usuario a actualizar');
+    }
 
-    if (!usuarioActualizado) throw new NotFoundException('No se pudo encontrar el usuario a actualizar');
-    return usuarioActualizado;
+    return this.findOne(id);
   }
 
+  // Añade este método a tu UsuariosService
+async ascender(id: number): Promise<Usuario> {
+  const usuario = await this.findOne(id);
+
+  usuario.rol = Rol.ADMIN; 
+
+  return await this.usuarioRepository.save(usuario);
+}
+
   /**
-   * ELIMINAR (UsuariosController)
+   * ELIMINAR
    */
-  async remove(id: string): Promise<{ deleted: boolean }> {
-    const resultado = await this.usuarioModel.findByIdAndDelete(id).exec();
-    if (!resultado) throw new NotFoundException('El usuario no existe');
+  async remove(id: number): Promise<{ deleted: boolean }> {
+    const resultado = await this.usuarioRepository.delete(id);
+    
+    if (resultado.affected === 0) {
+      throw new NotFoundException('El usuario no existe');
+    }
+    
     return { deleted: true };
   }
 }

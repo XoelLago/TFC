@@ -4,12 +4,11 @@
       <div class="icon-badge">
         <span class="material-symbols-outlined">person_add</span>
       </div>
-
       <h2 class="form-title">Únete a Ritual & Rhythm</h2>
       <p class="form-subtitle">Crea tu cuenta para empezar tu viaje cultural.</p>
     </div>
 
-    <form class="login-form" (submit)="onRegistrar()">
+    <form class="login-form" (ngSubmit)="onRegistrar()">
       <div class="form-group">
         <label>NOMBRE DE USUARIO</label>
         <div class="input-container">
@@ -23,13 +22,25 @@
         <label>CONTRASEÑA</label>
         <div class="input-container">
           <span class="material-symbols-outlined icon-left">lock</span>
-          <input type="password" placeholder="Contraseña" [(ngModel)]="usuario.contrasena" name="contrasena" required>
-          <span class="material-symbols-outlined icon-right">visibility</span>
+          <input [type]="showPassword ? 'text' : 'password'" placeholder="Contraseña" [(ngModel)]="usuario.contrasena"
+            name="contrasena" required>
+
+          <span class="material-symbols-outlined icon-right" (click)="togglePassword()" style="cursor: pointer;">
+            {{ showPassword ? 'visibility_off' : 'visibility' }}
+          </span>
         </div>
       </div>
 
-
       <div class="footer">
+        @if(errorMsg){
+
+        <p style="color:red; margin-bottom: 10px;">
+
+          {{ errorMsg }}
+
+        </p>
+        }
+
         <button type="submit" class="btn-submit" [disabled]="loading">
           @if(!loading){
           <span>CREAR CUENTA</span>
@@ -38,11 +49,7 @@
           <span>Procesando...</span>
           }
         </button>
-        @if(errorMsg){
-        <p style="color:red; margin-top:10px;">
-          {{ errorMsg }}
-        </p>
-        }
+
         <p class="footer-text">
           ¿Ya tienes una cuenta? <a routerLink="/login" class="register-link">Inicia sesión</a>
         </p>

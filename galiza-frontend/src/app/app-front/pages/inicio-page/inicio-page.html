@@ -1,12 +1,4 @@
 <div class="main-page">
-  <!-- <header class="hero-section">
-    <div class="overlay">
-      <div class="header-content">
-        <p class="brand-tagline">PRESERVANDO LA ESENCIA DEL MOVIMIENTO</p>
-      </div>
-    </div>
-  </header> -->
-
   <main class="content-section">
     <div class="header">
       <div class="icon-badge">
@@ -16,7 +8,9 @@
       <h2 class="form-title">Ritual & Rhythm</h2>
       <p class="form-subtitle">Inicia sesión para continuar tu viaje cultural.</p>
     </div>
-    <form class="login-form" (submit)="onLogin()">
+
+    <form class="login-form" (ngSubmit)="onLogin()">
+
       <div class="form-group">
         <label>NOMBRE DE USUARIO</label>
         <div class="input-container">
@@ -29,9 +23,14 @@
         <label>CONTRASEÑA</label>
         <div class="input-container">
           <span class="material-symbols-outlined icon-left">lock</span>
-          <input type="password" placeholder="••••••••" [(ngModel)]="credenciales.contrasena" name="contrasena"
-            required>
-          <span class="material-symbols-outlined icon-right">visibility</span>
+
+          <input [type]="showPassword ? 'text' : 'password'" placeholder="••••••••"
+            [(ngModel)]="credenciales.contrasena" name="contrasena" required>
+
+          <span class="material-symbols-outlined icon-right" style="cursor: pointer;" (click)="togglePassword()"
+            title="{{ showPassword ? 'Ocultar contraseña' : 'Ver contraseña' }}">
+            {{ showPassword ? 'visibility_off' : 'visibility' }}
+          </span>
         </div>
       </div>
 
@@ -39,30 +38,30 @@
         <label class="checkbox-label">
           <input type="checkbox"> Recordarme
         </label>
-        <a href="#" class="forgot-link">¿Olvidaste tu contraseña?</a>
+        <a href="javascript:void(0)" class="forgot-link">¿Olvidaste tu contraseña?</a>
       </div>
+
       <div class="footer">
+        @if(errorMsg){
+
+        <p style="color:red; margin-bottom: 10px;">
+
+          {{ errorMsg }}
+
+        </p>
+      }
         <button type="submit" class="btn-submit" [disabled]="loading">
-          @if(!loading){
+          @if (!loading) {
           <span>LOG IN</span>
-          }
-          @if(loading){
-          <span>Cargando...</span>
+          } @else {
+          <span class="spinner">Cargando...</span>
           }
         </button>
-        @if(errorMsg){
-        <p style="color:red; margin-top:10px;">
-          {{ errorMsg }}
-        </p>
-        }
+
         <p class="footer-text">
           ¿No tienes una cuenta? <a routerLink="/registro" class="register-link">Regístrate</a>
         </p>
       </div>
     </form>
-
-
-
-
   </main>
 </div>

@@ -1,14 +1,44 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { Evento } from './entities/eventos.schema';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Evento } from './entities/evento.entity';
 
 @Injectable()
 export class EventosService {
-  constructor(@InjectModel(Evento.name) private model: Model<Evento>) {}
-  async create(dto: any) { return new this.model(dto).save(); }
-  async findAll() { return this.model.find().populate('lugar').exec(); }
-  async findOne(id: string) { return this.model.findById(id).populate('lugar').exec(); }
-  async update(id: string, dto: any) { return this.model.findByIdAndUpdate(id, dto, { new: true }).exec(); }
-  async remove(id: string) { return this.model.findByIdAndDelete(id).exec(); }
+  constructor(
+    @InjectRepository(Evento)
+    private readonly repository: Repository<Evento>,
+  ) {}
+
+  async create(dto: any) {
+    const data = {
+      ...dto,
+      lat: dto.coords?.lat,
+      lng: dto.coords?.lng
+    };
+    const nuevo = this.repository.create(data);
+    return await this.repository.save(nuevo);
+  }
+
+  async findAll() {
+    return await this.repository.find();
+  }
+
+  async findOne(id: number) {
+    return await this.repository.findOneBy({ id });
+  }
+
+  async update(id: number, dto: any) {
+    const data = { ...dto };
+    if (dto.coords) {
+      data.lat = dto.coords.lat;
+      data.lng = dto.coords.lng;
+    }
+    await this.repository.update(id, data);
+    return this.findOne(id);
+  }
+
+  async remove(id: number) {
+    return await this.repository.delete(id);
+  }
 }

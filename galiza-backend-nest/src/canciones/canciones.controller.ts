@@ -1,15 +1,15 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { CancionesService } from './canciones.service';
-import { CreateCancioneDto } from './dto/create-cancione.dto';
+import { CreateCancionDto } from './dto/create-cancione.dto';
 import { UpdateCancioneDto } from './dto/update-cancione.dto';
+import { CancionesService } from './canciones.service';
 
 @Controller('canciones')
 export class CancionesController {
   constructor(private readonly cancionesService: CancionesService) {}
 
   @Post()
-  create(@Body() createCancioneDto: CreateCancioneDto) {
-    return this.cancionesService.create(createCancioneDto);
+  create(@Body() createCancionDto: CreateCancionDto) {
+    return this.cancionesService.create(createCancionDto);
   }
 
   @Get()
@@ -18,17 +18,17 @@ export class CancionesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: number) {
     return this.cancionesService.findOne( id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCancioneDto: UpdateCancioneDto) {
+  update(@Param('id') id: number, @Body() updateCancioneDto: UpdateCancioneDto) {
     return this.cancionesService.update(id, updateCancioneDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return this.cancionesService.remove(id);
   }
 }

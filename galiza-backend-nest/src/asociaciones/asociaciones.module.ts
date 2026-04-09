@@ -1,13 +1,11 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AsociacionesService } from './asociaciones.service';
 import { AsociacionesController } from './asociaciones.controller';
-import { MongooseModule } from '@nestjs/mongoose';
-import { Asociacion, AsociacionSchema } from './asociaciones.schema';
+import { Asociacion } from './entities/asociacione.entity';
 
 @Module({
-  imports: [
-  MongooseModule.forFeature([{ name: Asociacion.name, schema: AsociacionSchema }])
-],
+  imports: [TypeOrmModule.forFeature([Asociacion])],
   controllers: [AsociacionesController],
   providers: [AsociacionesService],
 })

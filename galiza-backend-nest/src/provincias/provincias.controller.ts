@@ -1,7 +1,5 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseIntPipe } from '@nestjs/common';
 import { ProvinciasService } from './provincias.service';
-import { CreateProvinciaDto } from './dto/create-provincia.dto';
-import { UpdateProvinciaDto } from './dto/update-provincia.dto';
 import { RolesGuard } from '../auth/roles.guard';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Roles } from '../auth/roles.decorator';
@@ -14,8 +12,8 @@ export class ProvinciasController {
 
   @Post()
   @Roles(Rol.ADMIN)
-  create(@Body() createProvinciaDto: CreateProvinciaDto) {
-    return this.provinciasService.create(createProvinciaDto);
+  create(@Body() createDto: any) {
+    return this.provinciasService.create(createDto);
   }
 
   @Get()
@@ -24,17 +22,17 @@ export class ProvinciasController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.provinciasService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProvinciaDto: UpdateProvinciaDto) {
-    return this.provinciasService.update( id, updateProvinciaDto);
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateDto: any) {
+    return this.provinciasService.update(id, updateDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: number) {
     return this.provinciasService.remove(id);
   }
 }

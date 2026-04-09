@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FrontUserService } from '../../service/front-user.service';
 import { FormsModule } from '@angular/forms';
@@ -13,18 +13,16 @@ import { CommonModule } from '@angular/common';
 })
 export class ProfilePage implements OnInit {
 
-  // 1. Cargamos el rol desde el localStorage al empezar para que el botón aparezca ya
   usuario: any = {
+    id: null, // Cambiado de _id a id
     nombre: localStorage.getItem('user_nombre') || '',
     rol: localStorage.getItem('user_rol') || '',
-    _id: ''
   };
 
   usuarioEditado: any = { nombre: '' };
   seccionActual: string = 'principal';
   cargando: boolean = false;
   errorMsg: string = '';
-  nombreDeRespaldo: string = localStorage.getItem('user_nombre') || 'Usuario';
 
   constructor(
     private frontUserService: FrontUserService,
@@ -40,16 +38,13 @@ export class ProfilePage implements OnInit {
     this.cargando = true;
     this.frontUserService.getPerfil().subscribe({
       next: (res: any) => {
-        // 2. Actualizamos el objeto con lo que venga del servidor
+        // En MySQL el ID viene como 'id'
         this.usuario = res;
         this.usuarioEditado.nombre = res.nombre;
 
-        // Guardamos el rol por si ha cambiado
-        if (res.rol) {
-          localStorage.setItem('user_rol', res.rol);
-        }
-
-        console.log('ROL DETECTADO:', this.usuario.rol); // Mira esto en la consola (F12)
+        // Actualizamos persistencia por si acaso
+        if (res.rol) localStorage.setItem('user_rol', res.rol);
+        if (res.id) localStorage.setItem('user_id', res.id.toString());
 
         this.cargando = false;
         this.cdr.detectChanges();
@@ -57,7 +52,6 @@ export class ProfilePage implements OnInit {
       error: (err) => {
         console.error('Error al obtener perfil:', err);
         this.cargando = false;
-        // Si falla el token, fuera
         this.onLogout();
       }
     });
@@ -77,15 +71,25 @@ export class ProfilePage implements OnInit {
 
   actualizarNombre() {
     if (!this.usuarioEditado.nombre) return;
+
+    // Validamos que tenemos el ID antes de enviar
+    if (!this.usuario.id) {
+      this.errorMsg = 'Error: ID de usuario no encontrado';
+      return;
+    }
+
     this.cargando = true;
-    this.frontUserService.updateUsuario(this.usuario._id, { nombre: this.usuarioEditado.nombre }).subscribe({
+    this.frontUserService.updateUsuario(this.usuario.id, { nombre: this.usuarioEditado.nombre }).subscribe({
       next: (res: any) => {
         this.usuario.nombre = res.nombre;
         localStorage.setItem('user_nombre', res.nombre);
         this.cargando = false;
         this.volver();
       },
-      error: () => this.cargando = false
+      error: (err) => {
+        this.cargando = false;
+        this.errorMsg = 'No se pudo actualizar el nombre';
+      }
     });
   }
 

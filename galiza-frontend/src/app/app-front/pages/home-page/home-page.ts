@@ -13,19 +13,20 @@ import { MapaService } from '../../service/mapa.service';
   styleUrls: ['./home-page.css']
 })
 export class HomePage implements AfterViewInit {
+  // Referencias de Leaflet
   private map!: L.Map;
   private oldMapLayer!: L.TileLayer.WMS;
   private markers: L.Marker[] = [];
 
+  // Estado de la interfaz
   public showHelp: boolean = false;
   public searchTerm: string = '';
   public searchResults: DatosMapa[] = [];
-
-  // Datos locales (hasta que conectemos el API)
-  public places: DatosMapa[] = MAP_DATA;
   public selectedPlace: DatosMapa | null = null;
+  public opacity: number = 0;
 
-  opacity: number = 0;
+  // Datos y control de marcadores
+  public places: DatosMapa[] = MAP_DATA;
   private lastMarker: L.Marker | null = null;
 
   constructor(
@@ -35,35 +36,40 @@ export class HomePage implements AfterViewInit {
   ) { }
 
   ngAfterViewInit() {
-    this.initMap();
+    // Timeout para asegurar que el contenedor #map existe en el DOM
+    setTimeout(() => {
+      this.initMap();
+    }, 100);
   }
 
   private initMap(): void {
-    // 1. Inicializar el contenedor del mapa
+    // 1. Configuración inicial del mapa centrado en Galicia
     this.map = L.map('map', {
       center: [42.755, -7.863],
-      zoom: 7,
+      zoom: 8,
       minZoom: 7,
       maxZoom: 18,
-      maxBounds: L.latLngBounds(L.latLng(42.0, -10.0), L.latLng(43.0, -5.0)),
+      // Limitamos el movimiento a la zona de Galicia
+      maxBounds: L.latLngBounds(L.latLng(41.5, -10.0), L.latLng(44.0, -6.0)),
     });
 
-    // 2. CAPA BASE: RELIEVE OCEÁNICO
+    // 2. CAPA BASE: Océanos/Relieve (ESRI)
     L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}', {
-      maxZoom: 13
+      maxZoom: 13,
+      attribution: 'Tiles &copy; Esri'
     }).addTo(this.map);
 
-    // 3. CAPA SATÉLITE: PNOA
+    // 3. CAPA SATÉLITE: PNOA (IGN España)
     L.tileLayer.wms('https://www.ign.es/wms-inspire/pnoa-ma', {
       layers: 'OI.OrthoimageCoverage',
       format: 'image/png',
       transparent: true,
       version: '1.3.0',
-      opacity: 1,
       zIndex: 5
     }).addTo(this.map);
 
-    // 4. CAPA HISTÓRICA: MINUTAS
+    // 4. CAPA HISTÓRICA: Minutas Cartográficas (IGN)
+    // Es la capa que controlamos con el slider de opacidad
     this.oldMapLayer = L.tileLayer.wms('https://www.ign.es/wms/minutas-cartograficas', {
       layers: 'Minutas',
       format: 'image/png',
@@ -73,27 +79,32 @@ export class HomePage implements AfterViewInit {
       zIndex: 10
     }).addTo(this.map);
 
+    // Dibujar los puntos iniciales
     this.renderMarkers();
 
+    // Evento para redimensionar iconos según el zoom
     this.map.on('zoomend', () => {
       this.updateMarkersSize();
     });
 
+    // Color de fondo para zonas sin carga (mar)
     const mapDiv = document.getElementById('map');
-    if (mapDiv) {
-      mapDiv.style.backgroundColor = '#abd3df';
-    }
+    if (mapDiv) mapDiv.style.backgroundColor = '#abd3df';
   }
 
   private renderMarkers() {
     this.places.forEach(place => {
-      // Leaflet acepta {lat, lng} directamente
       const marker = L.marker(place.coords, {
         icon: this.getCustomIcon(place.tipo, place.icono, this.map.getZoom())
       }).addTo(this.map);
 
-      marker.bindTooltip(`<b>${place.nome}</b>`, { direction: 'top', offset: [0, -45] });
+      // Tooltip rápido al pasar el ratón
+      marker.bindTooltip(`<b>${place.nome}</b>`, {
+        direction: 'top',
+        offset: [0, -35]
+      });
 
+      // Evento de clic en marcador
       marker.on('click', () => {
         this.seleccionarLugar(place, marker);
       });
@@ -102,17 +113,21 @@ export class HomePage implements AfterViewInit {
     });
   }
 
-  // Función auxiliar para centrar y seleccionar
-  private seleccionarLugar(place: DatosMapa, marker: L.Marker) {
+  public seleccionarLugar(place: DatosMapa, marker: L.Marker) {
+    // zone.run asegura que Angular detecte los cambios de variables dentro de eventos de Leaflet
     this.zone.run(() => {
-      if (this.lastMarker) this.lastMarker.setZIndexOffset(0);
+      if (this.lastMarker) {
+        this.lastMarker.setZIndexOffset(0);
+      }
+
       this.selectedPlace = place;
-      marker.setZIndexOffset(1000);
+      marker.setZIndexOffset(1000); // Ponemos el marcador encima de todos
       this.lastMarker = marker;
 
-      // Cálculo de desplazamiento para que el popup no tape el marcador
-      const targetPoint = this.map.project(place.coords, 10).subtract([0, 120]);
+      // Desplazamos el mapa un poco para que la card no tape el marcador
+      const targetPoint = this.map.project(place.coords, 10).subtract([0, 150]);
       this.map.flyTo(this.map.unproject(targetPoint, 10), 10);
+
       this.cdr.detectChanges();
     });
   }
@@ -122,7 +137,9 @@ export class HomePage implements AfterViewInit {
     this.markers.forEach((marker, index) => {
       const place = this.places[index];
       const element = marker.getElement();
+
       if (element) {
+        // Ocultamos marcadores si el zoom es muy lejano
         if (currentZoom < 7.5) {
           element.style.display = 'none';
         } else {
@@ -133,10 +150,12 @@ export class HomePage implements AfterViewInit {
     });
   }
 
-  getCustomIcon(tipo: string, iconName: string, zoom: number) {
-    const size = Math.max(40, zoom * 4);
-    const fontSize = size * 0.55;
+  private getCustomIcon(tipo: string, iconName: string, zoom: number) {
+    // El tamaño escala con el zoom
+    const size = Math.max(35, zoom * 3.5);
+    const fontSize = size * 0.5;
 
+    // Colores corporativos por tipo
     let color = '#6c757d';
     if (tipo === 'asociacion') color = '#D4A017';
     else if (tipo === 'evento') color = '#8C2A1C';
@@ -153,12 +172,16 @@ export class HomePage implements AfterViewInit {
   }
 
   updateOpacity() {
-    if (this.oldMapLayer) this.oldMapLayer.setOpacity(this.opacity);
+    if (this.oldMapLayer) {
+      this.oldMapLayer.setOpacity(this.opacity);
+    }
   }
 
   toggleHelp(event: Event): void {
     event.stopPropagation();
     this.showHelp = !this.showHelp;
+
+    // Auto-cierre del globo de ayuda a los 5 segundos
     if (this.showHelp) {
       setTimeout(() => {
         this.showHelp = false;
@@ -168,8 +191,15 @@ export class HomePage implements AfterViewInit {
   }
 
   onSearch() {
+    if (!this.searchTerm.trim()) {
+      this.searchResults = [];
+      return;
+    }
+
+    // Buscamos en el servicio (datos estáticos o API)
     this.mapaService.buscarLugares(this.searchTerm).subscribe(res => {
       this.searchResults = res;
+      this.cdr.detectChanges();
     });
   }
 
@@ -177,11 +207,11 @@ export class HomePage implements AfterViewInit {
     this.searchTerm = '';
     this.searchResults = [];
 
-    // Buscamos el marcador por coordenadas de objeto
-    const marker = this.markers.find(m =>
-      m.getLatLng().lat === place.coords.lat &&
-      m.getLatLng().lng === place.coords.lng
-    );
+    // Localizamos el objeto marker de Leaflet que corresponde a este lugar
+    const marker = this.markers.find(m => {
+      const latLng = m.getLatLng();
+      return latLng.lat === place.coords.lat && latLng.lng === place.coords.lng;
+    });
 
     if (marker) {
       this.seleccionarLugar(place, marker);

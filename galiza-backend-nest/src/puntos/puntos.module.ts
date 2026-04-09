@@ -1,13 +1,11 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { PuntosService } from './puntos.service';
 import { PuntosController } from './puntos.controller';
-import { MongooseModule } from '@nestjs/mongoose';
-import { Punto, PuntoSchema } from './entities/puntos.schema';
+import { Punto } from './entities/punto.entity';
 
 @Module({
-  imports: [
-  MongooseModule.forFeature([{ name: Punto.name, schema: PuntoSchema }])
-],
+  imports: [TypeOrmModule.forFeature([Punto])],
   controllers: [PuntosController],
   providers: [PuntosService],
 })

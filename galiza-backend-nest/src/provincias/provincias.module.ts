@@ -1,13 +1,15 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProvinciasService } from './provincias.service';
 import { ProvinciasController } from './provincias.controller';
-import { MongooseModule } from '@nestjs/mongoose';
-import { Provincia, ProvinciaSchema } from './entities/provincias.schema';
+import { Provincia } from './entities/provincia.entity';
+import { UsuariosModule } from '../usuarios/usuarios.module';
 
 @Module({
   imports: [
-  MongooseModule.forFeature([{ name: Provincia.name, schema: ProvinciaSchema }])
-],
+    TypeOrmModule.forFeature([Provincia]),
+    UsuariosModule, // <--- Al importar esto, ya tiene acceso al JwtModule que exportaste
+  ],
   controllers: [ProvinciasController],
   providers: [ProvinciasService],
 })

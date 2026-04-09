@@ -9,20 +9,24 @@ import { Observable, tap, BehaviorSubject } from 'rxjs';
 export class FrontUserService {
   private URL_API = 'http://localhost:3000';
 
-  // Inicializamos el Subject con lo que haya en disco
   private userSubject = new BehaviorSubject<any>(this.getUserFromStorage());
   user$ = this.userSubject.asObservable();
 
   constructor(private http: HttpClient, private router: Router) { }
 
   private getUserFromStorage() {
-    const rol = localStorage.getItem('user_rol');
-    const nombre = localStorage.getItem('user_nombre');
-    // Si existen ambos, devolvemos el objeto, si no, null
-    return (rol && nombre) ? { rol, nombre } : null;
+    const userJson = localStorage.getItem('user');
+    return userJson ? JSON.parse(userJson) : null;
+  }
+
+  esAdmin(): boolean {
+    const user = this.userSubject.value;
+    // Comparamos con el string exacto de tu Enum de NestJS
+    return user?.rol === 'admin';
   }
 
   registrar(usuario: any): Observable<any> {
+    // En NestJS, la ruta por defecto suele ser /api/usuarios si usaste el prefijo
     return this.http.post(`${this.URL_API}/usuarios`, usuario);
   }
 
@@ -30,15 +34,12 @@ export class FrontUserService {
     return this.http.post<any>(`${this.URL_API}/auth/login`, credenciales).pipe(
       tap(res => {
         if (res.access_token && res.user) {
-          // 1. GUARDAR EN LOCALSTORAGE (Para persistencia al refrescar F5)
           localStorage.setItem('access_token', res.access_token);
-          localStorage.setItem('user_rol', res.user.rol);
-          localStorage.setItem('user_nombre', res.user.nombre);
-
-          // 2. ACTUALIZAR EL SUBJECT (Para reactividad instantánea sin recargar)
+          localStorage.setItem('user', JSON.stringify(res.user)); // Guardamos el objeto entero
           const userData = {
             rol: res.user.rol,
-            nombre: res.user.nombre
+            nombre: res.user.nombre,
+            id: res.user.id
           };
           this.userSubject.next(userData);
         }
@@ -47,15 +48,11 @@ export class FrontUserService {
   }
 
   logout() {
-    // Limpiamos todo
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('user_rol');
-    localStorage.removeItem('user_nombre');
+    localStorage.clear(); // Más rápido: borra todo rastro
     this.userSubject.next(null);
     this.router.navigate(['/login']);
   }
 
-  // Helper para obtener el token rápido en otras peticiones
   private getHeaders() {
     const token = localStorage.getItem('access_token');
     return new HttpHeaders({
@@ -67,18 +64,14 @@ export class FrontUserService {
     return this.http.get(`${this.URL_API}/auth/profile`, { headers: this.getHeaders() });
   }
 
-  // Modificado para que si el usuario actualiza su propio nombre,
-  // la interfaz se entere al momento
-  updateUsuario(id: string, datos: any) {
+  // Cambiamos id: string por number para MySQL
+  updateUsuario(id: number, datos: any) {
     return this.http.patch(`${this.URL_API}/usuarios/${id}`, datos, { headers: this.getHeaders() }).pipe(
       tap((usuarioActualizado: any) => {
-        // Si el usuario cambió su nombre, actualizamos el storage y el subject
-        if (datos.nombre) {
+        if (datos.nombre || datos.rol) {
           localStorage.setItem('user_nombre', usuarioActualizado.nombre);
-          this.userSubject.next({
-            ...this.userSubject.value,
-            nombre: usuarioActualizado.nombre
-          });
+          localStorage.setItem('user_rol', usuarioActualizado.rol);
+          this.userSubject.next(usuarioActualizado);
         }
       })
     );
@@ -87,4 +80,10 @@ export class FrontUserService {
   isLoggedIn(): boolean {
     return !!localStorage.getItem('access_token');
   }
+
+  ascenderUsuario(id: number): Observable<any> {
+  const url = `${this.URL_API}/usuarios/${id}/ascender`;
+  // Enviamos un objeto vacío {} como body porque el cambio lo decide el backend
+  return this.http.patch(url, {}, { headers: this.getHeaders() });
+}
 }
