@@ -3,12 +3,13 @@ import { Rol } from '../../common/enums'; // Asegúrate de que la ruta sea corre
 
 export class CreateUsuarioDto {
   @IsString()
-  @IsNotEmpty()
+  @IsString()
+  @IsNotEmpty({ message: 'El nombre de usuario es obligatorio' })
   nombre!: string;
 
   @IsString()
-  @IsNotEmpty()
-  @MinLength(6)
+  @IsNotEmpty({ message: 'La contraseña es obligatoria' })
+  @MinLength(6, { message: 'La contraseña debe tener al menos 6 caracteres' })
   contrasena!: string;
 
   @IsEnum(Rol)

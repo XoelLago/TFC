@@ -27,36 +27,48 @@ export class RegistroPage {
     private cdr: ChangeDetectorRef
   ) {}
 
-  onRegistrar() {
-    // 1. Validación inicial
-    if (!this.usuario.nombre || !this.usuario.contrasena) {
-      this.errorMsg = 'Debes rellenar todos los campos';
-      return;
-    }
-
-    this.loading = true;
-    this.errorMsg = ''; // Limpiamos errores previos
-
-    this.frontUserService.registrar(this.usuario).subscribe({
-      next: () => {
-        this.loading = false;
-        this.router.navigate(['/login']);
-      },
-      error: (err) => {
-        this.loading = false;
-
-        // Manejo de errores dinámico según lo que responda NestJS/MySQL
-        if (err.status === 409 || err.status === 400) {
-          this.errorMsg = 'El nombre de usuario ya está registrado';
-        } else {
-          this.errorMsg = 'Error en el servidor. Inténtalo más tarde';
-        }
-
-        console.error('Error en registro:', err);
-        this.cdr.detectChanges();
-      }
-    });
+ onRegistrar() {
+  // 1. Validación inicial (Frontend)
+  if (!this.usuario.nombre || !this.usuario.contrasena) {
+    this.errorMsg = 'Debes rellenar todos los campos';
+    return;
   }
+
+  this.loading = true;
+  this.errorMsg = '';
+
+  this.frontUserService.registrar(this.usuario).subscribe({
+    next: () => {
+      this.loading = false;
+      // Opcional: Podrías pasar un mensaje al login de "Usuario creado con éxito"
+      this.router.navigate(['/login']);
+    },
+    error: (err) => {
+      this.loading = false;
+
+      /**
+       * Captura de mensajes dinámicos:
+       * err.error.message es donde NestJS guarda el texto que pusimos
+       * en los "throw new ...Exception('Texto')" del Backend.
+       */
+      if (err.error && err.error.message) {
+        // Si es un array (pasa cuando usas ValidationPipe con varias reglas)
+        if (Array.isArray(err.error.message)) {
+          this.errorMsg = err.error.message[0];
+        } else {
+          // Si es un string único (nuestros ConflictException o BadRequestException)
+          this.errorMsg = err.error.message;
+        }
+      } else {
+        // Fallback por si el servidor se cae o no responde el JSON esperado
+        this.errorMsg = 'No se pudo conectar con el servidor';
+      }
+
+      console.error('Error detallado:', err);
+      this.cdr.detectChanges();
+    }
+  });
+}
 
   togglePassword() {
     this.showPassword = !this.showPassword;

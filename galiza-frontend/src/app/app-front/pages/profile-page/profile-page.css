@@ -258,3 +258,32 @@
     padding: 40px;
   }
 }
+.input-container{
+display: flex;
+flex-direction: column;
+
+}
+
+.input-edit{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  margin-bottom: 5px;
+
+  input {
+    flex: 1;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-family: 'Montserrat', sans-serif;
+
+    &:focus {
+      outline: none;
+      border-color: #93331d;
+      box-shadow: 0 0 5px rgba(147, 51, 29, 0.5);
+    }
+  }
+
+}

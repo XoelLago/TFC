@@ -13,9 +13,10 @@ import { CommonModule } from '@angular/common';
 })
 export class ProfilePage implements OnInit {
 
+  // 1. INICIALIZACIÓN SEGURA: No nos fiamos del localStorage para el ID
   usuario: any = {
-    id: null, // Cambiado de _id a id
-    nombre: localStorage.getItem('user_nombre') || '',
+    id: null,
+    nombre: localStorage.getItem('user_nombre') || '', // Solo para carga visual rápida
     rol: localStorage.getItem('user_rol') || '',
   };
 
@@ -38,13 +39,18 @@ export class ProfilePage implements OnInit {
     this.cargando = true;
     this.frontUserService.getPerfil().subscribe({
       next: (res: any) => {
-        // En MySQL el ID viene como 'id'
+
+        // 2. LA VERDAD ABSOLUTA: Viene del servidor
         this.usuario = res;
+
+        // Aseguramos el ID por si acaso Nest lo devuelve de forma extraña
+        this.usuario.id = res.id;
         this.usuarioEditado.nombre = res.nombre;
 
-        // Actualizamos persistencia por si acaso
+        // Actualizamos persistencia visual (Opcional, pero útil para menús)
         if (res.rol) localStorage.setItem('user_rol', res.rol);
-        if (res.id) localStorage.setItem('user_id', res.id.toString());
+        if (res.nombre) localStorage.setItem('user_nombre', res.nombre);
+        // Ya NO guardamos ni leemos el ID en el localStorage.
 
         this.cargando = false;
         this.cdr.detectChanges();
@@ -52,7 +58,7 @@ export class ProfilePage implements OnInit {
       error: (err) => {
         console.error('Error al obtener perfil:', err);
         this.cargando = false;
-        this.onLogout();
+        this.onLogout(); // Si el token es inválido o caducó, expulsamos al usuario
       }
     });
   }
@@ -70,25 +76,50 @@ export class ProfilePage implements OnInit {
   }
 
   actualizarNombre() {
-    if (!this.usuarioEditado.nombre) return;
+    // 1. Validación básica de entrada
+    if (!this.usuarioEditado.nombre || this.usuarioEditado.nombre.trim().length < 3) {
+      this.errorMsg = 'El nombre debe tener al menos 3 caracteres';
+      return;
+    }
 
-    // Validamos que tenemos el ID antes de enviar
-    if (!this.usuario.id) {
-      this.errorMsg = 'Error: ID de usuario no encontrado';
+    // 2. Verificación de ID ESTRICTA
+    if (!this.usuario || !this.usuario.id) {
+      this.errorMsg = 'Error: Esperando validación del servidor. Intenta de nuevo.';
       return;
     }
 
     this.cargando = true;
+    this.errorMsg = '';
+    // Forzamos el estado inicial de carga en la vista
+    this.cdr.detectChanges();
+
     this.frontUserService.updateUsuario(this.usuario.id, { nombre: this.usuarioEditado.nombre }).subscribe({
       next: (res: any) => {
+        // Actualizamos los datos
         this.usuario.nombre = res.nombre;
         localStorage.setItem('user_nombre', res.nombre);
+
         this.cargando = false;
         this.volver();
+
+        // ¡ESTO ES CLAVE! Avisamos a Angular de que ya no estamos cargando
+        this.cdr.detectChanges();
       },
       error: (err) => {
         this.cargando = false;
-        this.errorMsg = 'No se pudo actualizar el nombre';
+
+        if (err.error && err.error.message) {
+          this.errorMsg = Array.isArray(err.error.message)
+            ? err.error.message[0]
+            : err.error.message;
+        } else {
+          this.errorMsg = 'Error inesperado al actualizar el nombre';
+        }
+
+        console.error('Error al actualizar nombre:', err);
+
+        // También avisamos aquí para desbloquear el botón en caso de fallo
+        this.cdr.detectChanges();
       }
     });
   }

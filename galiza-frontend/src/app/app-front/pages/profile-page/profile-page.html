@@ -23,23 +23,17 @@
 
       <p class="form-subtitle">
         {{
-          seccionActual === 'principal' ? 'Dancer & Storyteller' :
-          seccionActual === 'cuenta' ? 'Gestión de Cuenta' :
-          seccionActual === 'seguridad' ? 'Configuración de Seguridad' :
-          seccionActual === 'admin' ? 'Panel de Administración' :
-          seccionActual === 'admin-usuarios' ? 'Administración de Usuarios' :
-          seccionActual === 'admin-eventos' ? 'Administración de Eventos' :
-          'Gestión de perfil'
+        seccionActual === 'principal' ? 'Dancer & Storyteller' :
+        seccionActual === 'cuenta' ? 'Gestión de Cuenta' :
+        seccionActual === 'seguridad' ? 'Configuración de Seguridad' :
+        seccionActual === 'admin' ? 'Panel de Administración' :
+        seccionActual === 'admin-usuarios' ? 'Administración de Usuarios' :
+        seccionActual === 'admin-eventos' ? 'Administración de Eventos' :
+        'Gestión de perfil'
         }}
       </p>
     </div>
 
-    @if (errorMsg) {
-      <div class="error-banner">
-        <span class="material-icons">warning</span>
-        {{ errorMsg }}
-      </div>
-    }
 
     <div class="settings-wrapper" [ngSwitch]="seccionActual">
 
@@ -58,9 +52,8 @@
             <span class="material-icons icon-right">chevron_right</span>
           </button>
 
-          <button class="settings-btn admin-highlight"
-                  (click)="cambiarSeccion('admin')"
-                  *ngIf="usuario?.rol?.toUpperCase() === 'ADMIN'">
+          <button class="settings-btn admin-highlight" (click)="cambiarSeccion('admin')"
+            *ngIf="usuario?.rol?.toUpperCase() === 'ADMIN'">
             <span class="material-icons icon-left" style="color: #d4af37;">admin_panel_settings</span>
             Administrar
             <span class="material-icons icon-right">chevron_right</span>
@@ -107,21 +100,25 @@
             <div class="form-group">
               <label>NOMBRE DE USUARIO</label>
               <div class="input-container">
+                <span class="input-edit">
                 <span class="material-icons" style="color: #93331d; font-size: 1.2rem;">edit</span>
-                <input
-                  type="text"
-                  [(ngModel)]="usuarioEditado.nombre"
-                  placeholder="Introduce tu nuevo nombre..."
-                >
+                <input type="text" [(ngModel)]="usuarioEditado.nombre" placeholder="Introduce tu nuevo nombre...">
+                </span>
+                @if(errorMsg){
+
+                <p style="color:red; margin-bottom: 10px;">
+
+                  {{ errorMsg }}
+
+                </p>
+                }
               </div>
             </div>
           </div>
 
-          <button
-            class="settings-btn save-btn"
-            (click)="actualizarNombre()"
-            [disabled]="cargando || !usuarioEditado.nombre || usuarioEditado.nombre === usuario.nombre"
-          >
+          <button class="settings-btn save-btn" (click)="actualizarNombre()"
+          [disabled]="cargando || !usuarioEditado.nombre || usuarioEditado.nombre === usuario.nombre"
+            >
             <span class="material-icons icon-left">
               {{ cargando ? 'sync' : 'save' }}
             </span>

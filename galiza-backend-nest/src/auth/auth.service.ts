@@ -26,7 +26,7 @@ async login(loginDto: LoginUsuarioDto) {
   if (!isMatch) throw new UnauthorizedException('Contraseña incorrecta');
 
   const payload = { 
-    sub: user.id, 
+    id: user.id, 
     nombre: user.nombre, 
     rol: user.rol 
   };

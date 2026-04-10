@@ -7,7 +7,9 @@ import {
   Param, 
   Delete, 
   UseGuards, 
-  ParseIntPipe 
+  ParseIntPipe, 
+  Req,
+  ForbiddenException
 } from '@nestjs/common';
 import { UsuariosService } from './usuarios.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
@@ -46,14 +48,23 @@ export class UsuariosController {
 
   // ACTUALIZAR: Protegido
   @Patch(':id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Rol.ADMIN, Rol.USER)
-  update(
-    @Param('id', ParseIntPipe) id: number, 
-    @Body() updateUsuarioDto: UpdateUsuarioDto
-  ) {
-    return this.usuariosService.update(id, updateUsuarioDto);
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(Rol.ADMIN, Rol.USER)
+async update(
+  @Param('id', ParseIntPipe) id: number, 
+  @Body() updateUsuarioDto: UpdateUsuarioDto,
+  @Req() req: any // <--- Importante: Inyectamos la petición
+) {
+  // Extraemos el usuario que viene del TOKEN (JwtAuthGuard lo pone ahí)
+  const userInToken = req.user;
+
+  // SEGURIDAD: Si no es ADMIN y el ID que quiere cambiar no es el suyo propio...
+  if (userInToken.rol !== Rol.ADMIN && userInToken.id !== id) {
+    throw new ForbiddenException('No tienes permiso para modificar a otro usuario');
   }
+
+  return this.usuariosService.update(id, updateUsuarioDto);
+}
 
   // BORRAR: Solo el administrador
   @Delete(':id')

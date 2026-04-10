@@ -21,13 +21,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(payload: any) {
     // LOG para depuración en desarrollo:
     console.log('--- Payload decodificado desde MySQL ---');
-    console.log('ID Usuario:', payload.sub);
+    console.log('ID Usuario:', payload.id);
     console.log('Nombre:', payload.nombre);
     console.log('Rol:', payload.rol);
 
     // Lo que retornamos aquí se inyecta en el objeto Request (req.user)
     return { 
-      id: payload.sub, // En MySQL es 'id', no '_id'
+      id: payload.id, // En MySQL es 'id', no '_id'
       nombre: payload.nombre, 
       rol: payload.rol 
     };
