@@ -5,10 +5,11 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Usuario } from '../../models/usuario.model';
 import { AdminUsersComponent } from '../../components/admin-users/admin-users';
+import { ActionToastComponent } from "../../components/action-toast/action-toast";
 
 @Component({
   standalone: true,
-  imports: [FormsModule, CommonModule, AdminUsersComponent],
+  imports: [FormsModule, CommonModule, AdminUsersComponent, ActionToastComponent],
   selector: 'app-profile-page',
   templateUrl: './profile-page.html',
   styleUrls: ['./profile-page.css']

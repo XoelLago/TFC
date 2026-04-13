@@ -1,0 +1,71 @@
+.action-toast {
+  position: fixed;
+  /* Lo escondemos arriba */
+  top: -250px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 90%;
+  max-width: 420px;
+  background: #1a1a1a;
+  color: white;
+  padding: 22px;
+
+  /* Bordes redondeados abajo para que parezca que cuelga */
+  border-radius: 20px 20px 20px 20px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+  z-index: 100001; /* Un número muy alto */
+
+  /* Animación suave */
+  transition: top 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  border-bottom: 4px solid #93331d;
+}
+
+/* LA CLAVE: Solo cambiamos el top */
+.action-toast.show {
+  top: 0 !important;
+}
+
+.toast-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.toast-content p {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.95rem;
+  margin: 0;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.toast-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.toast-btn {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  transition: opacity 0.2s;
+}
+
+.toast-btn.confirm {
+  background: #93331d;
+  color: white;
+}
+
+.toast-btn.cancel {
+  background: #333;
+  color: #bbb;
+}

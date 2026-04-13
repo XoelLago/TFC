@@ -1,0 +1,15 @@
+<div class="action-toast" [class.show]="visible">
+  <div class="toast-content">
+    <span class="material-icons">{{ icon }}</span>
+    <p>{{ mensaje }}</p>
+  </div>
+
+  <div class="toast-actions">
+    <button type="button" class="toast-btn confirm" (click)="onConfirmar()">
+      {{ txtConfirmar }}
+    </button>
+    <button type="button" class="toast-btn cancel" (click)="onCancelar()">
+      {{ txtCancelar }}
+    </button>
+  </div>
+</div>

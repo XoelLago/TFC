@@ -188,13 +188,9 @@
   </section>
 </div>
 
-<div class="action-toast" [class.show]="confirmacion.visible">
-  <div class="toast-content">
-    <span class="material-icons">priority_high</span>
-    <p>{{ confirmacion.mensaje }}</p>
-  </div>
-  <div class="toast-actions">
-    <button class="toast-btn confirm" (click)="confirmarAccionApp()">SÍ, CONTINUAR</button>
-    <button class="toast-btn cancel" (click)="cancelarConfirmacion()">NO</button>
-  </div>
-</div>
+<app-action-toast
+  [visible]="confirmacion.visible"
+  [mensaje]="confirmacion.mensaje"
+  (confirmar)="confirmarAccionApp()"
+  (cancelar)="cancelarConfirmacion()">
+</app-action-toast>
