@@ -1,6 +1,7 @@
 export enum Rol {
   USER = 'USER',
   ADMIN = 'ADMIN',
+  SUPERUSER = 'SUPERUSER',
 }
 
 export enum TipoRecomendacion {

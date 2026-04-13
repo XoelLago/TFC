@@ -11,10 +11,18 @@
   <section class="content-section">
     <div class="profile-header-top">
       <div class="icon-badge">
-        <span class="material-icons" *ngIf="seccionActual === 'principal'">person</span>
-        <span class="material-icons" *ngIf="seccionActual === 'cuenta'">badge</span>
-        <span class="material-icons" *ngIf="seccionActual === 'seguridad'">lock</span>
-        <span class="material-icons" *ngIf="seccionActual.includes('admin')">admin_panel_settings</span>
+        @if(seccionActual === 'principal'){
+        <span class="material-icons">person</span>
+        }
+        @if(seccionActual === 'cuenta'){
+        <span class="material-icons">badge</span>
+        }
+        @if(seccionActual === 'seguridad'){
+        <span class="material-icons">lock</span>
+        }
+        @if(seccionActual.includes('admin')){
+        <span class="material-icons">admin_panel_settings</span>
+        }
       </div>
 
       <h2 class="form-title">
@@ -52,13 +60,13 @@
             <span class="material-icons icon-right">chevron_right</span>
           </button>
 
-          <button class="settings-btn admin-highlight" (click)="cambiarSeccion('admin')"
-            *ngIf="usuario?.rol?.toUpperCase() === 'ADMIN'">
+          @if(usuario?.rol?.toUpperCase() === 'SUPERUSER'){
+          <button class="settings-btn admin-highlight" (click)="cambiarSeccion('admin')">
             <span class="material-icons icon-left" style="color: #d4af37;">admin_panel_settings</span>
             Administrar
             <span class="material-icons icon-right">chevron_right</span>
           </button>
-
+          }
           <button class="settings-btn logout-item-btn" (click)="onLogout()">
             <span class="material-icons icon-left">logout</span>
             Cerrar Sesión
@@ -101,8 +109,8 @@
               <label>NOMBRE DE USUARIO</label>
               <div class="input-container">
                 <span class="input-edit">
-                <span class="material-icons" style="color: #93331d; font-size: 1.2rem;">edit</span>
-                <input type="text" [(ngModel)]="usuarioEditado.nombre" placeholder="Introduce tu nuevo nombre...">
+                  <span class="material-icons" style="color: #93331d; font-size: 1.2rem;">edit</span>
+                  <input type="text" [(ngModel)]="usuarioEditado.nome" placeholder="Introduce tu nuevo nombre...">
                 </span>
                 @if(errorMsg){
 
@@ -117,8 +125,7 @@
           </div>
 
           <button class="settings-btn save-btn" (click)="actualizarNombre()"
-          [disabled]="cargando || !usuarioEditado.nombre || usuarioEditado.nombre === usuario.nombre"
-            >
+            [disabled]="cargando || !usuarioEditado.nome || usuarioEditado.nome === usuario.nombre">
             <span class="material-icons icon-left">
               {{ cargando ? 'sync' : 'save' }}
             </span>
@@ -134,10 +141,10 @@
             <span class="material-icons icon-left">arrow_back</span>
             Volver a Admin
           </button>
-          <div class="info-group">
-            <label>BASE DE DATOS DE USUARIOS</label>
-            <div class="static-data">La lista está actualmente vacía.</div>
-          </div>
+
+          <app-admin-users tituloLista="GESTIÓN DE USUARIOS" [items]="usuariosMapeados"
+            [miRol]="usuario.rol?.toLowerCase()" [cargando]="cargando" (accionRealizada)="manejarAccionUsuario($event)">
+          </app-admin-users>
         </div>
       </div>
 
@@ -179,4 +186,15 @@
       <p class="form-subtitle">V2.4.0 • Ritual & Rhythm</p>
     </div>
   </section>
+</div>
+
+<div class="action-toast" [class.show]="confirmacion.visible">
+  <div class="toast-content">
+    <span class="material-icons">priority_high</span>
+    <p>{{ confirmacion.mensaje }}</p>
+  </div>
+  <div class="toast-actions">
+    <button class="toast-btn confirm" (click)="confirmarAccionApp()">SÍ, CONTINUAR</button>
+    <button class="toast-btn cancel" (click)="cancelarConfirmacion()">NO</button>
+  </div>
 </div>

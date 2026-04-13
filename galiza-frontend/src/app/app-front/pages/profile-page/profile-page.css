@@ -9,7 +9,7 @@
   display: block;
   height: 90vh;
   width: 100%;
-  overflow: hidden; /* Evita scroll doble */
+  overflow: hidden;
 }
 
 /* --- CONTENEDOR PRINCIPAL --- */
@@ -27,7 +27,7 @@
   height: 10vh;
   width: 100%;
   position: relative;
-  background: #93331d; /* Fondo base por si no carga la imagen */
+  background: #93331d;
 
   .overlay {
     height: 100%;
@@ -59,17 +59,17 @@
 
 /* --- CUERPO DE LA PÁGINA --- */
 .content-section {
-  flex: 1; /* Ocupa todo el espacio restante hasta abajo */
+  flex: 1;
   padding: 30px 7% 10px 7%;
   width: 100%;
   max-width: 500px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow-y: auto; /* Permite scroll interno si el móvil es muy pequeño */
+  overflow-y: auto;
 }
 
-/* --- AVATAR Y NOMBRE (Siempre arriba) --- */
+/* --- AVATAR Y NOMBRE --- */
 .profile-header-top {
   display: flex;
   flex-direction: column;
@@ -106,10 +106,10 @@
   }
 }
 
-/* --- CONTENEDOR DE MENÚS (Estructura de empuje) --- */
+/* --- CONTENEDOR DE MENÚS --- */
 .settings-wrapper {
   width: 100%;
-  flex: 1; /* Crece para permitir que el spacer funcione */
+  flex: 1;
   display: flex;
   flex-direction: column;
 }
@@ -121,12 +121,11 @@
   flex: 1;
 }
 
-/* El elemento mágico que empuja el resto hacia abajo */
 .spacer {
   flex: 1;
 }
 
-/* --- BLOQUE DE BOTONES (Pegado abajo) --- */
+/* --- BLOQUE DE BOTONES --- */
 .options-bottom {
   width: 100%;
   display: flex;
@@ -150,6 +149,7 @@
   color: #333;
   cursor: pointer;
   transition: all 0.2s ease;
+  margin: 3px;
 
   &:active {
     background: #e0ddd5;
@@ -189,7 +189,7 @@
   }
 }
 
-/* --- ESTILOS DE SUBMENÚS (Info labels) --- */
+/* --- ESTILOS DE SUBMENÚS --- */
 .back-btn {
   background: transparent;
   border: 1px dashed #93331d;
@@ -218,6 +218,34 @@
     border-radius: 8px;
     color: #333;
     margin-top: 5px;
+  }
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-edit {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  margin-bottom: 5px;
+
+  input {
+    flex: 1;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-family: 'Montserrat', sans-serif;
+
+    &:focus {
+      outline: none;
+      border-color: #93331d;
+      box-shadow: 0 0 5px rgba(147, 51, 29, 0.5);
+    }
   }
 }
 
@@ -258,32 +286,77 @@
     padding: 40px;
   }
 }
-.input-container{
-display: flex;
-flex-direction: column;
+/* ... Tus estilos anteriores de hero, main-page, etc ... */
 
+.action-toast {
+  position: fixed;
+  bottom: -180px; /* Escondido */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 420px;
+  max-height: 200px;
+  background: #1a1a1a;
+  color: white;
+  padding: 22px;
+  border-radius: 20px 20px 20px 20px;
+  box-shadow: 0 -10px 40px rgba(0,0,0,0.6);
+  z-index: 99999;
+  transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  border-top: 4px solid #93331d;
 }
 
-.input-edit{
+.action-toast.show {
+  bottom: 0; /* Sube a la pantalla */
+}
+
+.toast-content {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-top: 10px;
-  margin-bottom: 5px;
+  gap: 12px;
+}
 
-  input {
-    flex: 1;
-    padding: 12px 15px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    font-family: 'Montserrat', sans-serif;
+.toast-content p {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.95rem;
+  margin: 0;
+  font-weight: 500;
+}
 
-    &:focus {
-      outline: none;
-      border-color: #93331d;
-      box-shadow: 0 0 5px rgba(147, 51, 29, 0.5);
-    }
-  }
+.toast-actions {
+  display: flex;
+  gap: 12px;
+}
 
+.toast-btn {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  transition: opacity 0.2s;
+}
+
+.toast-btn:active { opacity: 0.8; }
+
+.toast-btn.confirm { background: #93331d; color: white; }
+.toast-btn.cancel { background: #333; color: #bbb; }
+.action-toast {
+  z-index: 10001;
+}
+
+/* Estilo por si quieres que el botón de confirmación cambie según la acción */
+.toast-btn.confirm {
+  background: #93331d;
+  color: white;
+}
+
+/* Si quieres mostrar el error de "No permitido" con otro color */
+.toast-card.error {
+  border-top-color: #ff4444;
 }

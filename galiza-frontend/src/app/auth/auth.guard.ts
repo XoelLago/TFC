@@ -19,17 +19,24 @@ canActivate(route: ActivatedRouteSnapshot): boolean | UrlTree {
       return this.router.parseUrl('/login');
     }
 
-    try {
-      const user = JSON.parse(userJson);
+    // Dentro de tu AuthGuard, en el bloque try/catch:
+try {
+  const user = JSON.parse(userJson);
+  const userRol = user.rol?.toLowerCase();
 
-      if (route.data['role'] && route.data['role'] !== user.rol) {
-        return this.router.parseUrl('/home');
-      }
-    } catch (e) {
-      // Si el JSON está mal, limpiamos y fuera
-      localStorage.clear();
-      return this.router.parseUrl('/login');
+  // Si la ruta pide un rol específico...
+  if (route.data['role']) {
+    const roleRequerido = route.data['role'].toLowerCase();
+
+    // Pasa si tiene el rol exacto O si es superuser
+    if (userRol !== roleRequerido && userRol !== 'superuser') {
+      return this.router.parseUrl('/home');
     }
+  }
+} catch (e) {
+  localStorage.clear();
+  return this.router.parseUrl('/login');
+}
 
     return true;
   }

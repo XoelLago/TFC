@@ -1,0 +1,84 @@
+<div class="info-group">
+  <label>{{ tituloLista }}</label>
+
+  <div class="input-edit">
+    <input type="text" placeholder="Buscar..." [(ngModel)]="terminoBusqueda" (input)="aplicarFiltros()">
+    <span class="material-icons" style="color: #93331d;">search</span>
+  </div>
+
+  <div class="filter-chips">
+    <span [class.active]="filtroActual === 'todos'" (click)="setFiltro('todos')">Todos</span>
+    <span [class.active]="filtroActual === 'user'" (click)="setFiltro('user')">Usuarios</span>
+    <span [class.active]="filtroActual === 'admin'" (click)="setFiltro('admin')">Admins</span>
+    <span [class.active]="filtroActual === 'superuser'" (click)="setFiltro('superuser')">Supers</span>
+  </div>
+
+  <div class="fixed-list-wrapper">
+    <label style="margin-top: 10px; display: block;">RESULTADOS ({{ itemsFiltrados.length }})</label>
+
+    <div class="user-list-container">
+      @if (cargando) {
+      <div class="empty-state">Cargando...</div>
+      } @else if (itemsFiltrados.length > 0) {
+      @for (item of itemsFiltrados; track item.id) {
+      <div class="user-card static-data" (click)="seleccionarItem(item)">
+        <div class="user-info">
+          <span class="user-name">{{ item.titulo }}</span>
+        </div>
+        <span class="user-role-badge" [ngClass]="item.claseCss">
+          {{ item.etiqueta }}
+        </span>
+      </div>
+      }
+      } @else {
+      <div class="empty-state">
+        <span class="material-icons">search_off</span>
+        <p>Sin resultados</p>
+      </div>
+      }
+    </div>
+  </div>
+</div>
+
+@if (itemSeleccionado) {
+<div class="modal-overlay" (click)="cerrarCard()">
+  <div class="action-card menu-fade" (click)="$event.stopPropagation()">
+    <div class="card-header">
+      <h3>Gestionar {{ itemSeleccionado.titulo }}</h3>
+    </div>
+
+    <div class="action-buttons">
+
+      @if (miRol === 'superuser') {
+      @if (itemSeleccionado.id === miId || itemSeleccionado.etiqueta?.toLowerCase() === 'superuser') {
+      <div class="no-actions-msg">Nada que hacer con este rango</div>
+      } @else {
+      <button class="action-btn up" (click)="emitirAccion('ascender')">
+        <span class="material-icons">upgrade</span> Ascender
+      </button>
+      <button class="action-btn down" (click)="emitirAccion('descender')">
+        <span class="material-icons">vertical_align_bottom</span> Descender
+      </button>
+      <button class="action-btn delete" (click)="emitirAccion('eliminar')">
+        <span class="material-icons">delete</span> Eliminar Usuario
+      </button>
+      }
+      }
+
+      @else if (miRol === 'admin') {
+      @if (itemSeleccionado.id === miId ||
+      itemSeleccionado.etiqueta?.toLowerCase() === 'superuser' ||
+      itemSeleccionado.etiqueta?.toLowerCase() === 'admin') {
+      <div class="no-actions-msg">Sin permisos para este nivel</div>
+      } @else if (itemSeleccionado.etiqueta?.toLowerCase() === 'user') {
+      <button class="action-btn up" (click)="emitirAccion('ascender')">
+        <span class="material-icons">upgrade</span> Ascender a Admin
+      </button>
+      }
+      }
+
+      <button class="action-btn close" (click)="cerrarCard()">Cancelar</button>
+    </div>
+  </div>
+</div>
+}

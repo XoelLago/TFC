@@ -1,16 +1,13 @@
 import { 
-  Injectable, 
-  ConflictException, 
-  InternalServerErrorException, 
-  NotFoundException,
-  BadRequestException 
+  Injectable, ConflictException, InternalServerErrorException, 
+  NotFoundException, BadRequestException, ForbiddenException 
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
-import { Usuario } from './entities/usuario.entity';
 import { UpdateUsuarioDto } from './dto/update-usuarios.dto';
+import { Usuario } from './entities/usuario.entity';
 import { Rol } from '../common/enums';
 
 @Injectable()
@@ -20,136 +17,76 @@ export class UsuariosService {
     private readonly usuarioRepository: Repository<Usuario>,
   ) {}
 
-  /**
-   * CREAR USUARIO
-   * Validación de duplicados y forzado de rol USER.
-   */
- async create(createUsuarioDto: CreateUsuarioDto): Promise<Usuario> {
-  const { contrasena } = createUsuarioDto;
-
-  try {
-    // 1. Ya no hace falta validar la longitud aquí, el DTO ya lo hizo.
-    const salt = await bcrypt.genSalt(10);
-    const hashedContrasena = await bcrypt.hash(contrasena, salt);
-
-    const nuevoUsuario = this.usuarioRepository.create({
-      ...createUsuarioDto,
-      contrasena: hashedContrasena,
-      rol: Rol.USER, 
-    });
-
-    return await this.usuarioRepository.save(nuevoUsuario);
-
-  } catch (error) {
-    if (typeof error === 'object' && error !== null) {
-      const err = error as { code?: string; errno?: number };
-      if (err.code === 'ER_DUP_ENTRY' || err.errno === 1062) {
-        throw new ConflictException('Este nombre de usuario ya está registrado');
-      }
-    }
-    throw new InternalServerErrorException('Error al guardar el usuario');
-  }
-}
-
-  /**
-   * ASCENDER A ADMIN
-   * Validación: Si ya es admin, avisamos al usuario.
-   */
-  async ascender(id: number): Promise<Usuario> {
-    const usuario = await this.findOne(id); // Lanza NotFoundException si no existe
-
-    if (usuario.rol === Rol.ADMIN) {
-      throw new BadRequestException(`El usuario ${usuario.nombre} ya es administrador`);
-    }
-
-    usuario.rol = Rol.ADMIN; 
-    return await this.usuarioRepository.save(usuario);
-  }
-
-  /**
-   * BUSCAR PARA LOGIN
-   */
-  async findByNombreWithPassword(nombre: string): Promise<Usuario | null> {
+  async create(createUsuarioDto: CreateUsuarioDto): Promise<Usuario> {
     try {
-      return await this.usuarioRepository.findOne({
-        where: { nombre },
-        select: ['id', 'nombre', 'contrasena', 'rol'] 
+      const salt = await bcrypt.genSalt(10);
+      const hashed = await bcrypt.hash(createUsuarioDto.contrasena, salt);
+      const nuevo = this.usuarioRepository.create({
+        ...createUsuarioDto,
+        contrasena: hashed,
+        rol: Rol.USER, 
       });
+      return await this.usuarioRepository.save(nuevo);
     } catch (error) {
-      throw new InternalServerErrorException('Error al buscar el usuario en la base de datos');
+      if ((error as any).code === 'ER_DUP_ENTRY') throw new ConflictException('Nombre de usuario ya existe');
+      throw new InternalServerErrorException('Error al crear usuario');
     }
   }
 
-  /**
-   * OBTENER TODOS
-   */
   async findAll(): Promise<Usuario[]> {
-    return await this.usuarioRepository.find();
+    return await this.usuarioRepository.find({ order: { id: 'DESC' } });
   }
 
-  /**
-   * BUSCAR POR ID
-   */
   async findOne(id: number): Promise<Usuario> {
-    const usuario = await this.usuarioRepository.findOneBy({ id });
-    if (!usuario) throw new NotFoundException('No se ha encontrado ningún usuario con ese ID');
-    return usuario;
+    const user = await this.usuarioRepository.findOneBy({ id });
+    if (!user) throw new NotFoundException('Usuario no encontrado');
+    return user;
   }
 
-  /**
-   * ACTUALIZAR PERFIL
-   * Eliminamos el cambio de rol de aquí por seguridad.
-   */
- async update(id: number, updateUsuarioDto: UpdateUsuarioDto): Promise<Usuario> {
-  // 1. Buscamos al usuario completo primero
-
-  
-  const usuario = await this.usuarioRepository.findOneBy({ id });
-  if (!usuario) {
-    throw new NotFoundException('Usuario no encontrado');
+  async ascender(id: number): Promise<Usuario> {
+    const user = await this.findOne(id);
+    if (user.rol === Rol.USER) user.rol = Rol.ADMIN;
+    else if (user.rol === Rol.ADMIN) user.rol = Rol.SUPERUSER;
+    else throw new BadRequestException('Ya tiene el rango máximo');
+    return await this.usuarioRepository.save(user);
   }
 
-  // 2. Seguridad: Borrar rol para que no se modifique
-  delete (updateUsuarioDto as any).rol;
+  async descender(id: number): Promise<Usuario> {
+    const user = await this.findOne(id);
+    if (user.rol === Rol.SUPERUSER) user.rol = Rol.ADMIN;
+    else if (user.rol === Rol.ADMIN) user.rol = Rol.USER;
+    else throw new BadRequestException('Ya tiene el rango mínimo');
+    return await this.usuarioRepository.save(user);
+  }
 
-  // 3. Validar nombre duplicado
-  if (updateUsuarioDto.nombre) {
-    const usuarioConEseNombre = await this.usuarioRepository.findOneBy({ 
-      nombre: updateUsuarioDto.nombre 
-    });
-    if (usuarioConEseNombre && usuarioConEseNombre.id !== id) {
-      throw new ConflictException('Este nombre de usuario ya está registrado');
+  async update(id: number, updateDto: UpdateUsuarioDto): Promise<Usuario> {
+    const user = await this.findOne(id);
+    delete (updateDto as any).rol; // Seguridad
+
+    if (updateDto.contrasena) {
+      const salt = await bcrypt.genSalt(10);
+      updateDto.contrasena = await bcrypt.hash(updateDto.contrasena, salt);
     }
+
+    Object.assign(user, updateDto);
+    await this.usuarioRepository.save(user);
+    return this.findOne(id);
   }
 
-  // 4. Encriptar contraseña si viene
-  if (updateUsuarioDto.contrasena) {
-    const salt = await bcrypt.genSalt(10);
-    updateUsuarioDto.contrasena = await bcrypt.hash(updateUsuarioDto.contrasena, salt);
-  }
-
-  // 5. ¡LA CLAVE!: Fusionamos los cambios en el objeto 'usuario'
-  // Esto pisa el nombre viejo con el nuevo en el objeto que ya tenemos
-  Object.assign(usuario, updateUsuarioDto);
-
-  // 6. Guardamos el objeto actualizado
-  // 'save' detecta que tiene ID y hace un UPDATE en la DB
-  await this.usuarioRepository.save(usuario);
-
-  // 7. Devolvemos el usuario limpio (sin pass) llamando a tu findOne
-  return this.findOne(id);
-}
-
-  /**
-   * ELIMINAR
-   */
   async remove(id: number): Promise<{ deleted: boolean }> {
-    const resultado = await this.usuarioRepository.delete(id);
-    
-    if (resultado.affected === 0) {
-      throw new NotFoundException('El usuario que intentas eliminar no existe');
-    }
-    
+    const user = await this.findOne(id);
+    if (user.rol === Rol.SUPERUSER) throw new ForbiddenException('No puedes eliminar un Superuser');
+    await this.usuarioRepository.delete(id);
     return { deleted: true };
   }
+  // src/usuarios/usuarios.service.ts
+
+async findByNombreWithPassword(nombre: string): Promise<Usuario | null> {
+  return await this.usuarioRepository
+    .createQueryBuilder('usuario')
+    .where('usuario.nombre = :nombre', { nombre })
+    .addSelect('usuario.contrasena') // Asegura que traemos la clave para comparar
+    .getOne();
 }
+}
+

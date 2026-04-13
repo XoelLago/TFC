@@ -33,8 +33,8 @@
     <div class="legend-item"><div class="dot marker-asociacion"></div><span class="material-icons sm">groups</span><span>Asociación</span></div>
     <div class="legend-item"><div class="dot marker-evento"></div><span class="material-icons sm">theater_comedy</span><span>Evento</span></div>
   </div>
-
-  <div class="place-card" *ngIf="selectedPlace">
+  @if(selectedPlace){
+  <div class="place-card" >
     <div class="card-header">
       <span class="badge" [ngClass]="selectedPlace.tipo">{{ selectedPlace.tipo.toUpperCase() }}</span>
       <button class="close-btn" (click)="selectedPlace = null">×</button>
@@ -55,6 +55,7 @@
       <button class="explore-btn">Ver detalles</button>
     </div>
   </div>
+}
 
 <div class="search-container">
   <div class="search-box">

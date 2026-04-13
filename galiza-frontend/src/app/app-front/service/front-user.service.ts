@@ -19,11 +19,20 @@ export class FrontUserService {
     return userJson ? JSON.parse(userJson) : null;
   }
 
-  esAdmin(): boolean {
-    const user = this.userSubject.value;
-    // Comparamos con el string exacto de tu Enum de NestJS
-    return user?.rol === 'admin';
-  }
+  // Modifica estos métodos dentro de tu FrontUserService
+esAdmin(): boolean {
+  const user = this.userSubject.value;
+  if (!user?.rol) return false;
+
+  const rol = user.rol.toLowerCase();
+  // Ahora "es admin" significa ser Admin O ser Superusuario
+  return rol === 'admin' || rol === 'superuser';
+}
+
+esSuperuser(): boolean {
+  const user = this.userSubject.value;
+  return user?.rol?.toLowerCase() === 'superuser';
+}
 
   registrar(usuario: any): Observable<any> {
     // En NestJS, la ruta por defecto suele ser /api/usuarios si usaste el prefijo
@@ -81,9 +90,25 @@ export class FrontUserService {
     return !!localStorage.getItem('access_token');
   }
 
-  ascenderUsuario(id: number): Observable<any> {
-  const url = `${this.URL_API}/usuarios/${id}/ascender`;
-  // Enviamos un objeto vacío {} como body porque el cambio lo decide el backend
-  return this.http.patch(url, {}, { headers: this.getHeaders() });
+
+
+
+// front-user.service.ts
+
+getUsuarios(): Observable<any[]> {
+  // Sin esto, NestJS te devuelve el 401 que ves en consola
+  return this.http.get<any[]>(`${this.URL_API}/usuarios`, { headers: this.getHeaders() });
+}
+
+ascenderUsuario(id: number): Observable<any> {
+  return this.http.patch(`${this.URL_API}/usuarios/${id}/ascender`, {}, { headers: this.getHeaders() });
+}
+
+descenderUsuario(id: number): Observable<any> {
+  return this.http.patch(`${this.URL_API}/usuarios/${id}/descender`, {}, { headers: this.getHeaders() });
+}
+
+eliminarUsuario(id: number): Observable<any> {
+  return this.http.delete(`${this.URL_API}/usuarios/${id}`, { headers: this.getHeaders() });
 }
 }
