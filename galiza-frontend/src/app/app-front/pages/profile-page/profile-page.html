@@ -26,7 +26,7 @@
       </div>
 
       <h2 class="form-title">
-        {{ usuario?.nombre || 'Perfil de Usuario' }}
+        {{ usuario.nombre || 'Perfil de Usuario' }}
       </h2>
 
       <p class="form-subtitle">
@@ -60,7 +60,7 @@
             <span class="material-icons icon-right">chevron_right</span>
           </button>
 
-          @if(usuario?.rol?.toUpperCase() === 'SUPERUSER'){
+          @if(usuario.rol.toUpperCase() === 'SUPERUSER'){
           <button class="settings-btn admin-highlight" (click)="cambiarSeccion('admin')">
             <span class="material-icons icon-left" style="color: #d4af37;">admin_panel_settings</span>
             Administrar
@@ -143,7 +143,7 @@
           </button>
 
           <app-admin-users tituloLista="GESTIÓN DE USUARIOS" [items]="usuariosMapeados"
-            [miRol]="usuario.rol?.toLowerCase()" [cargando]="cargando" (accionRealizada)="manejarAccionUsuario($event)">
+            [miRol]="usuario.rol.toLowerCase()" [cargando]="cargando" (accionRealizada)="manejarAccionUsuario($event)">
           </app-admin-users>
         </div>
       </div>
@@ -191,6 +191,7 @@
 <app-action-toast
   [visible]="confirmacion.visible"
   [mensaje]="confirmacion.mensaje"
+  [tipo]="confirmacion.tipo"
   (confirmar)="confirmarAccionApp()"
   (cancelar)="cancelarConfirmacion()">
 </app-action-toast>

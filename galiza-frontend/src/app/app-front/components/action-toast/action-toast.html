@@ -5,11 +5,19 @@
   </div>
 
   <div class="toast-actions">
+    @if(tipo !== 'cancelar'){
     <button type="button" class="toast-btn confirm" (click)="onConfirmar()">
       {{ txtConfirmar }}
     </button>
+  }
     <button type="button" class="toast-btn cancel" (click)="onCancelar()">
-      {{ txtCancelar }}
+      @if(tipo === 'cancelar'){
+        CANCELAR
+      }@else{
+        {{ txtCancelar }}
+      }
+
+
     </button>
   </div>
 </div>

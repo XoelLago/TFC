@@ -44,40 +44,70 @@
 <div class="modal-overlay" (click)="cerrarCard()">
   <div class="action-card menu-fade" (click)="$event.stopPropagation()">
     <div class="card-header">
-      <h3>Gestionar {{ itemSeleccionado.titulo }}</h3>
+      <h3 style="font-family: 'Georgia', serif; font-size: 2.2rem; color: #311c18; text-align: center;">Gestionar {{ itemSeleccionado.titulo }}</h3>
+      <p style="font-family: 'Montserrat', sans-serif; font-size: 1rem; color: #554a43; text-align: center; margin-top: 5px;">{{ itemSeleccionado.etiqueta }}</p>
     </div>
 
-    <div class="action-buttons">
+    <div class="action-buttons-list">
 
       @if (miRol === 'superuser') {
-      @if (itemSeleccionado.id === miId || itemSeleccionado.etiqueta?.toLowerCase() === 'superuser') {
-      <div class="no-actions-msg">Nada que hacer con este rango</div>
-      } @else {
-      <button class="action-btn up" (click)="emitirAccion('ascender')">
-        <span class="material-icons">upgrade</span> Ascender
-      </button>
-      <button class="action-btn down" (click)="emitirAccion('descender')">
-        <span class="material-icons">vertical_align_bottom</span> Descender
-      </button>
-      <button class="action-btn delete" (click)="emitirAccion('eliminar')">
-        <span class="material-icons">delete</span> Eliminar Usuario
-      </button>
-      }
+        @if (itemSeleccionado.id === miId || itemSeleccionado.etiqueta.toLowerCase() === 'superuser') {
+          <div class="no-actions-msg">Nada que hacer con este rango</div>
+        } @else {
+          <button class="action-card-btn ascender" (click)="emitirAccion('ascender')">
+            <span class="btn-icon-wrapper">
+              <span class="material-icons">keyboard_arrow_up</span>
+            </span>
+            <div class="btn-text-content">
+              <span class="btn-title">ASCENDER</span>
+              <span class="btn-subtitle">Asignar rol superior</span>
+            </div>
+          </button>
+
+          <button class="action-card-btn descender" (click)="emitirAccion('descender')">
+            <span class="btn-icon-wrapper">
+              <span class="material-icons">keyboard_arrow_down</span>
+            </span>
+            <div class="btn-text-content">
+              <span class="btn-title">DESCENDER</span>
+              <span class="btn-subtitle">Asignar rol inferior</span>
+            </div>
+          </button>
+
+          <button class="action-card-btn eliminar" (click)="emitirAccion('eliminar')">
+            <span class="btn-icon-wrapper">
+              <span class="material-icons">person_off</span>
+            </span>
+            <div class="btn-text-content">
+              <span class="btn-title">ELIMINAR USUARIO</span>
+              <span class="btn-subtitle">Revocar acceso permanentemente</span>
+            </div>
+            <span class="material-icons btn-trash">delete</span>
+          </button>
+        }
       }
 
-      @else if (miRol === 'admin') {
-      @if (itemSeleccionado.id === miId ||
-      itemSeleccionado.etiqueta?.toLowerCase() === 'superuser' ||
-      itemSeleccionado.etiqueta?.toLowerCase() === 'admin') {
-      <div class="no-actions-msg">Sin permisos para este nivel</div>
-      } @else if (itemSeleccionado.etiqueta?.toLowerCase() === 'user') {
-      <button class="action-btn up" (click)="emitirAccion('ascender')">
-        <span class="material-icons">upgrade</span> Ascender a Admin
-      </button>
-      }
-      }
+      <!-- @else if (miRol === 'admin') {
+        @if (itemSeleccionado.id === miId ||
+             itemSeleccionado.etiqueta?.toLowerCase() === 'superuser' ||
+             itemSeleccionado.etiqueta?.toLowerCase() === 'admin') {
+          <div class="no-actions-msg">Sin permisos para este nivel</div>
+        } @else if (itemSeleccionado.etiqueta?.toLowerCase() === 'user') {
+          <button class="action-card-btn ascender" (click)="emitirAccion('ascender')">
+            <span class="btn-icon-wrapper">
+              <span class="material-icons">upgrade</span>
+            </span>
+            <div class="btn-text-content">
+              <span class="btn-title">ASCENDER</span>
+              <span class="btn-subtitle">Asignar rol superior</span>
+            </div>
+          </button>
+        }
+      } -->
 
-      <button class="action-btn close" (click)="cerrarCard()">Cancelar</button>
+      <div class="cancel-container">
+        <button class="cancel-link-btn" (click)="cerrarCard()">CANCELAR</button>
+      </div>
     </div>
   </div>
 </div>

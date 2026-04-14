@@ -61,7 +61,7 @@ export class UsuariosService {
 
   async update(id: number, updateDto: UpdateUsuarioDto): Promise<Usuario> {
     const user = await this.findOne(id);
-    delete (updateDto as any).rol; // Seguridad
+    delete (updateDto).rol; // Seguridad
 
     if (updateDto.contrasena) {
       const salt = await bcrypt.genSalt(10);

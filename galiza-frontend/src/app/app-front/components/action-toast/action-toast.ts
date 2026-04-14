@@ -12,6 +12,7 @@ export class ActionToastComponent {
   @Input() visible: boolean = false;
   @Input() mensaje: string = '';
   @Input() icon: string = 'priority_high';
+  @Input() tipo: string = '';
   @Input() txtConfirmar: string = 'SÍ, CONTINUAR';
   @Input() txtCancelar: string = 'NO';
 

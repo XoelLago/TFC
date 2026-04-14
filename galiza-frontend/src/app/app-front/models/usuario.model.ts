@@ -1,9 +1,17 @@
-import { Rol } from './rol.model';
+import { Rol } from "./rol.model";
 
 export interface Usuario {
-_id?: string;
-  nome: string;
-  contrasena?: string;
-  rol?: Rol;                  // 'USER' | 'ADMIN'
-  marcadores?: string[];      // opcional: IDs de bailes, canciones, etc.
+  id: number;
+  nombre: string;
+  rol: Rol;
+  marcadores?: any[]; // Puedes tipar Marcador luego si quieres
+}
+
+// Interfaz para que el componente AdminUsers sea reutilizable
+export interface UsuarioMapeado {
+  id: number;
+  titulo: string;
+  etiqueta: string;
+  claseCss: string;
+  original: Usuario;
 }

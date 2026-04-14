@@ -1,12 +1,14 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
 import { AsociacionesService } from './asociaciones.service';
+import { CreateAsociacionDto } from './dto/create-asociacione.dto';
+import { UpdateAsociacioneDto } from './dto/update-asociacione.dto';
 
 @Controller('asociaciones')
 export class AsociacionesController {
   constructor(private readonly asociacionesService: AsociacionesService) {}
 
   @Post()
-  create(@Body() createDto: any) {
+  create(@Body() createDto: CreateAsociacionDto) {
     return this.asociacionesService.create(createDto);
   }
 
@@ -21,7 +23,7 @@ export class AsociacionesController {
   }
 
   @Patch(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() updateDto: any) {
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateDto: UpdateAsociacioneDto) {
     return this.asociacionesService.update(id, updateDto);
   }
 

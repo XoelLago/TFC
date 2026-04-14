@@ -47,7 +47,7 @@
 .admin { background: #93331d; color: white; }
 .user { background: #444; color: #eee; }
 
-/* --- MODAL DE ACCIONES --- */
+/* --- MODAL DE ACCIONES (Rediseño de Botones) --- */
 .modal-overlay {
   position: fixed;
   top: 0; left: 0;
@@ -61,64 +61,175 @@
 }
 
 .action-card {
-  background: #f9f7f2;
-  width: 85%;
-  max-width: 300px;
-  padding: 20px;
-  border-radius: 15px;
-  border: 1px solid #93331d;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  background: #fbf9f4; /* Tono crema suave exacto de la imagen */
+  width: 90%;
+  max-width: 400px;
+  padding: 30px;
+  border-radius: 30px; /* Bordes muy redondeados */
+  border: 1px solid transparent; /* Eliminamos el borde oscuro antiguo */
+  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
 }
 
-.action-buttons {
+.card-header h3 {
+  margin: 0;
+}
+
+/* Nuevo contenedor para los botones tipo tarjeta */
+.action-buttons-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-top: 15px;
+  gap: 15px; /* Espaciado mayor entre botones */
+  margin-top: 25px;
 }
 
-.action-btn {
+/* Estilo base para los nuevos botones tipo tarjeta */
+.action-card-btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 15px 20px;
   border: none;
-  padding: 12px;
-  border-radius: 8px;
+  border-radius: 20px; /* Bordes redondeados tipo tarjeta */
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+  font-family: 'Montserrat', sans-serif;
+  position: relative; /* Para posicionar los iconos finales (flecha/basura) */
+}
+
+.action-card-btn:active {
+  transform: scale(0.98);
+}
+
+/* Contenedor del icono circular inicial */
+.btn-icon-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; /* Icono circular */
+}
+
+.btn-icon-wrapper .material-icons {
+  font-size: 1.8rem;
+}
+
+/* Contenedor del texto (título + subtítulo) */
+.btn-text-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  text-align: left;
+  margin-left: 15px;
+}
+
+.btn-title {
+  font-size: 1rem;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.btn-subtitle {
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+/* Iconos finales (flecha y basura) */
+.btn-arrow, .btn-trash {
+  font-size: 1.5rem;
+  position: absolute;
+  right: 20px;
+}
+
+/* Esquemas de color específicos adaptados de la imagen_0.png */
+
+/* ASCENDER (Verde) */
+.action-card-btn.ascender {
+  background: #eef8f1; /* Verde claro de fondo */
+  color: #0b512e; /* Verde oscuro para textos e icono */
+}
+.action-card-btn.ascender .btn-icon-wrapper {
+  color: #0b512e;
+}
+
+/* DESCENDER (Amarillo/Ámbar) */
+.action-card-btn.descender {
+  background: #fff8e1; /* Amarillo suave de fondo */
+  color: #83521d; /* Ámbar/marrón para textos e icono */
+}
+.action-card-btn.descender .btn-icon-wrapper {
+  color: #83521d;
+}
+
+/* ELIMINAR USUARIO (Rojo) */
+.action-card-btn.eliminar {
+  background: #fff2f1; /* Rosa suave de fondo */
+  color: #93331d; /* Marrón/rojo para textos e iconos */
+}
+.action-card-btn.eliminar .btn-icon-wrapper {
+  color: #93331d;
+}
+.action-card-btn.eliminar .btn-trash {
+  color: #93331d; /* Icono de basura rojo oscuro */
+}
+
+/* Rediseño del botón CANCELAR como enlace centrado */
+.cancel-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.cancel-link-btn {
+  background: transparent;
+  border: none;
+  color: #554a43; /* Marrón grisáceo suave */
+  font-size: 1.1rem;
   font-weight: 600;
   font-family: 'Montserrat', sans-serif;
   cursor: pointer;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
-.action-btn.up { background: #e8f5e9; color: #2e7d32; }
-.action-btn.down { background: #fff3e0; color: #e65100; }
-.action-btn.delete { background: #ffebee; color: #c62828; }
-.action-btn.close { background: transparent; color: #777; margin-top: 5px; }
+.cancel-link-btn:hover {
+  color: #311c18;
+}
 
-/* --- INPUTS --- */
+/* Mantener el resto de los estilos originales */
+/* ... .fixed-list-wrapper, .user-list-container, .user-card, etc. ... */
 .input-edit {
   display: flex;
   align-items: center;
   gap: 10px;
   margin-top: 10px;
   margin-bottom: 5px;
+
   input {
-    flex: 1; padding: 12px 15px; border: 1px solid #ccc; border-radius: 8px;
-    &:focus { outline: none; border-color: #93331d; }
+    flex: 1;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-family: 'Montserrat', sans-serif;
+
+    &:focus {
+      outline: none;
+      border-color: #93331d;
+      box-shadow: 0 0 5px rgba(147, 51, 29, 0.5);
+    }
   }
 }
-
-.empty-state {
-  height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #999; opacity: 0.6;
-}
-.no-actions-msg {
-  padding: 15px;
-  background: #f0f0f0;
+.empty-state{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
   color: #777;
-  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
   text-align: center;
-  font-size: 0.85rem;
-  font-weight: 600;
-  border: 1px dashed #ccc;
-  margin-bottom: 10px;
+  padding: 20px;
 }

@@ -57,7 +57,10 @@ esSuperuser(): boolean {
   }
 
   logout() {
-    localStorage.clear(); // Más rápido: borra todo rastro
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('user_rol');
+    localStorage.removeItem('user_nombre');
     this.userSubject.next(null);
     this.router.navigate(['/login']);
   }
