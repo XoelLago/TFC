@@ -58,10 +58,11 @@
   justify-content: center;
   align-items: center;
   z-index: 999;
+
 }
 
 .action-card {
-  background: #fbf9f4; /* Tono crema suave exacto de la imagen */
+  background: #f9f7f2 url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l5 15h15l-12 10 5 15-13-9-13 9 5-15-12-10h15z' fill='%2393331d' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E") repeat;
   width: 90%;
   max-width: 400px;
   padding: 30px;
@@ -98,6 +99,7 @@
 
 .action-card-btn:active {
   transform: scale(0.98);
+
 }
 
 /* Contenedor del icono circular inicial */
@@ -149,6 +151,7 @@
 .action-card-btn.ascender {
   background: #eef8f1; /* Verde claro de fondo */
   color: #0b512e; /* Verde oscuro para textos e icono */
+  border: 1px solid #0f6429;
 }
 .action-card-btn.ascender .btn-icon-wrapper {
   color: #0b512e;
@@ -158,6 +161,7 @@
 .action-card-btn.descender {
   background: #fff8e1; /* Amarillo suave de fondo */
   color: #83521d; /* Ámbar/marrón para textos e icono */
+  border: 1px solid #5e441d;
 }
 .action-card-btn.descender .btn-icon-wrapper {
   color: #83521d;
@@ -167,6 +171,7 @@
 .action-card-btn.eliminar {
   background: #fff2f1; /* Rosa suave de fondo */
   color: #93331d; /* Marrón/rojo para textos e iconos */
+  border: 1px solid #521d1a; /* Borde rojo suave */
 }
 .action-card-btn.eliminar .btn-icon-wrapper {
   color: #93331d;
