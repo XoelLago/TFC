@@ -205,6 +205,9 @@
 .badge.lugar { background: #B34A32; }
 .badge.asociacion { background: #D4A017; }
 .badge.evento { background: #8C2A1C; }
+.badge.personalizado{background: #333;}
+
+
 
 .card-header {
   display: flex;
@@ -389,3 +392,326 @@
   to { opacity: 1; transform: translateX(0); }
 }
 
+.boton-flotante {
+  /* 1. Posición fija abajo a la derecha */
+  position: fixed;
+  bottom: 120px;
+  right: 30px;
+
+  /* 2. Capa: Este número alto lo pone por encima de todo */
+  z-index:  1999;
+
+  /* 3. Diseño: Cuadrado con tu color y bordes */
+  width: 60px;
+  height: 60px;
+  background-color: #93331d;
+  border-radius: 20px; /* Bordes redondeados */
+
+  /* 4. Centrar el símbolo + */
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  /* 5. Estética */
+  color: white;
+  font-size: 35px;
+  font-weight: bold;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+/* --- OVERLAY DEL FORMULARIO --- */
+.overlay-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px); /* Desenfoque del mapa al fondo */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* Por encima de todo el mapa */
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Tarjeta del Formulario */
+.form-card {
+  background: white;
+  width: 95%;
+  max-width: 500px;
+  margin-bottom: 92px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease-out;
+}
+
+/* Cabecera del Formulario */
+.form-header {
+  background: #93331d;
+  color: white;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.form-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 28px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+/* Cuerpo del Formulario */
+.form-body {
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.input-group label {
+  font-weight: 600;
+  color: #444;
+  font-size: 0.9rem;
+}
+
+.input-group input,
+.input-group textarea {
+  padding: 12px;
+  border: 2px solid #eee;
+  border-radius: 10px;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.input-group input:focus,
+.input-group textarea:focus {
+  outline: none;
+  border-color: #93331d;
+}
+
+/* Visualización de Coordenadas */
+.coords-display {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-around;
+  border: 1px dashed #ccc;
+}
+
+.coord-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.coord-item small {
+  color: #888;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+}
+
+.coord-item span {
+  font-family: monospace;
+  font-weight: bold;
+  color: #333;
+}
+
+.helper-text {
+  font-size: 0.8rem;
+  color: #666;
+  margin: 0;
+  font-style: italic;
+}
+
+/* Pie del Formulario (Botones) */
+.form-footer {
+  padding: 20px;
+  background: #fcfcfc;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  border-top: 1px solid #eee;
+}
+
+.btn-cancel {
+  background: #eee;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #666;
+}
+
+.btn-save {
+  background: #93331d;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-save:hover {
+  background: #7a2a18;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.map-picker-container {
+  margin-bottom: 15px;
+}
+
+.map-picker-container label {
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #93331d;
+  display: block;
+  margin-bottom: 5px;
+}
+#mapPick {
+  height: 300px !important;
+  width: 100% !important;
+  display: block !important;
+  position: relative !important; /* Leaflet necesita esto para posicionar las imágenes */
+  background: #e0e0e0; /* Color gris de fondo */
+  border: 2px solid #93331d;
+  border-radius: 12px;
+  overflow: hidden;
+  z-index: 1001;
+}
+
+/* Evita que el contenedor del formulario oculte el mapa */
+.form-body {
+  overflow: visible !important;
+}
+
+/* Estilo para que el marcador de selección destaque */
+.leaflet-marker-icon {
+  filter: hue-rotate(140deg); /* Cambia el color del pin estándar de azul a otro */
+}
+
+textarea {
+    width: 100%;
+    min-height: 80px; /* Altura mínima inicial */
+    max-height: 150px; /* Evita que crezca demasiado */
+    padding: 10px;
+    border: 1.5px solid #d1d1d1;
+    border-radius: 8px;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    font-size: 14px;
+    color: #333;
+    background-color: #f9f9f9;
+    resize: vertical; /* Permite al usuario estirarlo solo hacia abajo */
+    transition: all 0.3s ease;
+    box-sizing: border-box; /* Asegura que el padding no rompa el ancho */
+}
+
+/* Efecto cuando el usuario hace clic para escribir */
+textarea:focus {
+    outline: none;
+    border-color: #93331d; /* Color marrón de tus marcadores */
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(147, 51, 29, 0.1); /* Resplandor suave */
+}
+
+/* Estilo del placeholder (el texto de ayuda dentro) */
+textarea::placeholder {
+    color: #aaa;
+    font-style: italic;
+}
+
+/* Estilo para el scrollbar dentro de la descripción (opcional, para Chrome/Safari) */
+textarea::-webkit-scrollbar {
+    width: 6px;
+}
+
+textarea::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+/* Contenedor horizontal para los botones de la card */
+.card-actions-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 15px;
+    align-items: center;
+}
+
+/* El botón de ver detalles ocupa el espacio disponible */
+.card-actions-row .explore-btn {
+    flex: 1;
+    margin-top: 0; /* Si tenías margin-top en tu css original, quítaselo para que alinee bien */
+}
+
+/* Estilos para los botones cuadrados de iconos */
+.btn-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    color: white;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn-icon .material-icons {
+    font-size: 20px;
+}
+
+.btn-icon:hover {
+    transform: scale(1.05);
+}
+
+/* Colores específicos */
+.btn-edit {
+    background-color: #d4a017; /* Amarillo/Dorado */
+}
+.btn-edit:hover {
+    background-color: #b8860b;
+}
+
+.btn-delete {
+    background-color: #dc3545; /* Rojo peligro */
+}
+.btn-delete:hover {
+    background-color: #c82333;
+}
+.action-toast.show {
+    top: 20px !important; /* Deja un poco de aire con el borde superior */
+}

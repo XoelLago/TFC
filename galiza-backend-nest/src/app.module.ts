@@ -10,6 +10,7 @@ import { BailesModule } from './bailes/bailes.module';
 import { LugaresModule } from './lugares/lugares.module';
 import { ProvinciasModule } from './provincias/provincias.module';
 import { AuthModule } from './auth/auth.module';
+import { MarcadoresModule } from './marcadores/marcadores.module';
 // Importa aquí los módulos según los vayas actualizando
 
 @Module({
@@ -40,6 +41,7 @@ import { AuthModule } from './auth/auth.module';
     AsociacionesModule,
     EventosModule,
     InstrumentosModule,
+    MarcadoresModule
     
   ],
 })

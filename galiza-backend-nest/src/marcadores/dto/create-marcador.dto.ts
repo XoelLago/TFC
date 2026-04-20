@@ -1,23 +1,32 @@
-import { IsString, IsNotEmpty, IsNumber, IsHexColor, IsOptional } from 'class-validator';
-
+// src/marcadores/dto/create-marcador.dto.ts
+import { Type } from 'class-transformer';
+import { IsString, IsNotEmpty, IsOptional, IsNumber, ValidateNested } from 'class-validator';
+class CoordsDto {
+  @IsNumber()
+  lat!: number;
+  @IsNumber()
+  lng!: number;
+}
+// En el backend: create-marcador.dto.ts
 export class CreateMarcadorDto {
   @IsString()
   @IsNotEmpty()
-  titulo!: string;
+  nome!: string;
 
-  @IsNumber()
-  lat!: number;
-
-  @IsNumber()
-  lng!: number;
-
-  @IsHexColor()
+  @IsString()
   @IsOptional()
-  color?: string; // Para que el usuario personalice su pin en el mapa
-
-  // El userId lo solemos sacar del Token JWT en el servidor, 
-  // pero si lo envías manualmente:
-  @IsNumber()
+  descripcion?: string;
+  
+  @IsString()
   @IsOptional()
-  usuarioId?: number;
+  tipo?: string;
+
+  @IsString()
+  @IsOptional()
+  icono?: string;
+
+  @ValidateNested() // Esto le dice que valide el objeto de dentro
+  @Type(() => CoordsDto) 
+  coords!: CoordsDto;
 }
+

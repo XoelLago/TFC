@@ -21,7 +21,6 @@ constructor(private router: Router) {
     // El menú solo se muestra si NO es login Y NO es registro
     this.showMenu = !url.includes('/login') && !url.includes('/registro');
 
-    console.log('¿Mostrar menú?', this.showMenu); // Para que lo veas en consola
   });
 }
 

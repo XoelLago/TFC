@@ -9,58 +9,46 @@ import { UpdateMarcadorDto } from './dto/update-marcador.dto';
 export class MarcadoresService {
   constructor(
     @InjectRepository(Marcador)
-    private readonly marcadorRepository: Repository<Marcador>,
-  ) {}
+    private repo: Repository<Marcador>
+  ) { }
 
-  async create(createMarcadorDto: CreateMarcadorDto) {
-  // 1. Extraemos el usuarioId y el resto de datos
-  const { usuarioId, ...datosMarcador } = createMarcadorDto;
-
-  // 2. Creamos la instancia mapeando el usuarioId al objeto usuario que espera TypeORM
-  const nuevoMarcador = this.marcadorRepository.create({
-    ...datosMarcador,
-    usuario: { id: usuarioId } as any // Aquí hacemos el "truco" para que encaje
-  });
-
-  // 3. Guardamos en la base de datos
-  return await this.marcadorRepository.save(nuevoMarcador);
-}
-
-  async findAll() {
-    return await this.marcadorRepository.find({ relations: ['usuario'] });
-  }
-
-  async findOne(id: number) {
-    const marcador = await this.marcadorRepository.findOne({
-      where: { id },
-      relations: ['usuario'],
+  async crear(dto: CreateMarcadorDto, usuarioId: number): Promise<Marcador> {
+    const nuevo = this.repo.create({
+      ...dto,
+      tipo: 'personalizado', // Forzado
+      icono: 'star',        // Forzado (siempre estrella)
+      usuario: { id: usuarioId } as any
     });
-    if (!marcador) throw new NotFoundException(`Marcador con id ${id} non atopado`);
-    return marcador;
+    return await this.repo.save(nuevo);
   }
 
-  async update(id: number, updateMarcadorDto: UpdateMarcadorDto) {
-  // 1. Buscamos el marcador existente
-  const marcador = await this.findOne(id);
-  
-  // 2. Extraemos el usuarioId y el resto de campos
-  const { usuarioId, ...datosAActualizar } = updateMarcadorDto;
-
-  // 3. Aplicamos los cambios básicos (titulo, lat, lng, color)
-  this.marcadorRepository.merge(marcador, datosAActualizar as Partial<Marcador>);
-
-  // 4. Si el usuarioId viene en el DTO, lo tratamos aparte
-  if (usuarioId) {
-    // Asignamos el objeto con el ID para que TypeORM lo reconozca como relación
-    marcador.usuario = { id: usuarioId } as any;
+  async findAllByUser(usuarioId: number): Promise<Marcador[]> {
+    return await this.repo.find({
+      where: { usuario: { id: usuarioId } }
+    });
   }
 
-  // 5. Guardamos
-  return await this.marcadorRepository.save(marcador);
+async update(id: number, updateMarcadorDto: UpdateMarcadorDto): Promise<Marcador> {
+  // 1. Buscamos si existe realmente
+  const marcadorExistente = await this.repo.findOneBy({ id });
+
+  if (!marcadorExistente) {
+    throw new NotFoundException(`O marcador con ID ${id} non existe`);
+  }
+
+  // 2. FUSIONAMOS los datos nuevos sobre el objeto que ya tiene el ID
+  // Esto es CLAVE: merge mete los datos del DTO dentro del objeto con ID
+  const marcadorActualizado = this.repo.merge(marcadorExistente, updateMarcadorDto);
+
+  // 3. Al hacer save de un objeto QUE YA TIENE ID, TypeORM hace un UPDATE, no un INSERT
+  return await this.repo.save(marcadorActualizado);
 }
 
-  async remove(id: number) {
-    const marcador = await this.findOne(id);
-    return await this.marcadorRepository.remove(marcador);
+  async remove(id: number): Promise<void> {
+    const marcador = await this.repo.findOneBy({ id });
+    if (!marcador) {
+      throw new NotFoundException(`Marcador con id ${id} non existe`);
+    }
+    await this.repo.remove(marcador);
   }
 }
