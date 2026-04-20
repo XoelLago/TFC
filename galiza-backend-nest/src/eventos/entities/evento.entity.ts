@@ -29,8 +29,8 @@ export class Evento {
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0.00 })
   precio: number = 0.00;
 
-  @Column({ default: 'event' })
-  icono: string = 'event';
+  @Column({ default: 'theater_comedy' })
+  icono: string = 'theater_comedy';
 
   @Column('text', { nullable: true })
   descripcion?: string;

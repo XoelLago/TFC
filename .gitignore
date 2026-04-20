@@ -1,0 +1,4 @@
+# Datos de Docker y scripts temporales
+mysql_data/
+error.log
+temp_backup.sql

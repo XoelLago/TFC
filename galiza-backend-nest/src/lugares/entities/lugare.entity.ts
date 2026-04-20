@@ -20,8 +20,8 @@ export class Lugar {
   @Column({ default: 'lugar' })
   tipo: string = 'lugar'; // Siempre lugar
 
-  @Column({ default: 'location_on' })
-  icono: string = 'location_on'; // Siempre location_on
+  @Column({ default: 'castle' })
+  icono: string = 'castle'; // Siempre location_on
 
   @Column('text', { nullable: true })
   descripcion?: string = 'Lugar de interés cultural'; // Opcional

@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  # BASE DE DATOS
+  db:
+    image: mysql:8.0
+    container_name: galiza_db
+    restart: "no"
+    environment:
+      MYSQL_DATABASE: galiza_db
+      MYSQL_ROOT_PASSWORD: root # Pon aquí la misma que tengas en tu .env o app.module
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql_data:/var/lib/mysql # AQUÍ SE GUARDARÁN TUS MARCADORES
+      - ./db-init:/docker-entrypoint-initdb.d
+
+  # BACKEND
+  backend:
+    build: ./galiza-backend-nest
+    container_name: galiza_back
+    restart: "no"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      # MUY IMPORTANTE: El host ya no es localhost, es 'db'
+      DATABASE_HOST: db 
+      DATABASE_PORT: 3306
+
+  # FRONTEND
+  frontend:
+    build: ./galiza-frontend
+    container_name: galiza_front
+    restart: "no"
+    ports:
+      - "4200:4200"
+    depends_on:
+      - backend
+
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: galiza_pma
+    restart: "no"
+    ports:
+      - "8080:80"
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=db

@@ -18,6 +18,8 @@
     "@angular/platform-browser": "^21.2.0",
     "@angular/router": "^21.2.0",
     "@tailwindcss/postcss": "^4.2.2",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.15.1",
     "leaflet": "^1.9.4",
     "postcss": "^8.5.8",
     "rxjs": "~7.8.0",

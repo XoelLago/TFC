@@ -5,6 +5,7 @@ import * as L from 'leaflet';
 import { CreateMarcadorForm, DatosMapa } from '../../models/mapa.model';
 import { MapaService } from '../../service/mapa.service';
 import { ActionToastComponent } from "../../components/action-toast/action-toast";
+import { IsNotEmpty } from 'class-validator';
 
 @Component({
   selector: 'app-home-page',
@@ -196,7 +197,12 @@ export class HomePage implements AfterViewInit {
     if (marker) this.seleccionarLugar(place, marker);
   }
   CrearMarcadorPersonalizado() {
-    if (!this.nuevoMarcador.nome) return;
+    this.errorMsg = '';
+    if (!this.nuevoMarcador.nome|| this.nuevoMarcador.nome.trim().length === 0) {
+      this.errorMsg = 'O nome do marcador é obrigatorio para poder gardalo.';
+      return;
+    }
+
 
     const body = {
       nome: this.nuevoMarcador.nome,
@@ -205,6 +211,8 @@ export class HomePage implements AfterViewInit {
       icono: 'star',
       coords: this.nuevoMarcador.coords
     };
+
+
 
     if (this.idMarcadorEditando) {
       this.mapaService.actualizarMarcador(this.idMarcadorEditando, body).subscribe({
@@ -224,6 +232,9 @@ export class HomePage implements AfterViewInit {
         next: (res) => {
           this.places.push(res);
           this.finalizarAccion();
+        },
+        error:(res) =>{
+          this.errorMsg = 'Falta el nombre por cubrir';
         }
       });
     }
@@ -240,6 +251,7 @@ export class HomePage implements AfterViewInit {
   abrirFormulario() {
     this.mostrarFormulario = true;
     this.textoBotonForm = 'Gardar';
+    this.errorMsg = '';
     this.nuevoMarcador.nome = ''; this.nuevoMarcador.descripcion = '';
     this.cdr.detectChanges();
     setTimeout(() => { this.initMiniMap(); }, 100);

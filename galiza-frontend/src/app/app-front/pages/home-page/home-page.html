@@ -17,7 +17,8 @@
         @if(showHelp){
         <div class="help-balloon">
           <p>Estás vendo as <strong>Minutas Cartográficas</strong> do IGN, debuxos feitos á man realizados entre
-            <strong>1910 e 1970</strong>.</p>
+            <strong>1910 e 1970</strong>.
+          </p>
           <div class="balloon-arrow"></div>
         </div>
         }
@@ -65,17 +66,17 @@
           </div>
         </div>
         <div class="card-actions-row">
-  <button class="explore-btn">Ver detalles</button>
+          <button class="explore-btn">Ver detalles</button>
 
-  @if(selectedPlace.tipo === 'personalizado') {
-    <button class="btn-icon btn-edit" (click)="abrirParaEditar(selectedPlace)" title="Editar">
-      <span class="material-icons">edit</span>
-    </button>
-    <button class="btn-icon btn-delete" (click)="borrarMarcador(selectedPlace)" title="Borrar">
-      <span class="material-icons">delete</span>
-    </button>
-  }
-</div>
+          @if(selectedPlace.tipo === 'personalizado') {
+          <button class="btn-icon btn-edit" (click)="abrirParaEditar(selectedPlace)" title="Editar">
+            <span class="material-icons">edit</span>
+          </button>
+          <button class="btn-icon btn-delete" (click)="borrarMarcador(selectedPlace)" title="Borrar">
+            <span class="material-icons">delete</span>
+          </button>
+          }
+        </div>
       </div>
     </div>
     }
@@ -115,14 +116,22 @@
       <div class="form-body">
         <div class="input-group">
           <label>Nome do Marcador</label>
-          <input type="text" [(ngModel)]="nuevoMarcador.nome" placeholder="Ex: Fonte da Vida...">
+
+          <input type="text" (input)="errorMsg =''" [(ngModel)]="nuevoMarcador.nome" placeholder="Ex: Fonte da Vida...">
+          @if(errorMsg){
+          <label style="color:red; margin-bottom: 10px;">
+            {{ errorMsg }}
+          </label>
+          }
         </div>
 
         <div class="form-group">
-        <label class="input-group">Descripción:</label>
-        <textarea  class="textarea" [(ngModel)]="nuevoMarcador.descripcion" placeholder="Escribe aquí os detalles..." rows="3">
+          <label class="input-group">Descripción:</label>
+          <textarea class="textarea" [(ngModel)]="nuevoMarcador.descripcion" placeholder="Escribe aquí os detalles..."
+            rows="3">
   </textarea>
-</div>
+        </div>
+
         <div class="map-picker-container">
           <label>Fai clic no mapa para situar o punto:</label>
           <div id="mapPick" style="height: 200px; border-radius: 10px; margin-top: 5px;"></div>
@@ -141,9 +150,10 @@
       </div>
 
       <div class="form-footer">
+
         <button class="btn-cancel" (click)="cerrarFormulario()">Cancelar</button>
 
-        <button class="btn-save" [disabled]="!nuevoMarcador.nome" (click)="CrearMarcadorPersonalizado()">
+        <button class="btn-save" (click)="CrearMarcadorPersonalizado()">
           <span class="material-icons">save</span> {{textoBotonForm}}
         </button>
       </div>
@@ -151,11 +161,6 @@
   </div>
   }
 </div>
-<app-action-toast
-  [visible]="toastConfig.visible"
-  [mensaje]="toastConfig.mensaje"
-  [icon]="toastConfig.icon"
-  [txtConfirmar]="toastConfig.txtConfirmar"
-  (confirmar)="ejecutarAccionToast()"
-  (cancelar)="cerrarToast()">
+<app-action-toast [visible]="toastConfig.visible" [mensaje]="toastConfig.mensaje" [icon]="toastConfig.icon"
+  [txtConfirmar]="toastConfig.txtConfirmar" (confirmar)="ejecutarAccionToast()" (cancelar)="cerrarToast()">
 </app-action-toast>
