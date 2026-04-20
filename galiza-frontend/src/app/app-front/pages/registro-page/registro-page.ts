@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { FrontUserService } from '../../service/front-user.service';
+import { ActionToastComponent } from "../../components/action-toast/action-toast";
 
 @Component({
   selector: 'app-registro-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, ActionToastComponent],
   templateUrl: './registro-page.html',
   styleUrls: ['./registro-page.css']
 })
@@ -21,10 +22,13 @@ export class RegistroPage {
   errorMsg = '';
   showPassword = false; // Para el ojito de la contraseña
 
+  mostrarToast: boolean = false;
+  mensajeToast: string = '';
+
   constructor(
     private frontUserService: FrontUserService,
     private router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
   ) {}
 
  onRegistrar() {
