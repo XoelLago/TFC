@@ -1,0 +1,146 @@
+<div class="overlay-container active">
+  <div class="form-card">
+    <div class="form-header">
+      <h2><span class="material-icons">castle</span> {{ datos ? 'Editar Lugar' : 'Novo Lugar' }}</h2>
+      <button class="btn-close" (click)="cancelar.emit()">×</button>
+    </div>
+
+    <div class="form-body">
+      <div class="input-group">
+        <label>Nome do Lugar *</label>
+        <input type="text" [(ngModel)]="lugar.nome" placeholder="Ex: Castro de Baroña...">
+        @if(errorMsg){
+          <label style="color:red; margin-bottom: 10px;">
+            {{ errorMsg }}
+          </label>
+          }
+      </div>
+
+      <div class="input-group">
+        <label>Provincia *</label>
+        <div class="combo-wrapper">
+          <span class="material-icons combo-icon">map</span>
+          <select class="custom-select" [(ngModel)]="provinciaSeleccionadaId">
+            <option [ngValue]="null" disabled>Selecciona unha provincia...</option>
+            @for (p of provincias; track p) {
+              <option [ngValue]="p._id">{{ p.nome }}</option>
+            }
+          </select>
+        </div>
+        @if(errorMsg){
+          <label style="color:red; margin-bottom: 10px;">
+            {{ errorMsg }}
+          </label>
+          }
+      </div>
+
+      <div class="input-group">
+        <label>Descrición</label>
+        <textarea [(ngModel)]="lugar.descripcion" placeholder="Escribe detalles..." rows="2"></textarea>
+      </div>
+
+      <div class="map-picker-container">
+        <label>Ubicación:</label>
+        <div id="mapPickLugar"></div>
+      </div>
+
+      <div class="coords-display">
+        <div class="coord-item">
+          <small>Lat</small>
+          <span>{{ lugar.coords.lat.toFixed(5) }}</span>
+        </div>
+        <div class="coord-item">
+          <small>Lng</small>
+          <span>{{ lugar.coords.lng.toFixed(5) }}</span>
+        </div>
+      </div>
+
+      <button type="button" class="btn-advanced-toggle" (click)="toggleAvanzado()">
+        <span class="material-icons">{{ mostrarAvanzado ? 'expand_less' : 'expand_more' }}</span>
+        {{ mostrarAvanzado ? 'Ocultar detalles' : 'Detalles avanzados' }}
+      </button>
+
+      @if (mostrarAvanzado) {
+<div class="advanced-section">
+  <div class="row">
+    <div class="input-group flex-1 relative-container">
+      <label>Baile</label>
+      <div class="search-box-custom">
+        <input
+          type="text"
+          [(ngModel)]="textoBusquedaBaile"
+          (input)="filtrarBailes($event)"
+          (focus)="mostrarBailes = true"
+          (blur)="ocultarLista('bailes')"
+          placeholder="Buscar baile..."
+        >
+      </div>
+      @if (mostrarBailes && textoBusquedaBaile) {
+        <ul class="custom-dropdown">
+          @for (b of bailesFiltrados; track b._id) {
+            <li (mousedown)="seleccionarBaile(b.nome)">{{ b.nome }}</li>
+          } @empty {
+            <li class="empty-message" (mousedown)="$event.preventDefault()">Non hai resultados</li>
+          }
+        </ul>
+      }
+    </div>
+
+    <div class="input-group flex-1 relative-container">
+      <label>Canción</label>
+      <div class="search-box-custom">
+        <input
+          type="text"
+          [(ngModel)]="textoBusquedaCancion"
+          (input)="filtrarCancions($event)"
+          (focus)="mostrarCancions = true"
+          (blur)="ocultarLista('cancions')"
+          placeholder="Buscar canción..."
+        >
+      </div>
+      @if (mostrarCancions && textoBusquedaCancion) {
+        <ul class="custom-dropdown">
+          @for (c of cancionsFiltradas; track c._id) {
+            <li (mousedown)="seleccionarCancion(c.nome)">{{ c.nome }}</li>
+          } @empty {
+            <li class="empty-message" (mousedown)="$event.preventDefault()">Non hai resultados</li>
+          }
+        </ul>
+      }
+    </div>
+  </div>
+
+  <div class="input-group relative-container">
+    <label>Evento</label>
+    <div class="search-box-custom">
+      <input
+        type="text"
+        [(ngModel)]="textoBusquedaEvento"
+        (input)="filtrarEventos($event)"
+        (focus)="mostrarEventos = true"
+        (blur)="ocultarLista('eventos')"
+        placeholder="Buscar evento..."
+      >
+    </div>
+    @if (mostrarEventos && textoBusquedaEvento) {
+      <ul class="custom-dropdown">
+        @for (e of eventosFiltrados; track e._id) {
+          <li (mousedown)="seleccionarEvento(e.nome)">{{ e.nome }}</li>
+        } @empty {
+          <li class="empty-message" (mousedown)="$event.preventDefault()">Non hai resultados</li>
+        }
+      </ul>
+    }
+  </div>
+</div>
+}
+    </div>
+
+    <div class="form-footer">
+      <button class="btn-cancel" (click)="cancelar.emit()">Cancelar</button>
+      <button class="btn-save" (click)="guardar()">
+        <span class="material-icons">save</span> Gardar
+      </button>
+    </div>
+  </div>
+</div>

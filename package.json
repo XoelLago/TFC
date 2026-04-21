@@ -5,7 +5,9 @@
     "start:all": "concurrently \"cd galiza-backend-nest && npm run start:dev\" \"cd galiza-frontend && ng serve -o\""
   },
   "dependencies": {
-    "@nestjs/config": "^4.0.4"
+    "@nestjs/config": "^4.0.4",
+    "primeicons": "^7.0.0",
+    "primeng": "^21.1.6"
   },
   "devDependencies": {
     "concurrently": "^9.2.1"

@@ -1,0 +1,239 @@
+.overlay-container {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999 !important;
+}
+
+/* Tarjeta calcada */
+.form-card {
+  background: white;
+  width: 95%;
+  max-width: 500px;
+  margin-bottom: 92px; /* Espacio para el menú inferior */
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  max-height: 87vh; /* Evita que choque con el header de la web */
+}
+
+/* Cabecera calcada */
+.form-header {
+  background: #93331d;
+  color: white;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.form-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Cuerpo con Scroll para que los detalles no corten el card */
+.form-body {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* 2. Estilo Focus (Mantenido) */
+input:focus, textarea:focus, .custom-select:focus {
+  outline: none;
+  border-color: #93331d !important;
+  box-shadow: 0 0 0 3px rgba(147, 51, 29, 0.1);
+  background-color: #fff;
+}
+
+/* 3. ARREGLO DE INPUTS CORTADOS */
+.row-expand {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Dos columnas iguales */
+  gap: 12px;
+  width: 100%;
+}
+
+/* Asegurar que el input no se salga de su celda */
+.input-group input {
+  width: 100% !important;
+  box-sizing: border-box; /* Fundamental para que el padding no sume al ancho */
+}
+
+/* Si la pantalla es muy pequeña, los ponemos uno encima de otro */
+@media (max-width: 400px) {
+  .row-expand {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Resto de estilos */
+.form-footer { padding: 12px 20px; background: #fcfcfc; border-top: 1px solid #eee; display: flex; justify-content: flex-end; gap: 10px; }
+
+.combo-wrapper { position: relative; display: flex; align-items: center; }
+.combo-icon { position: absolute; left: 12px; color: #93331d; pointer-events: none; }
+.custom-select {
+  width: 100%; padding: 12px 12px 12px 40px;
+  border: 2px solid #eee; border-radius: 10px;
+  background: white url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2393331d' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 15px center;
+  background-size: 15px; appearance: none;
+  box-sizing: border-box;
+}
+
+.coords-display {
+  background: #f8f9fa; border-radius: 10px; padding: 10px;
+  display: flex; justify-content: space-around; border: 1px dashed #ccc;
+}
+.coord-item { display: flex; flex-direction: column; align-items: center; }
+.coord-item small { color: #888; font-size: 0.7rem; text-transform: uppercase; }
+.coord-item span { font-family: monospace; font-weight: bold; color: #333; }
+
+#mapPickLugar { height: 180px; width: 100%; border: 2px solid #93331d; border-radius: 12px; }
+
+.btn-advanced-toggle {
+  background: #fdf2f0; border: none; padding: 10px; border-radius: 10px;
+  color: #93331d; font-weight: bold; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+}
+
+.advanced-section { display: flex; flex-direction: column; gap: 12px; padding-top: 10px; }
+.input-group { display: flex; flex-direction: column; gap: 5px; }
+.input-group label { font-weight: bold; color: #444; font-size: 0.9rem; }
+.input-group input, .input-group textarea { padding: 12px; border: 2px solid #eee; border-radius: 10px; outline: none; }
+
+.btn-save { background: #93331d; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+.btn-cancel { background: #eee; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+input:focus, textarea:focus, .custom-select:focus {
+  outline: none;
+  border-color: #93331d !important;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(147, 51, 29, 0.1);
+  transition: all 0.2s ease;
+}
+.btn-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 28px;
+  cursor: pointer;
+  line-height: 1;
+}
+/* --- SECCIÓN AVANZADA Y LAYOUT --- */
+.advanced-section {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+/* Necesario para que la lista no se salga de su caja */
+.relative-container {
+  position: relative;
+}
+
+.input-group label {
+  font-weight: bold;
+  color: #444;
+  font-size: 0.85rem;
+  margin-bottom: 6px;
+  display: block;
+}
+
+/* --- ESTILOS DEL INPUT (Como en la segunda imagen) --- */
+.search-box-custom {
+  background: white;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  border-radius: 8px; /* Borde de formulario normal, no píldora */
+  border: 1px solid #ccc; /* Borde gris estándar */
+  transition: all 0.3s ease;
+}
+
+.search-box-custom input {
+  border: none !important;
+  outline: none !important;
+  width: 100%;
+  padding: 10px 0;
+  font-size: 14px;
+  background: transparent;
+  color: #333;
+  box-shadow: none !important;
+}
+
+.search-box-custom:focus-within {
+  border-color: #93331d;
+  box-shadow: 0 0 0 2px rgba(147, 51, 29, 0.1);
+}
+
+/* --- LISTA DESPLEGABLE PEGADA AL INPUT --- */
+.custom-dropdown {
+  position: absolute;
+  top: calc(100% + 4px); /* Se pega justo debajo del input (con 4px de respiro) */
+  left: 0;
+  right: 0;
+  background: white;
+  border-radius: 8px;
+  list-style: none;
+  padding: 5px 0;
+  margin: 0;
+  max-height: 160px;
+  overflow-y: auto;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); /* Sombra elegante */
+  border: 1px solid #ddd;
+  z-index: 2000;
+}
+
+.custom-dropdown li {
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #444;
+  border-bottom: 1px solid #f9f9f9;
+}
+
+.custom-dropdown li:last-child {
+  border-bottom: none;
+}
+
+.custom-dropdown li:hover {
+  background-color: #fdf2f0;
+  color: #93331d;
+}
+
+/* --- MENSAJE "NO HAY NADA" --- */
+.empty-message {
+  color: #999 !important;
+  font-style: italic;
+  text-align: center;
+  cursor: default !important; /* Que no parezca que se puede clickar */
+}
+
+.empty-message:hover {
+  background-color: transparent !important; /* Quitamos el hover rojo */
+}

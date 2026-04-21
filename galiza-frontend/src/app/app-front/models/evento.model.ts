@@ -7,11 +7,11 @@ _id: string;
   fecha?: string;
 coords: { lat: number; lng: number };  tipo: string;
   prezo?: number;
-  icono: string;
   descripcion: string;
   bailes?: string[];
   cancions?: string[];
   eventos?: string[];
+  publicado: boolean;
   Lugar?: Lugar;
   enlaceExterno?: string;
 }

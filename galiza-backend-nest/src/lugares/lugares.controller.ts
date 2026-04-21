@@ -1,7 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { LugaresService } from './lugares.service';
+import { UpdateLugareDto } from './dto/update-lugare.dto';
+import { Roles } from '../auth/roles.decorator';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/roles.guard';
+import { Rol } from '../common/enums';
 
 @Controller('lugares')
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(Rol.ADMIN, Rol.SUPERUSER)
 export class LugaresController {
   constructor(private readonly lugaresService: LugaresService) {}
 
@@ -21,7 +28,7 @@ export class LugaresController {
   }
 
   @Patch(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() updateDto: any) {
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateDto: UpdateLugareDto) {
     return this.lugaresService.update(id, updateDto);
   }
 

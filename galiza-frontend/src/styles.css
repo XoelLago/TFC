@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 /* Fuentes de Google */
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;600&display=swap');
-
+@import "primeicons/primeicons.css";
 /* Reset base */
 html, body {
   margin: 0;

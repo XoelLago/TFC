@@ -179,7 +179,7 @@
   background: #fbf9f4;
   border-radius: 18px;
   padding: 15px 20px;
-  z-index: 2000;
+  z-index: 9999;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
   border: 1px solid #FCE3AD;
   animation: slideUp 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -297,6 +297,7 @@
   margin: -10px 30px 5px 30px;
   position: relative;
   z-index: 100;
+  z-index: 3000 !important; /* Subimos el buscador */
 }
 
 .search-box {
@@ -338,6 +339,7 @@
   overflow-y: auto;
   box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
   border: 1px solid #eee;
+  z-index: 3001 !important;
 }
 
 .search-results li {
@@ -392,32 +394,6 @@
   to { opacity: 1; transform: translateX(0); }
 }
 
-.boton-flotante {
-  /* 1. Posición fija abajo a la derecha */
-  position: fixed;
-  bottom: 120px;
-  right: 30px;
-
-  /* 2. Capa: Este número alto lo pone por encima de todo */
-  z-index:  1999;
-
-  /* 3. Diseño: Cuadrado con tu color y bordes */
-  width: 60px;
-  height: 60px;
-  background-color: #93331d;
-  border-radius: 20px; /* Bordes redondeados */
-
-  /* 4. Centrar el símbolo + */
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  /* 5. Estética */
-  color: white;
-  font-size: 35px;
-  font-weight: bold;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-  cursor: pointer;
-}
 /* --- OVERLAY DEL FORMULARIO --- */
 .overlay-container {
   position: fixed;
@@ -430,7 +406,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999; /* Por encima de todo el mapa */
+  z-index: 9999 !important; /* Por encima de todo el mapa */
   animation: fadeIn 0.3s ease-out;
 }
 
@@ -714,4 +690,65 @@ textarea::-webkit-scrollbar-thumb {
 }
 .action-toast.show {
     top: 20px !important; /* Deja un poco de aire con el borde superior */
+}
+.boton-flotante,
+:host ::ng-deep .p-speeddial-button {
+    width: 56px !important;
+    height: 56px !important;
+    background-color: #93331d !important;
+    color: white !important;
+    border-radius: 50% !important;
+    border: none !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3) !important;
+    transition: transform 0.2s !important;
+    position: fixed;
+    right: 25px;
+    bottom: 125px;
+}
+
+/* Efecto clic en ambos */
+.boton-flotante:active,
+:host ::ng-deep .p-speeddial-button:active {
+    transform: scale(0.9) !important;
+}
+
+/* Iconos interiores */
+.boton-flotante .material-icons,
+:host ::ng-deep .p-speeddial-button .p-icon-wrapper,
+:host ::ng-deep .p-speeddial-button .pi {
+    font-size: 15px !important;
+    font-weight: bold;
+    color: white !important;
+}
+
+/* Botones pequeños del SpeedDial (Acciones) */
+:host ::ng-deep .p-speeddial-action {
+    background-color: #93331d !important;
+    color: white !important;
+    width: 35px !important;
+    height: 35px !important;
+    border: none !important;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2) !important;
+}
+
+:host ::ng-deep .p-speeddial-action:hover {
+    background-color: #7a2a18 !important;
+}
+
+/* Tooltips a la izquierda */
+:host ::ng-deep .p-tooltip-text {
+    background-color: #333 !important;
+    font-family: 'Segoe UI', sans-serif !important;
+    font-size: 12px !important;
+    z-index: 2001 !important;
+}
+:host ::ng-deep .p-speeddial,
+:host ::ng-deep .p-speeddial-button,
+:host ::ng-deep .p-speeddial-list,
+:host ::ng-deep .p-speeddial-mask,
+.boton-flotante {
+    z-index: 2000 !important;
 }

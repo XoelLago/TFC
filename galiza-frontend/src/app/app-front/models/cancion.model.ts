@@ -7,5 +7,5 @@ _id: string;
   letra?: string;
   audioUrl?: string;
   instrumentos?: Instrumento[];
-  lugares?: Lugar[];
+  lugar: Lugar;
 }

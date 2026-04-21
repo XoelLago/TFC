@@ -12,7 +12,6 @@ _id: string;
   compas?: string;
   imaxeUrl?: string;
   videoUrl?: string;
-  provincia?: Provincia;
-  lugares?: Lugar[];
+  lugar: Lugar;
   instrumentos?: Instrumento[];
 }

@@ -101,12 +101,32 @@
       }
     </div>
   </div>
-  <div class="boton-flotante" (click)="abrirFormulario()">
-    <span>+</span>
-  </div>
 
-  @if (mostrarFormulario) {
-  <div class="overlay-container" [class.active]="mostrarFormulario" [hidden]="!mostrarFormulario">
+
+<div class="contenedor-boton-final">
+
+  @if (rolUsuario === 'ADMIN' || rolUsuario === 'SUPERUSER') {
+    <p-speeddial
+  [model]="adminMenuItems"
+  type="quarter-circle"
+  direction="up-left"
+  [radius]="100"
+  showIcon="pi pi-plus"
+  hideIcon="pi pi-times"
+  buttonClassName="p-button-rounded custom-main-btn"
+  tooltipPosition="left"
+  [style]="{ position: 'fixed', right: '25px', bottom: '110px' }">
+</p-speeddial>
+  } @else {
+    <div class="boton-flotante" (click)="abrirFormulario()">
+      <span class="material-icons">add</span>
+    </div>
+  }
+
+</div>
+
+  @if (mostrarFormularioMarcadores) {
+  <div class="overlay-container" [class.active]="mostrarFormularioMarcadores" [hidden]="!mostrarFormularioMarcadores">
     <div class="form-card">
       <div class="form-header">
         <h2><span class="material-icons">add_location_alt</span> Novo Marcador</h2>
@@ -160,6 +180,28 @@
     </div>
   </div>
   }
+ @if (mostrarFormLugar) {
+  <app-form-lugar
+    [datos]="selectedPlace"
+    (cancelar)="mostrarFormLugar = false"
+    (guardado)="recargarMapa()">
+  </app-form-lugar>
+}
+<!--
+@if (mostrarFormEvento) {
+  <app-form-evento
+    (cancelar)="mostrarFormEvento = false"
+    (guardado)="recargarMapa()">
+  </app-form-evento>
+}
+@if (mostrarFormAsociacion) {
+  <app-form-asociacion
+    [datos]="selectedPlace"
+    (cancelar)="mostrarFormLugar = false"
+    (guardado)="recargarMapa()">
+  </app-form-asociacion>
+} -->
+
 </div>
 <app-action-toast [visible]="toastConfig.visible" [mensaje]="toastConfig.mensaje" [icon]="toastConfig.icon"
   [txtConfirmar]="toastConfig.txtConfirmar" (confirmar)="ejecutarAccionToast()" (cancelar)="cerrarToast()">

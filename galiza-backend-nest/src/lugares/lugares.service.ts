@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Lugar } from './entities/lugare.entity';
+import { UpdateLugareDto } from './dto/update-lugare.dto';
 
 @Injectable()
 export class LugaresService {
@@ -29,12 +30,11 @@ export class LugaresService {
     return await this.repository.findOneBy({ id });
   }
 
-  async update(id: number, dto: any) {
+  async update(id: number, dto: UpdateLugareDto) {
     const data = { ...dto };
-    if (dto.coords) {
-      data.lat = dto.coords.lat;
-      data.lng = dto.coords.lng;
-    }
+      data.lat = dto.lat;
+      data.lng = dto.lng;
+    
     await this.repository.update(id, data);
     return this.findOne(id);
   }

@@ -6,11 +6,20 @@ import { CreateMarcadorForm, DatosMapa } from '../../models/mapa.model';
 import { MapaService } from '../../service/mapa.service';
 import { ActionToastComponent } from "../../components/action-toast/action-toast";
 import { IsNotEmpty } from 'class-validator';
+import { FrontUserService } from '../../service/front-user.service';
+import { Router } from '@angular/router';
+import { SpeedDialModule, SpeedDial } from 'primeng/speeddial';
+import { MenuItem } from 'primeng/api';
+import { Usuario } from '../../models/usuario.model';
+import { Rol } from '../../models/rol.model';
+import { FormLugar } from "../../components/form-lugar/form-lugar";
+import { FormEvento } from "../../components/form-evento/form-evento";
+import { FormAsociacion } from "../../components/form-asociacion/form-asociacion";
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, ActionToastComponent],
+  imports: [CommonModule, FormsModule, ActionToastComponent, SpeedDialModule, SpeedDial, FormLugar, FormEvento, FormAsociacion],
   templateUrl: './home-page.html',
   styleUrls: ['./home-page.css']
 })
@@ -34,7 +43,10 @@ export class HomePage implements AfterViewInit {
   public searchResults: DatosMapa[] = [];
   public selectedPlace: DatosMapa | null = null;
   public opacity: number = 0;
-  public mostrarFormulario: boolean = false;
+  public mostrarFormularioMarcadores: boolean = false;
+  public mostrarFormAsociacion: boolean = false;
+  public mostrarFormEvento: boolean = false;
+  public mostrarFormLugar: boolean = false;
 
   public places: DatosMapa[] = [];
   private lastMarker: L.Marker | null = null;
@@ -48,12 +60,47 @@ export class HomePage implements AfterViewInit {
   };
   public textoBotonForm: string = 'Gardar';
 
+usuario: Usuario = {
+    id: 0,
+    nombre: localStorage.getItem('user_nombre') || '',
+    rol: (localStorage.getItem('user_rol') as Rol),
+  };
+
+  public rolUsuario: string = this.usuario.rol;
+ public adminMenuItems: MenuItem[] = [];
+
+
   constructor(
     private zone: NgZone,
     private cdr: ChangeDetectorRef,
-    private mapaService: MapaService
-  ) { }
+    private mapaService: MapaService,
+    private router: Router
+  ) {
 
+    this.adminMenuItems = [
+    {
+      icon: 'pi pi-star',
+      tooltipOptions: { tooltipLabel: 'Marcador Personalizado',tooltipPosition: 'left' },
+      command: () => this.abrirFormulario()
+    },
+    {
+      icon: 'material-icons castle',
+      tooltipOptions: { tooltipLabel: 'Novo Lugar',tooltipPosition: 'left' },
+      command: () => this.mostrarFormLugar = true
+    },
+    {
+      icon: 'theater_comedy',
+      tooltipOptions: { tooltipLabel: 'Novo Evento',tooltipPosition: 'left' },
+      command: () => this.router.navigate(['/ruta-eventos'])
+    },
+    {
+      icon: 'groups',
+      tooltipOptions: { tooltipLabel: 'Nova Asociación',tooltipPosition: 'left' },
+      command: () => this.router.navigate(['/ruta-asociaciones'])
+    }
+  ];
+
+  }
   ngAfterViewInit() {
     setTimeout(() => {
       this.initMap();
@@ -249,7 +296,7 @@ export class HomePage implements AfterViewInit {
   }
 
   abrirFormulario() {
-    this.mostrarFormulario = true;
+    this.mostrarFormularioMarcadores = true;
     this.textoBotonForm = 'Gardar';
     this.errorMsg = '';
     this.nuevoMarcador.nome = ''; this.nuevoMarcador.descripcion = '';
@@ -284,7 +331,7 @@ export class HomePage implements AfterViewInit {
   }
 
   cerrarFormulario() {
-    this.mostrarFormulario = false;
+    this.mostrarFormularioMarcadores = false;
     if (this.mapPick) { this.mapPick.remove(); (this.mapPick as any) = null; }
     this.pickMarker = null;
     this.cdr.detectChanges();
@@ -311,7 +358,7 @@ export class HomePage implements AfterViewInit {
       }
     };
 
-    this.mostrarFormulario = true;
+    this.mostrarFormularioMarcadores = true;
     this.cdr.detectChanges();
 
     // Iniciamos el minimapa centrado en las coordenadas de este marcador
@@ -368,5 +415,17 @@ export class HomePage implements AfterViewInit {
     this.cdr.detectChanges();
   }
 
+public recargarMapa() {
+  // 1. Cerramos todos los posibles formularios abiertos
+  this.mostrarFormularioMarcadores = false;
+  this.mostrarFormLugar = false;
+  // this.mostrarFormEvento = false; // (Cuando lo tengas)
 
+  // 2. Llamamos a cargarDatos que ya tienes definido
+  // Este método hace el subscribe y luego llama a renderMarkers()
+  this.cargarDatos();
+
+  // 3. Forzamos la detección de cambios por si acaso
+  this.cdr.detectChanges();
+}
 }

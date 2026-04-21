@@ -375,7 +375,7 @@ CREATE TABLE `lugares` (
   PRIMARY KEY (`id`),
   KEY `FK_8870a592b189c1e9ff216238c9b` (`provinciaId`),
   CONSTRAINT `FK_8870a592b189c1e9ff216238c9b` FOREIGN KEY (`provinciaId`) REFERENCES `provincias` (`id`) ON DELETE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -384,6 +384,7 @@ CREATE TABLE `lugares` (
 
 LOCK TABLES `lugares` WRITE;
 /*!40000 ALTER TABLE `lugares` DISABLE KEYS */;
+INSERT INTO `lugares` VALUES (1,'A Coruña','coords: {\r\n    lat:  43.37135,\r\n    lng: -8.396\r\n  }','lugar','castle',NULL,NULL,NULL,NULL,1);
 /*!40000 ALTER TABLE `lugares` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -405,7 +406,7 @@ CREATE TABLE `marcadores_usuarios` (
   PRIMARY KEY (`id`),
   KEY `FK_6190046ca8ee935ec876175f794` (`usuarioId`),
   CONSTRAINT `FK_6190046ca8ee935ec876175f794` FOREIGN KEY (`usuarioId`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -414,6 +415,7 @@ CREATE TABLE `marcadores_usuarios` (
 
 LOCK TABLES `marcadores_usuarios` WRITE;
 /*!40000 ALTER TABLE `marcadores_usuarios` DISABLE KEYS */;
+INSERT INTO `marcadores_usuarios` VALUES (3,' acoruña','{\"lat\":43.28057961568862,\"lng\":-8.468555147179007}','personalizado','star','',1);
 /*!40000 ALTER TABLE `marcadores_usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -481,7 +483,7 @@ CREATE TABLE `provincias` (
   `image` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `IDX_68728fc6ec5f051835d3ce7185` (`nome`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -490,6 +492,7 @@ CREATE TABLE `provincias` (
 
 LOCK TABLES `provincias` WRITE;
 /*!40000 ALTER TABLE `provincias` DISABLE KEYS */;
+INSERT INTO `provincias` VALUES (1,'A Coruña','A provincia da Coruña é unha das catro provincias galegas, situada no noroeste de Galicia e da Península Ibérica. Caracterízase pola súa extensa costa atlántica, marcada polas Rías Altas e o Golfo Ártabro, sendo a capital a cidade homónima. Cunha forte identidade cultural, combina historia, paisaxes marítimas e un importante papel portuario..',NULL),(2,'Lugo','A provincia de Lugo é unha das catro provincias que conforman a comunidade autónoma de Galicia, situada no noroeste de España. É a meirande provincia galega en extensión territorial e caracterízase pola súa diversidade paisaxística, que vai dende a costa cantábrica ata zonas de montaña interior.',NULL),(4,'Ourense','A provincia de Ourense é a única das catro provincias galegas que non ten mar, situada no sueste de Galicia. Caracterízase polo seu interior montañoso, o val do Miño e Sil, e unha rica herdanza termal e patrimonial, destacando a súa capital, o Concello de Ourense. É unha zona de alto valor paisaxístico e vinícola, conformada por diversas comarcas.',NULL),(6,'Pontevedra','A provincia de Pontevedra é unha das catro provincias que conforman a comunidade autónoma de Galicia, situada no suroeste da rexión. A súa capital é a cidade homónima de Pontevedra, coñecida como a \"Boa Vila\", aínda que a cidade máis poboada é Vigo.',NULL);
 /*!40000 ALTER TABLE `provincias` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -588,7 +591,7 @@ CREATE TABLE `usuarios` (
   `rol` enum('USER','ADMIN','SUPERUSER') NOT NULL DEFAULT 'USER',
   PRIMARY KEY (`id`),
   UNIQUE KEY `IDX_8699a5bc72f5c2ca7c46b420e8` (`nombre`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -597,7 +600,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,'xoellago','$2b$10$XymiFkF.hf/mQnA7nN9aOuADn21NaREcbhcUqaSzjiOPjICmZzO4y','SUPERUSER');
+INSERT INTO `usuarios` VALUES (1,'xoellago','$2b$10$XymiFkF.hf/mQnA7nN9aOuADn21NaREcbhcUqaSzjiOPjICmZzO4y','SUPERUSER'),(4,'nuevo','$2b$10$VO4VjRceh5ApexZo4iieHON2hV7sbLopkRb1XQd4pVq1Z0a0vTjru','USER'),(5,'Xoellaago','$2b$10$w7Co3a6hmVN67I0AgQ0Sd.FatyzZNURKQhNkNM7F3.jfHCXgNSGXe','USER');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -610,4 +613,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-04-20 11:43:12
+-- Dump completed on 2026-04-21 10:35:50
