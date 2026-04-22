@@ -1,7 +1,6 @@
 import { Component, AfterViewInit, NgZone, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import * as L from 'leaflet';
 import { CreateMarcadorForm, DatosMapa } from '../../models/mapa.model';
 import { MapaService } from '../../service/mapa.service';
 import { ActionToastComponent } from "../../components/action-toast/action-toast";
@@ -15,6 +14,8 @@ import { Rol } from '../../models/rol.model';
 import { FormLugar } from "../../components/form-lugar/form-lugar";
 import { FormEvento } from "../../components/form-evento/form-evento";
 import { FormAsociacion } from "../../components/form-asociacion/form-asociacion";
+import L from 'leaflet';
+
 
 @Component({
   selector: 'app-home-page',
@@ -51,7 +52,7 @@ export class HomePage implements AfterViewInit {
   public places: DatosMapa[] = [];
   private lastMarker: L.Marker | null = null;
 
-  public nuevoMarcador: any = {
+  public nuevoMarcador: CreateMarcadorForm = {
     nome: '',
     tipo: 'personalizado',
     descripcion: '',
@@ -74,7 +75,8 @@ usuario: Usuario = {
     private zone: NgZone,
     private cdr: ChangeDetectorRef,
     private mapaService: MapaService,
-    private router: Router
+    private router: Router,
+    private frontUserService: FrontUserService
   ) {
 
     this.adminMenuItems = [
@@ -251,8 +253,9 @@ usuario: Usuario = {
     }
 
 
+
     const body = {
-      nome: this.nuevoMarcador.nome,
+      nome: this.frontUserService.capitalizarNombre(this.nuevoMarcador.nome),
       descripcion: this.nuevoMarcador.descripcion || '',
       tipo: 'personalizado',
       icono: 'star',

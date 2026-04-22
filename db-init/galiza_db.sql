@@ -376,7 +376,7 @@ CREATE TABLE `lugares` (
   PRIMARY KEY (`id`),
   KEY `FK_8870a592b189c1e9ff216238c9b` (`provinciaId`),
   CONSTRAINT `FK_8870a592b189c1e9ff216238c9b` FOREIGN KEY (`provinciaId`) REFERENCES `provincias` (`id`) ON DELETE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -385,7 +385,7 @@ CREATE TABLE `lugares` (
 
 LOCK TABLES `lugares` WRITE;
 /*!40000 ALTER TABLE `lugares` DISABLE KEYS */;
-INSERT INTO `lugares` VALUES (2,'A Coruña','{\"lat\":43.35779531515394,\"lng\":-8.413218067813007}','lugar','castle','','[]','[]','[]',1),(3,'Lugo','{\"lat\":43.007151905994085,\"lng\":-7.556564659335151}','lugar','castle','','[]','[]','[]',1);
+INSERT INTO `lugares` VALUES (2,'A Coruña','{\"lat\":43.35779531515394,\"lng\":-8.413218067813007}','lugar','castle','','[]','[]','[]',1),(3,'Lugo','{\"lat\":43.007151905994085,\"lng\":-7.556564659335151}','lugar','castle','','[]','[]','[]',1),(5,'Arzua','{\"lat\":42.755,\"lng\":-7.863}','lugar','castle','','[{\"id\":1,\"nome\":\"Golpellas\",\"descripcion\":null,\"compas\":\"Muiñeira Nova\",\"image\":null,\"video\":null}]','[]','[]',1);
 /*!40000 ALTER TABLE `lugares` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -407,7 +407,7 @@ CREATE TABLE `marcadores_usuarios` (
   PRIMARY KEY (`id`),
   KEY `FK_6190046ca8ee935ec876175f794` (`usuarioId`),
   CONSTRAINT `FK_6190046ca8ee935ec876175f794` FOREIGN KEY (`usuarioId`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -416,7 +416,6 @@ CREATE TABLE `marcadores_usuarios` (
 
 LOCK TABLES `marcadores_usuarios` WRITE;
 /*!40000 ALTER TABLE `marcadores_usuarios` DISABLE KEYS */;
-INSERT INTO `marcadores_usuarios` VALUES (4,'Lugo','{\"lat\":43.024102077748054,\"lng\":-7.560918959613632}','personalizado','star','',1);
 /*!40000 ALTER TABLE `marcadores_usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -614,4 +613,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-04-21 12:00:20
+-- Dump completed on 2026-04-22  8:35:33

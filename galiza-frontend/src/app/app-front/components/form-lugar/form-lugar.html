@@ -16,23 +16,25 @@
           }
       </div>
 
-      <div class="input-group">
-        <label>Provincia *</label>
-        <div class="combo-wrapper">
-          <span class="material-icons combo-icon">map</span>
-          <select class="custom-select" [(ngModel)]="provinciaSeleccionadaId">
-            <option [ngValue]="null" disabled>Selecciona unha provincia...</option>
-            @for (p of provincias; track p) {
-              <option [ngValue]="p._id">{{ p.nome }}</option>
-            }
-          </select>
-        </div>
-        @if(errorMsg){
-          <label style="color:red; margin-bottom: 10px;">
-            {{ errorMsg }}
-          </label>
-          }
-      </div>
+     <div class="input-group">
+  <label>Provincia *</label>
+  <div class="combo-wrapper">
+    <span class="material-icons combo-icon">map</span>
+    <select class="custom-select" [(ngModel)]="provinciaSeleccionadaId">
+      <option value="" disabled>Selecciona unha provincia...</option>
+
+      @for (p of provincias; track $index) {
+        <option [value]="p.id">{{ p.nome }}</option>
+      }
+    </select>
+  </div>
+
+  @if(errorMsg){
+    <label style="color:red; margin-bottom: 10px; display: block;">
+      {{ errorMsg }}
+    </label>
+  }
+</div>
 
       <div class="input-group">
         <label>Descrición</label>
@@ -133,6 +135,49 @@
     }
   </div>
 </div>
+<div class="chips-section">
+    @if (lugar.bailes && lugar.bailes.length > 0) {
+      <div class="chip-group">
+        <label>Bailes vinculados:</label>
+        <div class="chips-container">
+          @for (b of lugar.bailes; track $index) {
+            <div class="chip chip-baile">
+              {{ b.nome }}
+              <span class="material-icons chip-close" (click)="removerBaile(b.nome)">close</span>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    @if (lugar.cancions && lugar.cancions.length > 0) {
+      <div class="chip-group">
+        <label>Música vinculada:</label>
+        <div class="chips-container">
+          @for (c of lugar.cancions; track $index) {
+            <div class="chip chip-cancion">
+              {{ c.nome }}
+              <span class="material-icons chip-close" (click)="removerCancion(c.nome)">close</span>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    @if (lugar.eventos && lugar.eventos.length > 0) {
+      <div class="chip-group">
+        <label>Eventos vinculados:</label>
+        <div class="chips-container">
+          @for (e of lugar.eventos; track $index) {
+            <div class="chip chip-evento">
+              {{ e.nome }}
+              <span class="material-icons chip-close" (click)="removerEvento(e.nome)">close</span>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
 }
     </div>
 

@@ -1,5 +1,5 @@
 export interface Provincia {
-_id: string;
+  id: string;
   nome: string;
   descripcion?: string;
   imaxeUrl?: string;

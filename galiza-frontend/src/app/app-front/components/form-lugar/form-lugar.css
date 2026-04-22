@@ -237,3 +237,54 @@ input:focus, textarea:focus, .custom-select:focus {
 .empty-message:hover {
   background-color: transparent !important; /* Quitamos el hover rojo */
 }
+.chips-section {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  border-top: 1px dashed #ccc;
+  padding-top: 15px;
+}
+
+.chip-group label {
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 8px;
+  display: block;
+  font-weight: 500;
+}
+
+.chips-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+/* Colores personalizados por categoría para distinguirlos bien */
+.chip-baile { background-color: #e3f2fd; color: #1565c0; border: 1px solid #bbdefb; }
+.chip-cancion { background-color: #f3e5f5; color: #7b1fa2; border: 1px solid #e1bee7; }
+.chip-evento { background-color: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
+
+.chip-close {
+  font-size: 16px;
+  margin-left: 8px;
+  cursor: pointer;
+  border-radius: 50%;
+  padding: 2px;
+  opacity: 0.7;
+}
+
+.chip-close:hover {
+  opacity: 1;
+  background-color: rgba(0, 0, 0, 0.1);
+}

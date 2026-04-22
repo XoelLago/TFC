@@ -115,4 +115,9 @@ descenderUsuario(id: number): Observable<any> {
 eliminarUsuario(id: number): Observable<any> {
   return this.http.delete(`${this.URL_API}/usuarios/${id}`, { headers: this.getHeaders() });
 }
+
+ capitalizarNombre(texto: string): string {
+  if (!texto) return '';
+  return texto.trim().charAt(0).toUpperCase() + texto.trim().slice(1).toLowerCase();
+}
 }
