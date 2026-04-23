@@ -591,7 +591,7 @@ CREATE TABLE `usuarios` (
   `rol` enum('USER','ADMIN','SUPERUSER') NOT NULL DEFAULT 'USER',
   PRIMARY KEY (`id`),
   UNIQUE KEY `IDX_8699a5bc72f5c2ca7c46b420e8` (`nombre`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -600,7 +600,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,'xoellago','$2b$10$XymiFkF.hf/mQnA7nN9aOuADn21NaREcbhcUqaSzjiOPjICmZzO4y','SUPERUSER'),(4,'nuevo','$2b$10$VO4VjRceh5ApexZo4iieHON2hV7sbLopkRb1XQd4pVq1Z0a0vTjru','USER'),(5,'Xoellaago','$2b$10$w7Co3a6hmVN67I0AgQ0Sd.FatyzZNURKQhNkNM7F3.jfHCXgNSGXe','USER');
+INSERT INTO `usuarios` VALUES (7,'xoel','$2b$10$tPZThchzm8DCml3DH9cuDu/uSp/wucfk7s94U/6/ZM0UBmGMlX2wa','SUPERUSER'),(11,'user','$2b$10$ylH3a9AoCHpY6OS3PoaWXOnfdZ2sZZnrHvtBIdVqgbrE2vrZmwEB6','USER');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -613,4 +613,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-04-22  8:35:33
+-- Dump completed on 2026-04-23  7:24:38

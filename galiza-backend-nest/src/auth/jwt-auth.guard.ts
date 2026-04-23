@@ -6,7 +6,7 @@ import { ConfigService } from '@nestjs/config';
 export class JwtAuthGuard implements CanActivate {
   constructor(
     private jwtService: JwtService,
-    private configService: ConfigService // Añadimos esto para leer el secreto del .env
+    private configService: ConfigService
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -26,7 +26,7 @@ export class JwtAuthGuard implements CanActivate {
     try {
       // Verificamos el token usando el secreto de nuestra configuración
       const payload = await this.jwtService.verifyAsync(token, {
-        secret: this.configService.get<string>('JWT_SECRET') || 'secretkey123',
+        secret: this.configService.get<string>('JWT_SECRET'),
       });
 
       // Guardamos el payload (que incluye el sub: user.id numérico) en la petición

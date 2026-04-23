@@ -40,6 +40,8 @@ export class RegistroPage {
 
   this.loading = true;
   this.errorMsg = '';
+this.usuario.nombre = this.usuario.nombre.toLowerCase();
+
 
   this.frontUserService.registrar(this.usuario).subscribe({
     next: () => {

@@ -10,14 +10,12 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('login')
   async login(@Body() loginDto: LoginUsuarioDto) {
-    // loginDto.nombre y loginDto.contrasena vienen del Front (Angular)
     return this.authService.login(loginDto);
   }
   
-  @UseGuards(JwtAuthGuard) // Usamos tu guard personalizado directamente
+  @UseGuards(JwtAuthGuard)
   @Get('profile')
   getProfile(@Req() req) {
-    // req.user contendrá el ID (número) y el nombre del usuario
     return req.user;
   }
 }

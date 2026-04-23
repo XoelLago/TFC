@@ -11,16 +11,13 @@ export class AuthService {
     private jwtService: JwtService
   ) {}
 
- // Cambia (nombre: string, pass: string) por (loginDto: LoginDto)
 async login(loginDto: LoginUsuarioDto) {
-  // Sacas los datos del DTO
   const { nombre, contrasena } = loginDto; 
 
   const user = await this.usuariosService.findByNombreWithPassword(nombre);
 
   if (!user) throw new UnauthorizedException('Usuario no encontrado');
 
-  // Comparamos usando la contrasena que viene del DTO
   const isMatch = await bcrypt.compare(contrasena, user.contrasena); 
 
   if (!isMatch) throw new UnauthorizedException('Contraseña incorrecta');

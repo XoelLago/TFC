@@ -1,6 +1,6 @@
-import { 
-  Injectable, ConflictException, InternalServerErrorException, 
-  NotFoundException, BadRequestException, ForbiddenException 
+import {
+  Injectable, ConflictException, InternalServerErrorException,
+  NotFoundException, BadRequestException, ForbiddenException
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -15,7 +15,7 @@ export class UsuariosService {
   constructor(
     @InjectRepository(Usuario)
     private readonly usuarioRepository: Repository<Usuario>,
-  ) {}
+  ) { }
 
   async create(createUsuarioDto: CreateUsuarioDto): Promise<Usuario> {
     try {
@@ -24,7 +24,7 @@ export class UsuariosService {
       const nuevo = this.usuarioRepository.create({
         ...createUsuarioDto,
         contrasena: hashed,
-        rol: Rol.USER, 
+        rol: Rol.USER,
       });
       return await this.usuarioRepository.save(nuevo);
     } catch (error) {
@@ -60,17 +60,24 @@ export class UsuariosService {
   }
 
   async update(id: number, updateDto: UpdateUsuarioDto): Promise<Usuario> {
-    const user = await this.findOne(id);
-    delete (updateDto).rol; // Seguridad
+    try {
+      const user = await this.findOne(id);
 
-    if (updateDto.contrasena) {
-      const salt = await bcrypt.genSalt(10);
-      updateDto.contrasena = await bcrypt.hash(updateDto.contrasena, salt);
+      delete (updateDto).rol;
+
+      if (updateDto.contrasena) {
+        const salt = await bcrypt.genSalt(10);
+        updateDto.contrasena = await bcrypt.hash(updateDto.contrasena, salt);
+      }
+
+      Object.assign(user, updateDto);
+      await this.usuarioRepository.save(user);
+      return this.findOne(id);
+
+    } catch (error) {
+      if ((error as any).code === 'ER_DUP_ENTRY') throw new ConflictException('Nombre de usuario ya existe');
+      throw new InternalServerErrorException('Error al actualizar usuario');
     }
-
-    Object.assign(user, updateDto);
-    await this.usuarioRepository.save(user);
-    return this.findOne(id);
   }
 
   async remove(id: number): Promise<{ deleted: boolean }> {
@@ -81,12 +88,12 @@ export class UsuariosService {
   }
   // src/usuarios/usuarios.service.ts
 
-async findByNombreWithPassword(nombre: string): Promise<Usuario | null> {
-  return await this.usuarioRepository
-    .createQueryBuilder('usuario')
-    .where('usuario.nombre = :nombre', { nombre })
-    .addSelect('usuario.contrasena') // Asegura que traemos la clave para comparar
-    .getOne();
-}
+  async findByNombreWithPassword(nombre: string): Promise<Usuario | null> {
+    return await this.usuarioRepository
+      .createQueryBuilder('usuario')
+      .where('usuario.nombre = :nombre', { nombre })
+      .addSelect('usuario.contrasena') // Asegura que traemos la clave para comparar
+      .getOne();
+  }
 }
 

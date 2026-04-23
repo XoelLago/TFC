@@ -94,6 +94,8 @@ export class ProfilePage implements OnInit {
       this.errorMsg = 'El nombre debe tener al menos 3 caracteres';
       return;
     }
+
+    this.usuarioEditado.nome = this.usuarioEditado.nome.toLowerCase();
     this.cargando = true;
     this.frontUserService.updateUsuario(this.usuario.id, { nombre: this.usuarioEditado.nome }).subscribe({
       next: (res: Usuario) => {
