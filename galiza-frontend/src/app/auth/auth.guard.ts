@@ -12,19 +12,17 @@ export class AuthGuard implements CanActivate {
   // En auth.guard.ts
 canActivate(route: ActivatedRouteSnapshot): boolean | UrlTree {
   if (isPlatformBrowser(this.platformId)) {
-    const token = localStorage.getItem('access_token'); // Asegúrate que la clave sea 'token'
-    const userJson = localStorage.getItem('user'); // Aquí debe estar el objeto completo
-
+    const token = localStorage.getItem('access_token');
+    const userJson = localStorage.getItem('user');
     if (!token || !userJson) {
       return this.router.parseUrl('/login');
     }
 
-    // Dentro de tu AuthGuard, en el bloque try/catch:
 try {
   const user = JSON.parse(userJson);
   const userRol = user.rol?.toLowerCase();
 
-  // Si la ruta pide un rol específico...
+  // Si la ruta pide un rol específico
   if (route.data['role']) {
     const roleRequerido = route.data['role'].toLowerCase();
 

@@ -92,7 +92,7 @@ export class UsuariosService {
     return await this.usuarioRepository
       .createQueryBuilder('usuario')
       .where('usuario.nombre = :nombre', { nombre })
-      .addSelect('usuario.contrasena') // Asegura que traemos la clave para comparar
+      .addSelect('usuario.contrasena')
       .getOne();
   }
 }

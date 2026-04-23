@@ -2,7 +2,6 @@ import { Injectable } from "@angular/core";
 import { CanActivate, Router } from "@angular/router";
 import { FrontUserService } from '../app-front/service/front-user.service';
 
-// role.guard.ts
 @Injectable({ providedIn: 'root' })
 export class RoleGuard implements CanActivate {
   constructor(private FrontUserService: FrontUserService, private router: Router) {}

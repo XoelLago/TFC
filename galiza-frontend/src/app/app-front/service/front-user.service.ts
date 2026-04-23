@@ -20,7 +20,6 @@ export class FrontUserService {
     return userJson ? JSON.parse(userJson) : null;
   }
 
-  // Modifica estos métodos dentro de tu FrontUserService
 esAdmin(): boolean {
   const user = this.userSubject.value;
   if (!user?.rol) return false;
@@ -36,7 +35,6 @@ esSuperuser(): boolean {
 }
 
   registrar(usuario: any): Observable<any> {
-    // En NestJS, la ruta por defecto suele ser /api/usuarios si usaste el prefijo
     return this.http.post(`${this.URL_API}/usuarios`, usuario);
   }
 
@@ -77,7 +75,6 @@ esSuperuser(): boolean {
     return this.http.get(`${this.URL_API}/auth/profile`, { headers: this.getHeaders() });
   }
 
-  // Cambiamos id: string por number para MySQL
   updateUsuario(id: number, datos: any) {
     return this.http.patch(`${this.URL_API}/usuarios/${id}`, datos, { headers: this.getHeaders() }).pipe(
       tap((usuarioActualizado: any) => {
@@ -97,10 +94,8 @@ esSuperuser(): boolean {
 
 
 
-// front-user.service.ts
 
 getUsuarios(): Observable<any[]> {
-  // Sin esto, NestJS te devuelve el 401 que ves en consola
   return this.http.get<any[]>(`${this.URL_API}/usuarios`, { headers: this.getHeaders() });
 }
 

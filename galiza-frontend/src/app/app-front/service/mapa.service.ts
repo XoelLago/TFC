@@ -16,8 +16,6 @@ export class MapaService {
     return new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`);
   }
 
-  // Obtenemos todo en una sola carga
- // src/app/service/mapa.service.ts
 getTodoElMapa(): Observable<DatosMapa[]> {
   return forkJoin({
     lugares: this.http.get<DatosMapa[]>(`${this.apiUrl}/lugares`),

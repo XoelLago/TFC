@@ -6,7 +6,7 @@ import { routes } from './app.routes';
 import { authInterceptor } from './auth/auth.interceptor';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
-import { provideAnimations } from '@angular/platform-browser/animations'; // Alternativa más ligera
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,7 +16,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
     providePrimeNG({
         theme: {
-            preset: Aura // Solo esto ya hace que el SpeedDial aparezca
+            preset: Aura
         }
     })
   ]

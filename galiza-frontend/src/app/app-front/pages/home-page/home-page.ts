@@ -120,13 +120,13 @@ usuario: Usuario = {
       maxBoundsViscosity: 1.0
     });
 
-    // 1. CAPA FONDO: El Mar (ArcGIS Ocean) - Restaurado
+    // CAPA FONDO: El Mar (ArcGIS Ocean) - Restaurado
     L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Esri',
       zIndex: 1
     }).addTo(this.map);
 
-    // 2. CAPA TERREO: Satélite PNOA (Con transparencia para que se vea el mar debajo)
+    // CAPA TERREO: Satélite PNOA (Con transparencia para que se vea el mar debajo)
     L.tileLayer.wms('https://www.ign.es/wms-inspire/pnoa-ma', {
       layers: 'OI.OrthoimageCoverage',
       format: 'image/png',
@@ -135,7 +135,7 @@ usuario: Usuario = {
       zIndex: 2
     }).addTo(this.map);
 
-    // 3. CAPA HISTÓRICA: Minutas
+    // CAPA HISTÓRICA: Minutas
     this.oldMapLayer = L.tileLayer.wms('https://www.ign.es/wms/minutas-cartograficas', {
       layers: 'Minutas',
       format: 'image/png',
@@ -145,8 +145,7 @@ usuario: Usuario = {
       zIndex: 5
     }).addTo(this.map);
 
-    // 4. CAPA ETIQUETAS: Nombres con "Halo" para que se lean sobre cualquier fondo
-    // He cambiado a Voyager_Labels_Under que son más legibles
+    // CAPA ETIQUETAS: Nombres con "Halo" para que se lean sobre cualquier fondo
     L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; CartoDB',
       zIndex: 10
@@ -343,7 +342,6 @@ usuario: Usuario = {
 
   public idMarcadorEditando: number | string | null = null;
 
-  // 2. Nueva función para abrir el formulario cargado
   abrirParaEditar(place: DatosMapa) {
     // Guardamos el ID por si luego en tu guardarMarcador tienes que hacer un PUT/UPDATE en vez de POST
     this.idMarcadorEditando = place.id || null;
@@ -376,7 +374,6 @@ usuario: Usuario = {
     }, 100);
   }
 
-  // 3. Nueva función para borrar
   public toastConfig = {
     visible: false,
     mensaje: '',
@@ -385,7 +382,7 @@ usuario: Usuario = {
     accion: () => { } // Aquí guardaremos la función que queremos ejecutar
   };
 
-  // 2. Modificamos la función borrar para que NO borre, sino que pregunte
+
   borrarMarcador(place: any) {
     this.toastConfig = {
       visible: true,
@@ -408,7 +405,7 @@ usuario: Usuario = {
     this.cdr.detectChanges();
   }
 
-  // 3. Funciones de control del Toast
+  // Funciones de control del Toast
   ejecutarAccionToast() {
     this.toastConfig.accion(); // Ejecuta lo que guardamos arriba
   }
@@ -419,16 +416,15 @@ usuario: Usuario = {
   }
 
 public recargarMapa() {
-  // 1. Cerramos todos los posibles formularios abiertos
+  // Cerramos todos los posibles formularios abiertos
   this.mostrarFormularioMarcadores = false;
   this.mostrarFormLugar = false;
-  // this.mostrarFormEvento = false; // (Cuando lo tengas)
 
-  // 2. Llamamos a cargarDatos que ya tienes definido
+  // Llamamos a cargarDatos que ya tienes definido
   // Este método hace el subscribe y luego llama a renderMarkers()
   this.cargarDatos();
 
-  // 3. Forzamos la detección de cambios por si acaso
+  // Forzamos la detección de cambios por si acaso
   this.cdr.detectChanges();
 }
 }

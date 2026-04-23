@@ -32,7 +32,7 @@ export class RegistroPage {
   ) {}
 
  onRegistrar() {
-  // 1. Validación inicial (Frontend)
+  // Validación inicial (Frontend)
   if (!this.usuario.nombre || !this.usuario.contrasena) {
     this.errorMsg = 'Debes rellenar todos los campos';
     return;
@@ -46,7 +46,6 @@ this.usuario.nombre = this.usuario.nombre.toLowerCase();
   this.frontUserService.registrar(this.usuario).subscribe({
     next: () => {
       this.loading = false;
-      // Opcional: Podrías pasar un mensaje al login de "Usuario creado con éxito"
       this.router.navigate(['/login']);
     },
     error: (err) => {

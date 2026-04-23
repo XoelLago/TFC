@@ -51,8 +51,8 @@ public provinciaSeleccionadaId: string = '';
 
   // Modelo
   public lugar: Lugar = {
-    id: '',             // Propiedad faltante
-    tipo: 'lugar',       // Propiedad faltante
+    id: '',
+    tipo: 'lugar',
     icono: '',
     nome: '',
     descripcion: '',
@@ -114,7 +114,7 @@ public provinciaSeleccionadaId: string = '';
       draggable: true
     }).addTo(this.mapPick);
 
-    // EVENTOS DE ACTUALIZACIÓN (NgZone + Objeto nuevo para detección de cambios)
+    // eventps de actualizacion (NgZone + Objeto nuevo para detección de cambios)
     this.pickMarker.on('drag', (e: any) => {
       this.zone.run(() => {
         const pos = e.target.getLatLng();
@@ -149,14 +149,14 @@ public provinciaSeleccionadaId: string = '';
 guardar() {
   const nombreNormalizado = this.frontUserService.capitalizarNombre(this.lugar.nome);
 
-  // 1. Validación de campos obligatorios
+  // Validación de campos obligatorios
   if (!nombreNormalizado || !this.provinciaSeleccionadaId) {
     this.errorMsg = 'O nome e a provincia son obrigatorios.';
     return;
   }
 
-  // 2. Control de duplicados (solo si es un registro nuevo)
-  // Nota: Esto asume que tienes la lista de lugares cargada o el servicio tiene un buscador
+  // Control de duplicados (solo si es un registro nuevo)
+  // Esto asume que tienes la lista de lugares cargada o el servicio tiene un buscador
   if (!this.datos) {
      this.lugaresService.getLugares().subscribe(lugares => {
         const existe = lugares.find(l => this.frontUserService.capitalizarNombre(l.nome) === nombreNormalizado);
@@ -183,7 +183,7 @@ private ejecutarGuardado() {
     return;
   }
 
-  // 3. Construcción del Payload exacto para TypeORM
+  // Construcción del Payload exacto para TypeORM
   const payload: any = {
     nome: this.frontUserService.capitalizarNombre(this.lugar.nome),
     coords: this.lugar.coords,

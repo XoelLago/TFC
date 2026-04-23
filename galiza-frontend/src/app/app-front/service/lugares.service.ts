@@ -8,7 +8,6 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root'
 })
 export class LugaresService {
-  // Ajusta la URL según tu configuración de entorno
   private readonly API_URL = environment.apiUrl + '/lugares';
 
   constructor(private http: HttpClient) {}

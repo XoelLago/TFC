@@ -19,7 +19,7 @@ export enum EstadoSolicitud {
   RECHAZADA = 'RECHAZADA',
 }
 
-// tipo-evento.enum.ts
+
 export enum TipoEvento {
   ROMERIA = 'Romería',
   FESTIVAL = 'Festival',
@@ -30,7 +30,8 @@ export enum TipoEvento {
   PROBA = 'Proba', 
   OUTRO = 'Outro'       
 }
-// tipo-punto.enum.ts
+
+
 export enum TipoPunto {
   MUINEIRA = 'Muiñeira',
   XOTA = 'Xota',
@@ -38,7 +39,7 @@ export enum TipoPunto {
   TABLON = 'Tablón',
   MANEO = 'Maneo',
   PASODOBRE = 'Pasodobre',
-  PUNTO_GALAICO = 'Punto Galaico', // Por si quieres generalizar
+  PUNTO_GALAICO = 'Punto Galaico', 
   OUTRO = 'Outro'
 }
 

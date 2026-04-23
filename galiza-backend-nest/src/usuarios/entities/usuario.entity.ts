@@ -16,7 +16,7 @@ export class Usuario {
   @Column({
     type: 'enum',
     enum: Rol,
-    default: Rol.USER // Por defecto, cualquier registro nuevo es un usuario normal
+    default: Rol.USER 
   })
   rol!: Rol;
 
