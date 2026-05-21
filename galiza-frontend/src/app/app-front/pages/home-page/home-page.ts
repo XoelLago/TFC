@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, NgZone, ChangeDetectorRef } from '@angular/core';
+import { Component, AfterViewInit, NgZone, ChangeDetectorRef, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CreateMarcadorForm, DatosMapa } from '../../models/mapa.model';
@@ -24,7 +24,7 @@ import L from 'leaflet';
   templateUrl: './home-page.html',
   styleUrls: ['./home-page.css']
 })
-export class HomePage implements AfterViewInit {
+export class HomePage implements AfterViewInit, OnInit {
   public errorMsg: string = '';
 
   private map!: L.Map;
@@ -49,6 +49,7 @@ export class HomePage implements AfterViewInit {
   public mostrarFormEvento: boolean = false;
   public mostrarFormLugar: boolean = false;
 
+
   public places: DatosMapa[] = [];
   private lastMarker: L.Marker | null = null;
 
@@ -67,8 +68,9 @@ usuario: Usuario = {
     rol: (localStorage.getItem('user_rol') as Rol),
   };
 
-  public rolUsuario: string = this.usuario.rol;
+
  public adminMenuItems: MenuItem[] = [];
+
 
 
   constructor(
@@ -86,29 +88,64 @@ usuario: Usuario = {
       command: () => this.abrirFormulario()
     },
     {
-      icon: 'material-icons castle',
+      icon: 'pi pi-star',
       tooltipOptions: { tooltipLabel: 'Novo Lugar',tooltipPosition: 'left' },
       command: () => this.mostrarFormLugar = true
     },
     {
-      icon: 'theater_comedy',
+      icon: 'pi pi-star',
       tooltipOptions: { tooltipLabel: 'Novo Evento',tooltipPosition: 'left' },
-      command: () => this.router.navigate(['/ruta-eventos'])
+      command: (event) => {this.mostrarFormEvento = true;this.cdr.detectChanges();}
     },
     {
       icon: 'groups',
       tooltipOptions: { tooltipLabel: 'Nova Asociación',tooltipPosition: 'left' },
-      command: () => this.router.navigate(['/ruta-asociaciones'])
+      command: () => this.mostrarFormAsociacion = true
     }
   ];
 
   }
+
+
+
+  ngOnInit(): void {
+    this.cdr.detectChanges();
+  }
+
+
+
   ngAfterViewInit() {
     setTimeout(() => {
       this.initMap();
       this.cargarDatos();
     }, 100);
+
+    this.cdr.detectChanges();
+
   }
+
+
+
+
+get rolUsuario(): string {
+   const userJson = localStorage.getItem('user');
+  const user = userJson ? JSON.parse(userJson) : null;
+  return user?.rol || 'USER';
+}
+
+private verificarSesion() {
+  const userJson = localStorage.getItem('user');
+  const user = userJson ? JSON.parse(userJson) : null;
+console.log('Usuario cargado del localStorage:', user);
+
+  this.usuario = {
+    id: user?.id || 0,
+    nombre: user.nombre || '',
+    rol: user.rol || 'USER',
+  };
+}
+
+
 
   private initMap(): void {
     this.map = L.map('map', {

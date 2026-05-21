@@ -1,0 +1,42 @@
+<div class="overlay-container active">
+  <div class="form-card">
+    <div class="form-header">
+      <h2><span class="material-icons">theater_comedy</span> {{ datos ? 'Editar Evento' : 'Novo Evento' }}</h2>
+      <button class="btn-close" (click)="cancelar.emit()">×</button>
+    </div>
+
+    <div class="form-body">
+      <div class="input-group">
+        <label>Nome do Evento *</label>
+        <input type="text" [(ngModel)]="evento.nome" placeholder="Ex: Romería de...">
+        @if(errorMsg){ <label style="color:red;">{{ errorMsg }}</label> }
+      </div>
+
+      <div class="input-group">
+        <label>Descrición</label>
+        <textarea [(ngModel)]="evento.descripcion" placeholder="Detalles do evento..." rows="2"></textarea>
+      </div>
+
+      <div class="map-picker-container">
+        <label>Ubicación do evento:</label>
+        <div id="mapPickEvento" style="height: 200px;"></div>
+      </div>
+
+      <div class="coords-display">
+        <div class="coord-item">
+          <small>Lat</small> <span>{{ evento.coords.lat.toFixed(5) }}</span>
+        </div>
+        <div class="coord-item">
+          <small>Lng</small> <span>{{ evento.coords.lng.toFixed(5) }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-footer">
+      <button class="btn-cancel" (click)="cancelar.emit()">Cancelar</button>
+      <button class="btn-save" (click)="guardar()">
+        <span class="material-icons">save</span> Gardar
+      </button>
+    </div>
+  </div>
+</div>

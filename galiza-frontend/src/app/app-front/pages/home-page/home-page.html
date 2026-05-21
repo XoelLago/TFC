@@ -1,6 +1,7 @@
 <div class="home-container">
   <header class="header">
     <h1 class="main-title">Mapa de Galiza</h1>
+
   </header>
 
 
@@ -41,6 +42,8 @@
       <div class="legend-item">
         <div class="dot marker-evento"></div><span class="material-icons sm">theater_comedy</span><span>Evento</span>
       </div>
+
+
     </div>
     @if(selectedPlace){
     <div class="place-card">
@@ -100,11 +103,11 @@
       </ul>
       }
     </div>
+
   </div>
 
 
-<div class="contenedor-boton-final">
-
+<div class="contenedor-boton-final" >
   @if (rolUsuario === 'ADMIN' || rolUsuario === 'SUPERUSER') {
     <p-speeddial
   [model]="adminMenuItems"
@@ -186,6 +189,13 @@
     (cancelar)="mostrarFormLugar = false"
     (guardado)="recargarMapa()">
   </app-form-lugar>
+}
+@if (mostrarFormEvento) {
+  <app-form-evento
+    [datos]="selectedPlace"
+    (cancelar)="mostrarFormEvento = false"
+    (guardado)="recargarMapa()">
+  </app-form-evento>
 }
 <!--
 @if (mostrarFormEvento) {

@@ -10,6 +10,9 @@ import { environment } from '../../../environments/environment';
 export class FrontUserService {
   private URL_API = environment.apiUrl;
 
+    private loginStatus = new BehaviorSubject<boolean>(this.hasToken());
+
+
   private userSubject = new BehaviorSubject<any>(this.getUserFromStorage());
   user$ = this.userSubject.asObservable();
 
@@ -91,10 +94,6 @@ esSuperuser(): boolean {
     return !!localStorage.getItem('access_token');
   }
 
-
-
-
-
 getUsuarios(): Observable<any[]> {
   return this.http.get<any[]>(`${this.URL_API}/usuarios`, { headers: this.getHeaders() });
 }
@@ -114,5 +113,20 @@ eliminarUsuario(id: number): Observable<any> {
  capitalizarNombre(texto: string): string {
   if (!texto) return '';
   return texto.trim().charAt(0).toUpperCase() + texto.trim().slice(1).toLowerCase();
+}
+
+hasToken(): boolean {
+    // Devuelve true si existe el token y no es una cadena vacía
+    return !!localStorage.getItem('token');
+  }
+
+
+// Llama a esto cuando el login sea exitoso
+notificarLogin() {
+  this.loginStatus.next(true);
+}
+
+getLoginStatus() {
+  return this.loginStatus.asObservable();
 }
 }
