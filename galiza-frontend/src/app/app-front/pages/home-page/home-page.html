@@ -191,11 +191,11 @@
   </app-form-lugar>
 }
 @if (mostrarFormEvento) {
-  <app-form-evento
+  <evento-form
     [datos]="selectedPlace"
     (cancelar)="mostrarFormEvento = false"
     (guardado)="recargarMapa()">
-  </app-form-evento>
+  </evento-form>
 }
 <!--
 @if (mostrarFormEvento) {

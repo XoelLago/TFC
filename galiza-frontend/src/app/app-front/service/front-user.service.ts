@@ -129,4 +129,5 @@ notificarLogin() {
 getLoginStatus() {
   return this.loginStatus.asObservable();
 }
+
 }

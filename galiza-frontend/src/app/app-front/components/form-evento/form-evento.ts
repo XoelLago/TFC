@@ -1,196 +1,62 @@
-import { Component, OnInit, Input, Output, EventEmitter, NgZone, ChangeDetectorRef } from '@angular/core';
+import { Component, EventEmitter, Output, ChangeDetectorRef, Input } from '@angular/core'; // 💡 Añadido Input aquí
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import * as L from 'leaflet';
-
-// Servicios y Modelos
-import { EventosService } from '../../service/eventos.service';
-import { LugaresService } from '../../service/lugares.service';
+import { switchMap } from 'rxjs/operators';
 import { FrontUserService } from '../../service/front-user.service';
+import { EventosService } from '../../service/eventos.service';
 
 @Component({
-  selector: 'app-form-evento',
+  selector: 'evento-form',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './form-evento.html',
-  styleUrls: ['./form-evento.css']
+  templateUrl: 'form-evento.html'
 })
-export class FormEvento implements OnInit {
-  @Input() datos: any = null;
+export class EventoForm {
+
+  // 💡 Declaramos el Input para que HomePage no rompa al compilar
+  @Input() datos: any;
+
+  @Output() enviado = new EventEmitter<void>();
   @Output() cancelar = new EventEmitter<void>();
-  @Output() guardado = new EventEmitter<any>();
 
-  public errorMsg: string = '';
-
-  // Gestión del Mapa
-  private mapPick!: L.Map;
-  private pickMarker: L.Marker | null = null;
-
-  // Listas para el buscador relacional de Lugares
-  public listaLugares: any[] = [];
-  public lugaresFiltrados: any[] = [];
-  public textoBusquedaLugar: string = '';
-  public mostrarLugares: boolean = false;
-  public lugarSeleccionadoId: string | null = null;
-
-  // Campo personalizado local
-  public direccion: string = '';
-
-  // Modelo adaptado a la captura de la base de datos
-  public evento: any = {
-    id: '',
-    nome: '',
-    fecha: '',
-    coords: { lat: 42.75500, lng: -7.86300 },
-    tipo: 'evento',
-    precio: 0,
-    icono: 'event',
-    descripcion: '',
-    enlaceExterno: '',
-    publicado: true,
-    lugarId: null
+  cargando = false;
+  errorMsg = '';
+  nuevoEvento = {
+    nome: '', fecha: '', coords: { lat: 42.2406, lng: -8.7207 },
+    tipo: '', precio: 0, icono: '', descripcion: '',
+    enlaceExterno: '', publicado: false, lugarId: null
   };
 
-  constructor(
-    private eventosService: EventosService,
-    private lugaresService: LugaresService,
-    private frontUserService: FrontUserService,
-    private zone: NgZone,
-    private cdr: ChangeDetectorRef
-  ) {}
+  constructor(private eventosService: EventosService, private cdr: ChangeDetectorRef) {}
 
+  // 💡 Opcional: Si quieres que al venir de HomePage con un Lugar seleccionado,
+  // el campo 'lugarId' se autorrellene en el formulario, añade este método:
   ngOnInit(): void {
-    this.cargarLugares();
-
-    if (this.datos) {
-      // Mapeamos los datos existentes al modelo
-      this.evento = {
-        ...this.datos,
-        coords: this.datos.coords ? { ...this.datos.coords } : { lat: 42.755, lng: -7.863 }
-      };
-
-      // Si tiene un lugar asignado, rellenamos el buscador flotante
-      if (this.datos.lugar || this.datos.lugarId) {
-        this.lugarSeleccionadoId = this.datos.lugar?.id || this.datos.lugarId;
-        this.textoBusquedaLugar = this.datos.lugar?.nome || 'Lugar asignado';
-      }
-
-      // Tratar la descripción para extraer la Dirección (Evita duplicados visuales)
-      if (this.evento.descripcion && this.evento.descripcion.includes('Dirección: ')) {
-        const partes = this.evento.descripcion.split('Dirección: ');
-        this.evento.descripcion = partes[0].trim(); // Deja solo el texto real
-        this.direccion = partes[1].trim();          // Pone la dirección en su input
-      }
+    if (this.datos && this.datos.id) {
+      this.nuevoEvento.lugarId = this.datos.id;
     }
-
-    setTimeout(() => this.initMiniMap(), 300);
   }
 
-  private cargarLugares() {
-    this.lugaresService.getLugares().subscribe({
-      next: (res) => {
-        this.listaLugares = res;
-        this.lugaresFiltrados = res;
-      },
-      error: (err) => console.error('Erro cargando lugares para combo:', err)
-    });
-  }
+  enviarSolicitud(): void {
+    this.cargando = true;
+    this.errorMsg = '';
 
-  private initMiniMap() {
-    if (this.mapPick) this.mapPick.remove();
-
-    this.mapPick = L.map('mapPickEvento').setView([this.evento.coords.lat, this.evento.coords.lng], 12);
-
-    L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
-      attribution: 'Google Hybrid'
-    }).addTo(this.mapPick);
-
-    this.pickMarker = L.marker([this.evento.coords.lat, this.evento.coords.lng], {
-      draggable: true
-    }).addTo(this.mapPick);
-
-    this.pickMarker.on('drag', (e: any) => {
-      this.zone.run(() => {
-        const pos = e.target.getLatLng();
-        this.evento.coords = { lat: pos.lat, lng: pos.lng };
-        this.cdr.detectChanges();
-      });
-    });
-
-    this.mapPick.on('click', (e: L.LeafletMouseEvent) => {
-      this.zone.run(() => {
-        this.evento.coords = { lat: e.latlng.lat, lng: e.latlng.lng };
-        this.pickMarker?.setLatLng(e.latlng);
-        this.cdr.detectChanges();
-      });
-    });
-
-    setTimeout(() => this.mapPick.invalidateSize(), 400);
-  }
-
-  // --- LÓGICA DEL BUSCADOR DE LUGARES ---
-  filtrarLugares(event: any) {
-    const valor = event.target.value.toLowerCase();
-    this.lugaresFiltrados = this.listaLugares.filter(l =>
-      l.nome.toLowerCase().includes(valor)
-    );
-  }
-
-  seleccionarLugar(lugar: any) {
-    this.mostrarLugares = false;
-    this.lugarSeleccionadoId = lugar.id;
-    this.textoBusquedaLugar = lugar.nome;
-    this.evento.lugarId = lugar.id;
-  }
-
-  ocultarLista(tipo: string) {
-    setTimeout(() => {
-      if (tipo === 'lugares') this.mostrarLugares = false;
-    }, 150);
-  }
-
-  // --- GUARDADO DE DATOS ---
-  guardar() {
-    // Validaciones obligatorias básicas
-    if (!this.evento.nome || !this.evento.fecha || !this.lugarSeleccionadoId) {
-      this.errorMsg = 'O nome, a data e o lugar asociado son campos obrigatorios.';
-      return;
-    }
-
-    // Unir la descripción original con la dirección en el formato solicitado
-    let descripcionFinal = this.evento.descripcion || '';
-    if (this.direccion.trim()) {
-      descripcionFinal += (descripcionFinal ? '\n' : '') + `Dirección: ${this.direccion.trim()}`;
-    }
-
-    // Payload final unificado listo para enviar a la base de datos
-    const payload: any = {
-      nome: this.frontUserService.capitalizarNombre(this.evento.nome),
-      fecha: this.evento.fecha,
-      coords: this.evento.coords,
-      tipo: this.evento.tipo || 'evento',
-      precio: Number(this.evento.precio) || 0,
-      icono: this.evento.icono || 'event',
-      descripcion: descripcionFinal,
-      enlaceExterno: this.evento.enlaceExterno || '',
-      publicado: !!this.evento.publicado,
-      lugarId: this.lugarSeleccionadoId
-    };
-
-    const idEvento = this.datos?.id || this.evento.id;
-
-    const obs = idEvento
-      ? this.eventosService.update(idEvento, payload)
-      : this.eventosService.create(payload);
-
-    obs.subscribe({
-      next: (res) => {
-        this.errorMsg = '';
-        this.guardado.emit(res);
+    this.eventosService.crearEvento(this.nuevoEvento).pipe(
+      switchMap((eventoCreado) => {
+        return this.eventosService.crearSolicitud({
+          estado: 'PENDIENTE',
+          eventoId: eventoCreado.id
+        });
+      })
+    ).subscribe({
+      next: () => {
+        this.cargando = false;
+        this.enviado.emit();
       },
       error: (err) => {
-        console.error('Erro ao gardar o evento:', err);
-        this.errorMsg = 'Erro no servidor ao procesar o evento.';
+        this.cargando = false;
+        this.errorMsg = err.error?.message || 'Error al procesar la solicitud';
+        this.cdr.detectChanges();
       }
     });
   }

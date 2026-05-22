@@ -7,27 +7,36 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root'
 })
 export class EventosService {
-  private readonly API_URL = environment.apiUrl + '/eventos';
+  private readonly URL_EVENTOS = environment.apiUrl + '/eventos';
+  private readonly URL_SOLICITUDES = environment.apiUrl + '/solicitudes-evento';
 
   constructor(private http: HttpClient) {}
 
-  findAll(): Observable<any[]> {
-    return this.http.get<any[]>(this.API_URL);
+ crearEvento(evento: any): Observable<any> {
+    return this.http.post(this.URL_EVENTOS, evento);
+  }
+  findAll(): Observable<any>{
+    return this.http.get(this.URL_EVENTOS)
+    }
+
+  actualizarEvento(id: number, data: any): Observable<any> {
+    return this.http.patch(`${this.URL_EVENTOS}/${id}`, data);
   }
 
-  findOne(id: number): Observable<any> {
-    return this.http.get<any>(`${this.API_URL}/${id}`);
+  obtenerEventoPorId(id: number): Observable<any> {
+    return this.http.get(`${this.URL_EVENTOS}/${id}`);
   }
 
-  create(evento: any): Observable<any> {
-    return this.http.post<any>(`${this.API_URL}/`, evento);
+  // Métodos para Solicitudes
+  crearSolicitud(solicitud: any): Observable<any> {
+    return this.http.post(this.URL_SOLICITUDES, solicitud);
   }
 
-  update(id: number, evento: any): Observable<any> {
-    return this.http.patch<any>(`${this.API_URL}/${id}`, evento);
+  obtenerSolicitudes(): Observable<any[]> {
+    return this.http.get<any[]>(this.URL_SOLICITUDES);
   }
 
-  remove(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.API_URL}/${id}`);
+  actualizarSolicitud(id: number, data: any): Observable<any> {
+    return this.http.patch(`${this.URL_SOLICITUDES}/${id}`, data);
   }
 }

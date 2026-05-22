@@ -1,42 +1,65 @@
-<div class="overlay-container active">
+<div class="overlay-container">
   <div class="form-card">
+
     <div class="form-header">
-      <h2><span class="material-icons">theater_comedy</span> {{ datos ? 'Editar Evento' : 'Novo Evento' }}</h2>
+      <h2><span class="material-icons">event_note</span> Solicitar Evento</h2>
       <button class="btn-close" (click)="cancelar.emit()">×</button>
     </div>
 
     <div class="form-body">
       <div class="input-group">
-        <label>Nome do Evento *</label>
-        <input type="text" [(ngModel)]="evento.nome" placeholder="Ex: Romería de...">
-        @if(errorMsg){ <label style="color:red;">{{ errorMsg }}</label> }
+        <label>NOME DO EVENTO *</label>
+        <input type="text" [(ngModel)]="nuevoEvento.nome" placeholder="Nombre del evento">
+      </div>
+
+      <div class="row-expand">
+        <div class="input-group">
+          <label>FECHA *</label>
+          <input type="datetime-local" [(ngModel)]="nuevoEvento.fecha">
+        </div>
+        <div class="input-group">
+          <label>TIPO</label>
+          <input type="text" [(ngModel)]="nuevoEvento.tipo" placeholder="Ej: Concierto, Danza...">
+        </div>
+      </div>
+
+      <div class="row-expand">
+        <div class="input-group">
+          <label>PRECIO (€)</label>
+          <input type="number" [(ngModel)]="nuevoEvento.precio" placeholder="0.00">
+        </div>
+        <div class="input-group">
+          <label>LUGAR ID</label>
+          <input type="number" [(ngModel)]="nuevoEvento.lugarId" placeholder="ID numérico">
+        </div>
+      </div>
+
+      <div class="row-expand">
+        <div class="input-group">
+          <label>ICONO</label>
+          <input type="text" [(ngModel)]="nuevoEvento.icono" placeholder="pi pi-image">
+        </div>
+        <div class="input-group">
+          <label>ENLACE EXTERNO</label>
+          <input type="text" [(ngModel)]="nuevoEvento.enlaceExterno" placeholder="https://...">
+        </div>
       </div>
 
       <div class="input-group">
-        <label>Descrición</label>
-        <textarea [(ngModel)]="evento.descripcion" placeholder="Detalles do evento..." rows="2"></textarea>
+        <label>DESCRIPCIÓN</label>
+        <textarea [(ngModel)]="nuevoEvento.descripcion" placeholder="Detalles de la propuesta..."></textarea>
       </div>
 
-      <div class="map-picker-container">
-        <label>Ubicación do evento:</label>
-        <div id="mapPickEvento" style="height: 200px;"></div>
-      </div>
-
-      <div class="coords-display">
-        <div class="coord-item">
-          <small>Lat</small> <span>{{ evento.coords.lat.toFixed(5) }}</span>
-        </div>
-        <div class="coord-item">
-          <small>Lng</small> <span>{{ evento.coords.lng.toFixed(5) }}</span>
-        </div>
-      </div>
+      <p *ngIf="errorMsg" style="color:red; margin: 0; font-size: 0.9rem;">{{ errorMsg }}</p>
     </div>
 
     <div class="form-footer">
       <button class="btn-cancel" (click)="cancelar.emit()">Cancelar</button>
-      <button class="btn-save" (click)="guardar()">
-        <span class="material-icons">save</span> Gardar
+      <button class="btn-save" (click)="enviarSolicitud()" [disabled]="cargando || !nuevoEvento.nome || !nuevoEvento.fecha">
+        <span class="material-icons icon-left">{{ cargando ? 'sync' : 'send' }}</span>
+        {{ cargando ? 'Enviando...' : 'Enviar Propuesta' }}
       </button>
     </div>
+
   </div>
 </div>

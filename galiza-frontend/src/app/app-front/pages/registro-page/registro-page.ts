@@ -8,7 +8,7 @@ import { ActionToastComponent } from "../../components/action-toast/action-toast
 @Component({
   selector: 'app-registro-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, ActionToastComponent],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './registro-page.html',
   styleUrls: ['./registro-page.css']
 })
