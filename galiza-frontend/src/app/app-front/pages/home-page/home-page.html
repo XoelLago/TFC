@@ -190,20 +190,14 @@
     (guardado)="recargarMapa()">
   </app-form-lugar>
 }
-@if (mostrarFormEvento) {
+<!-- @if (mostrarFormEvento) {
   <evento-form
     [datos]="selectedPlace"
     (cancelar)="mostrarFormEvento = false"
     (guardado)="recargarMapa()">
   </evento-form>
-}
+} -->
 <!--
-@if (mostrarFormEvento) {
-  <app-form-evento
-    (cancelar)="mostrarFormEvento = false"
-    (guardado)="recargarMapa()">
-  </app-form-evento>
-}
 @if (mostrarFormAsociacion) {
   <app-form-asociacion
     [datos]="selectedPlace"

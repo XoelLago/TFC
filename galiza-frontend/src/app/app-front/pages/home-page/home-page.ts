@@ -12,14 +12,13 @@ import { Usuario } from '../../models/usuario.model';
 import { Rol } from '../../models/rol.model';
 import { FormLugar } from "../../components/form-lugar/form-lugar";
 import { FormAsociacion } from "../../components/form-asociacion/form-asociacion";
-import { EventoForm } from '../../components/form-evento/form-evento';
 import L from 'leaflet';
 
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, ActionToastComponent, SpeedDialModule, SpeedDial, FormLugar, EventoForm, FormAsociacion],
+  imports: [CommonModule, FormsModule, ActionToastComponent, SpeedDialModule, SpeedDial, FormLugar, FormAsociacion],
   templateUrl: './home-page.html',
   styleUrls: ['./home-page.css']
 })
@@ -91,11 +90,7 @@ usuario: Usuario = {
       tooltipOptions: { tooltipLabel: 'Novo Lugar',tooltipPosition: 'left' },
       command: () => this.mostrarFormLugar = true
     },
-    {
-      icon: 'pi pi-star',
-      tooltipOptions: { tooltipLabel: 'Novo Evento',tooltipPosition: 'left' },
-      command: (event) => {this.mostrarFormEvento = true;this.cdr.detectChanges();}
-    },
+
     {
       icon: 'groups',
       tooltipOptions: { tooltipLabel: 'Nova Asociación',tooltipPosition: 'left' },

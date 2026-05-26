@@ -9,11 +9,11 @@ import { FrontUserService } from '../../service/front-user.service';
 import { EventosService } from '../../service/eventos.service';
 import { AdminUsersComponent } from '../../components/admin-users/admin-users';
 import { ActionToastComponent } from "../../components/action-toast/action-toast";
-import { EventoForm } from '../../components/form-evento/form-evento';
+import { FormEvento } from '../../components/form-evento/form-evento';
 
 @Component({
   standalone: true,
-  imports: [FormsModule, CommonModule, AdminUsersComponent, ActionToastComponent, EventoForm],
+  imports: [FormsModule, CommonModule, AdminUsersComponent, ActionToastComponent, FormEvento],
   selector: 'app-profile-page',
   templateUrl: './profile-page.html',
   styleUrls: ['./profile-page.css']

@@ -1,65 +1,125 @@
 <div class="overlay-container">
   <div class="form-card">
-
     <div class="form-header">
-      <h2><span class="material-icons">event_note</span> Solicitar Evento</h2>
+      <h2><span class="material-icons">event</span> Novo Evento</h2>
       <button class="btn-close" (click)="cancelar.emit()">×</button>
     </div>
 
     <div class="form-body">
+
+      <div class="row-expand">
+        <div class="input-group">
+          <label>Nome do Evento *</label>
+          <input type="text" [(ngModel)]="evento.nome" placeholder="Ex: Festival da Luz" [class.ng-invalid]="errorMsg && !evento.nome">
+          @if(errorMsg && !evento.nome){
+            <small style="color:red; margin-top: 4px; display: block;">O nome do evento é obrigatorio.</small>
+          }
+        </div>
+
+        <div class="input-group">
+          <label>Data e Hora *</label>
+          <input type="datetime-local" [(ngModel)]="evento.fecha" [class.ng-invalid]="errorMsg && !evento.fecha">
+          @if(errorMsg && !evento.fecha){
+            <small style="color:red; margin-top: 4px; display: block;">A data e hora son obrigatorias.</small>
+          }
+        </div>
+      </div>
+
+      <div class="row-expand">
+        <div class="input-group">
+          <label>Tipo de Evento *</label>
+          <div class="combo-wrapper">
+            <span class="material-icons combo-icon">category</span>
+            <select class="custom-select" [(ngModel)]="evento.tipo">
+              @for (t of Tipos; track $index) {
+                <option [value]="t">{{ t }}</option>
+              }
+            </select>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Prezo (€)</label>
+          <input type="number" step="0.01" [(ngModel)]="evento.precio">
+        </div>
+      </div>
+
+      <div class="input-group relative-container">
+        <label>Lugar *</label>
+        @if (!evento.lugar) {
+          <div class="search-box-custom" [class.ng-invalid]="errorMsg && !evento.lugar">
+            <input type="text" [(ngModel)]="textoBusquedaLugar" (input)="filtrarLugares($event)" (focus)="mostrarLugares = true" (blur)="ocultarLista('lugar')" placeholder="Buscar lugar existente...">
+          </div>
+          @if (mostrarLugares && textoBusquedaLugar) {
+            <ul class="custom-dropdown">
+              @for (l of lugaresFiltrados; track l.id) {
+                <li (mousedown)="seleccionarLugar(l)">{{ l.nome }}</li>
+              } @empty {
+                <li class="empty-message">Sen resultados</li>
+              }
+            </ul>
+          }
+          @if(errorMsg && !evento.lugar){
+            <small style="color:red; margin-top: 4px; display: block;">Debe seleccionar un lugar para o evento.</small>
+          }
+        } @else {
+          <div class="chip chip-lugar-selected">
+            <span class="material-icons">place</span> {{ evento.lugar.nome }}
+            <span class="material-icons chip-close" (click)="quitarLugar()">close</span>
+          </div>
+        }
+      </div>
+
+      <div class="map-picker-container">
+        <label>Ubicación exacta do evento:</label>
+        <div id="mapPickEvento"></div>
+      </div>
+
       <div class="input-group">
-        <label>NOME DO EVENTO *</label>
-        <input type="text" [(ngModel)]="nuevoEvento.nome" placeholder="Nombre del evento">
+        <label>Enlace Externo (Web, Entradas...)</label>
+        <input type="url" [(ngModel)]="evento.enlaceExterno" placeholder="https://...">
       </div>
 
-      <div class="row-expand">
-        <div class="input-group">
-          <label>FECHA *</label>
-          <input type="datetime-local" [(ngModel)]="nuevoEvento.fecha">
+      <div class="input-group relative-container">
+        <label>Asociacións Organizadoras</label>
+        <div class="search-box-custom">
+          <input type="text" [(ngModel)]="textoBusquedaAso" (input)="filtrarAsociaciones($event)" (focus)="mostrarAsociaciones = true" (blur)="ocultarLista('aso')" placeholder="Buscar asociacións...">
         </div>
-        <div class="input-group">
-          <label>TIPO</label>
-          <input type="text" [(ngModel)]="nuevoEvento.tipo" placeholder="Ej: Concierto, Danza...">
-        </div>
+        @if (mostrarAsociaciones && textoBusquedaAso) {
+          <ul class="custom-dropdown">
+            @for (a of asociacionesFiltradas; track a._id) {
+              <li (mousedown)="seleccionarAsociacion(a)">{{ a.nome }}</li>
+            } @empty {
+              <li class="empty-message">Sen resultados</li>
+            }
+          </ul>
+        }
       </div>
 
-      <div class="row-expand">
-        <div class="input-group">
-          <label>PRECIO (€)</label>
-          <input type="number" [(ngModel)]="nuevoEvento.precio" placeholder="0.00">
+      @if (evento.asociaciones.length > 0) {
+        <div class="chips-container">
+          @for (a of evento.asociaciones; track a.id) {
+            <div class="chip chip-asociacion">
+              {{ a.nome }}
+              <span class="material-icons chip-close" (click)="removerAso(a.id)">close</span>
+            </div>
+          }
         </div>
-        <div class="input-group">
-          <label>LUGAR ID</label>
-          <input type="number" [(ngModel)]="nuevoEvento.lugarId" placeholder="ID numérico">
-        </div>
-      </div>
-
-      <div class="row-expand">
-        <div class="input-group">
-          <label>ICONO</label>
-          <input type="text" [(ngModel)]="nuevoEvento.icono" placeholder="pi pi-image">
-        </div>
-        <div class="input-group">
-          <label>ENLACE EXTERNO</label>
-          <input type="text" [(ngModel)]="nuevoEvento.enlaceExterno" placeholder="https://...">
-        </div>
-      </div>
+      }
 
       <div class="input-group">
-        <label>DESCRIPCIÓN</label>
-        <textarea [(ngModel)]="nuevoEvento.descripcion" placeholder="Detalles de la propuesta..."></textarea>
+        <label>Descrición</label>
+        <textarea [(ngModel)]="evento.descripcion" rows="3" placeholder="Detalles adicionais..."></textarea>
+        @if (evento.tipo === 'Outro') {
+          <small style="color:#E65100; font-weight:bold; margin-top:5px;">Por favor, especifica o tipo de evento na descrición.</small>
+        }
       </div>
 
-      <p *ngIf="errorMsg" style="color:red; margin: 0; font-size: 0.9rem;">{{ errorMsg }}</p>
     </div>
 
     <div class="form-footer">
       <button class="btn-cancel" (click)="cancelar.emit()">Cancelar</button>
-      <button class="btn-save" (click)="enviarSolicitud()" [disabled]="cargando || !nuevoEvento.nome || !nuevoEvento.fecha">
-        <span class="material-icons icon-left">{{ cargando ? 'sync' : 'send' }}</span>
-        {{ cargando ? 'Enviando...' : 'Enviar Propuesta' }}
-      </button>
+      <button class="btn-save" (click)="guardar()"><span class="material-icons">save</span> Crear Evento</button>
     </div>
-
   </div>
 </div>

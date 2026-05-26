@@ -97,10 +97,10 @@
       </div>
 
       <div *ngSwitchCase="'solicitar-evento'">
-        <evento-form
+        <form-evento
           (cancelar)="volver()"
           (enviado)="mostrarToastInformativo('¡Propuesta enviada con éxito!'); volver()">
-        </evento-form>
+        </form-evento>
       </div>
 
       <div *ngSwitchCase="'admin'" class="menu-layout menu-fade">

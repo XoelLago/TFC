@@ -7,6 +7,7 @@ import { NotFoundPage } from "./pages/not-found-page/not-found-page";
 import { AuthGuard } from "../auth/auth.guard";
 import { RegistroPage } from "./pages/registro-page/registro-page";
 import { ProfilePage } from "./pages/profile-page/profile-page";
+import { EventosPage } from "./pages/eventos-page/eventos-page";
 
 export const appFrontRoutes: Routes = [
   {
@@ -23,6 +24,11 @@ export const appFrontRoutes: Routes = [
   {
     path: 'home',
     component: HomePage,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'eventos',
+    component: EventosPage,
     canActivate: [AuthGuard]
   },
   {

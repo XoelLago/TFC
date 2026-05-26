@@ -11,6 +11,7 @@ export interface DatosMapa {
   icono: string;
   descripcion?: string;
 
+
   bailes?: string[];   // El '?' significa que es opcional
   cancions?: string[];
 }

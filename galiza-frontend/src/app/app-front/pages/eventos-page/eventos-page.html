@@ -1,0 +1,56 @@
+<div class="page-container">
+  <div class="calendar-card">
+    <div class="calendar-header">
+      <button (click)="cambiarMes(-1)"><span class="material-icons">chevron_left</span></button>
+      <h2>{{ mesActual | date:'MMMM yyyy' | uppercase }}</h2>
+      <button (click)="cambiarMes(1)"><span class="material-icons">chevron_right</span></button>
+    </div>
+
+    <div class="calendar-grid weekdays">
+      @for (d of diasSemana; track $index) {
+        <div class="weekday">{{ d }}</div>
+      }
+    </div>
+
+    <div class="calendar-grid days">
+      @for (dia of diasCalendario; track $index) {
+        @if (dia) {
+          <div class="day-cell">
+            <span class="day-number">{{ dia.numero }}</span>
+            <div class="events-container">
+              @for (evt of dia.eventos; track evt.id) {
+                <div class="event-indicator" [style.backgroundColor]="getColorLeyenda(evt.tipo)" [title]="evt.nome"></div>
+              }
+            </div>
+          </div>
+        } @else {
+          <div class="day-cell empty"></div>
+        }
+      }
+    </div>
+  </div>
+
+  <div class="legend-card">
+    @for (item of leyenda; track item.tipo) {
+      <div class="legend-item">
+        <div class="legend-color" [style.backgroundColor]="item.color"></div>
+        <span>{{ item.label }}</span>
+      </div>
+    }
+  </div>
+
+  <div class="search-container">
+    <div class="search-box">
+      <span class="material-icons search-icon">search</span>
+      <input type="text" placeholder="Buscar evento..." [(ngModel)]="textoBusqueda" (input)="filtrarEventos()">
+    </div>
+  </div>
+
+  <button class="fab-button" (click)="abrirForm()">
+    <span class="material-icons">add</span>
+  </button>
+
+  @if (mostrarFormulario) {
+    <form-evento (cancelar)="cerrarForm()" (guardado)="onGuardado($event)"></form-evento>
+  }
+</div>
