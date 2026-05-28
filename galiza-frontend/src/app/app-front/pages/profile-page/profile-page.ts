@@ -131,19 +131,7 @@ export class ProfilePage implements OnInit {
     });
   }
 
-  resolverSolicitud(aprobar: boolean): void {
-    this.cargando = true;
-    const estado = aprobar ? 'ACEPTADA' : 'RECHAZADA';
-    this.eventosService.actualizarSolicitud(this.solicitudSeleccionada.id, { estado }).pipe(
-      switchMap(() => aprobar ? this.eventosService.actualizarEvento(this.eventoDeSolicitud.id, { publicado: true }) : of(null))
-    ).subscribe({
-      next: () => {
-        this.cargando = false;
-        this.cambiarSeccion('admin-solicitudes');
-      },
-      error: () => this.cargando = false
-    });
-  }
+
 
   // --- OTROS MÉTODOS ---
   onLogout(): void {
@@ -174,4 +162,46 @@ export class ProfilePage implements OnInit {
 
   cancelarConfirmacion() { this.confirmacion.visible = false; }
   confirmarAccionApp() { this.cancelarConfirmacion(); }
+
+
+  aceptarSolicitud(sol: any): void {
+    this.cargando = true;
+    // 1. Cambia el estado de la solicitud a APROBADA
+    this.eventosService.actualizarSolicitud(sol.id, { estado: 'APROBADA' }).pipe(
+      // 2. Cambia el publicado del evento asociado a true
+      switchMap(() => this.eventosService.actualizarEvento(sol.eventoId, { publicado: true }))
+    ).subscribe({
+      next: () => {
+        this.mostrarToastInformativo('Solicitud aprobada y evento publicado con éxito.');
+        this.listarSolicitudes(); // Recarga la lista para refrescar los botones
+      },
+      error: () => {
+        this.cargando = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  rechazarSolicitud(sol: any): void {
+    this.cargando = true;
+    // Al rechazar se borra la solicitud directamente
+    this.eventosService.eliminarSolicitud(sol.id).subscribe({
+      next: () => {
+        this.mostrarToastInformativo('Solicitud rechazada y eliminada.');
+        this.listarSolicitudes();
+      },
+      error: () => this.cargando = false
+    });
+  }
+
+  eliminarSolicitud(solId: number): void {
+    this.cargando = true;
+    this.eventosService.eliminarSolicitud(solId).subscribe({
+      next: () => {
+        this.mostrarToastInformativo('Solicitud eliminada de los registros.');
+        this.listarSolicitudes();
+      },
+      error: () => this.cargando = false
+    });
+  }
 }

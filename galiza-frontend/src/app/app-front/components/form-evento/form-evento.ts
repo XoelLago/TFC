@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, NgZone, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, NgZone, ChangeDetectorRef, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import * as L from 'leaflet';
@@ -18,8 +18,12 @@ import { AsociacionesService } from '../../service/asociaciones.service';
   styleUrls: ['./form-evento.css']
 })
 export class FormEvento implements OnInit {
+  @Input() eventoData: any = null;     // Recibe los datos del evento a revisar
+  @Input() modoLectura: boolean = false; // Controla si se ocultan los controles de guardado
+
   @Output() cancelar = new EventEmitter<void>();
   @Output() guardado = new EventEmitter<any>();
+  @Output() enviado = new EventEmitter<any>();
 
   public errorMsg: string = '';
   public Tipos = Object.values(TipoEvento);
@@ -156,7 +160,8 @@ export class FormEvento implements OnInit {
       enlaceExterno: this.evento.enlaceExterno,
       coords: this.evento.coords,
       lugar: this.evento.lugar,
-      asociaciones: this.evento.asociaciones
+      asociaciones: this.evento.asociaciones,
+      publicado: false
     };
 
     // 1. Crear Evento

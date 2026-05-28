@@ -3,6 +3,7 @@ import { AsociacionesService } from './asociaciones.service';
 import { CreateAsociacionDto } from './dto/create-asociacione.dto';
 import { UpdateAsociacioneDto } from './dto/update-asociacione.dto';
 
+
 @Controller('asociaciones')
 export class AsociacionesController {
   constructor(private readonly asociacionesService: AsociacionesService) {}

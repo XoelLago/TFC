@@ -39,4 +39,8 @@ export class EventosService {
   actualizarSolicitud(id: number, data: any): Observable<any> {
     return this.http.patch(`${this.URL_SOLICITUDES}/${id}`, data);
   }
+
+  eliminarSolicitud(id: number): Observable<any>{
+    return this.http.delete(`${this.URL_SOLICITUDES}/${id}`)
+  }
 }

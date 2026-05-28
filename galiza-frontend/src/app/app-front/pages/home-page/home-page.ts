@@ -60,14 +60,14 @@ export class HomePage implements AfterViewInit, OnInit {
   };
   public textoBotonForm: string = 'Gardar';
 
-usuario: Usuario = {
+  usuario: Usuario = {
     id: 0,
     nombre: localStorage.getItem('user_nombre') || '',
     rol: (localStorage.getItem('user_rol') as Rol),
   };
 
 
- public adminMenuItems: MenuItem[] = [];
+  public adminMenuItems: MenuItem[] = [];
 
 
 
@@ -80,23 +80,23 @@ usuario: Usuario = {
   ) {
 
     this.adminMenuItems = [
-    {
-      icon: 'pi pi-star',
-      tooltipOptions: { tooltipLabel: 'Marcador Personalizado',tooltipPosition: 'left' },
-      command: () => this.abrirFormulario()
-    },
-    {
-      icon: 'pi pi-star',
-      tooltipOptions: { tooltipLabel: 'Novo Lugar',tooltipPosition: 'left' },
-      command: () => this.mostrarFormLugar = true
-    },
+      {
+        icon: 'pi pi-star',
+        tooltipOptions: { tooltipLabel: 'Marcador Personalizado', tooltipPosition: 'left' },
+        command: () => this.abrirFormulario()
+      },
+      {
+        icon: 'pi pi-star',
+        tooltipOptions: { tooltipLabel: 'Novo Lugar', tooltipPosition: 'left' },
+        command: () => this.mostrarFormLugar = true
+      },
 
-    {
-      icon: 'groups',
-      tooltipOptions: { tooltipLabel: 'Nova Asociación',tooltipPosition: 'left' },
-      command: () => this.mostrarFormAsociacion = true
-    }
-  ];
+      {
+        icon: 'groups',
+        tooltipOptions: { tooltipLabel: 'Nova Asociación', tooltipPosition: 'left' },
+        command: () => this.mostrarFormAsociacion = true
+      }
+    ];
 
   }
 
@@ -121,23 +121,23 @@ usuario: Usuario = {
 
 
 
-get rolUsuario(): string {
-   const userJson = localStorage.getItem('user');
-  const user = userJson ? JSON.parse(userJson) : null;
-  return user?.rol || 'USER';
-}
+  get rolUsuario(): string {
+    const userJson = localStorage.getItem('user');
+    const user = userJson ? JSON.parse(userJson) : null;
+    return user?.rol || 'USER';
+  }
 
-private verificarSesion() {
-  const userJson = localStorage.getItem('user');
-  const user = userJson ? JSON.parse(userJson) : null;
-console.log('Usuario cargado del localStorage:', user);
+  private verificarSesion() {
+    const userJson = localStorage.getItem('user');
+    const user = userJson ? JSON.parse(userJson) : null;
+    console.log('Usuario cargado del localStorage:', user);
 
-  this.usuario = {
-    id: user?.id || 0,
-    nombre: user.nombre || '',
-    rol: user.rol || 'USER',
-  };
-}
+    this.usuario = {
+      id: user?.id || 0,
+      nombre: user.nombre || '',
+      rol: user.rol || 'USER',
+    };
+  }
 
 
 
@@ -191,7 +191,14 @@ console.log('Usuario cargado del localStorage:', user);
   private cargarDatos() {
     this.mapaService.getTodoElMapa().subscribe({
       next: (data) => {
-        this.places = data;
+
+        this.places = data.filter((e: any) => {
+          const esEvento = 'publicado' in e;
+          if (esEvento) {
+            return e.publicado === true || e.publicado === 'true';
+          }
+          return true;
+        });
         this.renderMarkers();
         this.cdr.detectChanges();
       },
@@ -277,7 +284,7 @@ console.log('Usuario cargado del localStorage:', user);
   }
   CrearMarcadorPersonalizado() {
     this.errorMsg = '';
-    if (!this.nuevoMarcador.nome|| this.nuevoMarcador.nome.trim().length === 0) {
+    if (!this.nuevoMarcador.nome || this.nuevoMarcador.nome.trim().length === 0) {
       this.errorMsg = 'O nome do marcador é obrigatorio para poder gardalo.';
       return;
     }
@@ -313,7 +320,7 @@ console.log('Usuario cargado del localStorage:', user);
           this.places.push(res);
           this.finalizarAccion();
         },
-        error:(res) =>{
+        error: (res) => {
           this.errorMsg = 'Falta el nombre por cubrir';
         }
       });
@@ -446,16 +453,16 @@ console.log('Usuario cargado del localStorage:', user);
     this.cdr.detectChanges();
   }
 
-public recargarMapa() {
-  // Cerramos todos los posibles formularios abiertos
-  this.mostrarFormularioMarcadores = false;
-  this.mostrarFormLugar = false;
+  public recargarMapa() {
+    // Cerramos todos los posibles formularios abiertos
+    this.mostrarFormularioMarcadores = false;
+    this.mostrarFormLugar = false;
 
-  // Llamamos a cargarDatos que ya tienes definido
-  // Este método hace el subscribe y luego llama a renderMarkers()
-  this.cargarDatos();
+    // Llamamos a cargarDatos que ya tienes definido
+    // Este método hace el subscribe y luego llama a renderMarkers()
+    this.cargarDatos();
 
-  // Forzamos la detección de cambios por si acaso
-  this.cdr.detectChanges();
-}
+    // Forzamos la detección de cambios por si acaso
+    this.cdr.detectChanges();
+  }
 }

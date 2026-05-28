@@ -1,7 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common'; // <-- Asegúrate de importar ParseIntPipe
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseGuards } from '@nestjs/common'; // <-- Asegúrate de importar ParseIntPipe
 import { SolicitudesEventoService } from './solicitudes-evento.service';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../auth/roles.decorator';
+import { Rol } from '../common/enums';
 
 @Controller('solicitudes-evento')
+@UseGuards(JwtAuthGuard, RolesGuard)
+
 export class SolicitudesEventoController {
   constructor(private readonly solicitudesEventoService: SolicitudesEventoService) {}
 

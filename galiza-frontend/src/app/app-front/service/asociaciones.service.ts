@@ -9,7 +9,7 @@ import { Asociacion } from '../models/asociacion.model';
 export class AsociacionesService {
 
   // Cambia esto por la URL real de tu API de Spring Boot / Backend
-  private apiUrl = 'http://localhost:8080/api/asociaciones';
+  private apiUrl = 'http://localhost:3000/asociaciones';
 
   constructor(private http: HttpClient) { }
 

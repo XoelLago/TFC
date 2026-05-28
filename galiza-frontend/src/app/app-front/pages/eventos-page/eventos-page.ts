@@ -43,7 +43,7 @@ public eventos: any[] = [];
 
   cargarEventos() {
     this.eventosService.findAll().subscribe(res => {
-      this.eventos = res;
+      this.eventos = res.filter((e: any) => e.publicado === true);
       this.filtrarEventos();
       this.generarCalendario();
       this.cdr.detectChanges();
