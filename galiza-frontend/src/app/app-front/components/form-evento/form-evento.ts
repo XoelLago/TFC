@@ -168,10 +168,14 @@ export class FormEvento implements OnInit {
     this.eventosService.crearEvento(payload).subscribe({
       next: (evtCreado) => {
         // 2. Crear Solicitud Automáticamente
+        console.log(evtCreado);
+        let idsum = 1;
         const solicitud = {
+          id: idsum,
           estado: 'PENDIENTE',
-          evento: evtCreado.id // Enviamos el ID para la relación OneToOne
+          eventoId: evtCreado.id // Enviamos el ID para la relación OneToOne
         };
+        idsum += 1;
 
         this.eventosService.crearSolicitud(solicitud).subscribe({
           next: () => {
@@ -184,6 +188,8 @@ export class FormEvento implements OnInit {
             this.guardado.emit(evtCreado);
           }
         });
+
+
       },
       error: (err) => {
         this.errorMsg = 'Erro ao crear o evento.';

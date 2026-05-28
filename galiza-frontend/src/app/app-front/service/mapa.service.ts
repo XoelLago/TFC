@@ -18,10 +18,10 @@ export class MapaService {
 
 getTodoElMapa(): Observable<DatosMapa[]> {
   return forkJoin({
-    lugares: this.http.get<DatosMapa[]>(`${this.apiUrl}/lugares`),
-    asociaciones: this.http.get<DatosMapa[]>(`${this.apiUrl}/asociaciones`),
-    eventos: this.http.get<DatosMapa[]>(`${this.apiUrl}/eventos`),
-    personalizados: this.http.get<DatosMapa[]>(`${this.apiUrl}/marcadores`)
+    lugares: this.http.get<DatosMapa[]>(`${this.apiUrl}/lugares`,{headers: this.getHeaders()}),
+    asociaciones: this.http.get<DatosMapa[]>(`${this.apiUrl}/asociaciones`,{headers: this.getHeaders()}),
+    eventos: this.http.get<DatosMapa[]>(`${this.apiUrl}/eventos`,{headers: this.getHeaders()}),
+    personalizados: this.http.get<DatosMapa[]>(`${this.apiUrl}/marcadores`,{headers: this.getHeaders()})
   }).pipe(
     map(resp => [
       ...resp.lugares,
