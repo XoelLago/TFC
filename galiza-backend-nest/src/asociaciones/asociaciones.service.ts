@@ -22,7 +22,9 @@ export class AsociacionesService {
   }
 
   async findAll() {
-    return await this.repository.find();
+    return await this.repository.find({
+    relations: ['bailes', 'cancions', 'eventos','lugar'] // 👈 ¡Esta es la única línea que necesitas añadir!
+  });
   }
 
   async findOne(id: number) {

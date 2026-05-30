@@ -21,7 +21,9 @@ export class EventosService {
   }
 
   async findAll() {
-    return await this.repository.find();
+    return await this.repository.find({
+    relations: ['lugar', 'asociaciones'] 
+  });
   }
 
   async findOne(id: number) {

@@ -23,7 +23,9 @@ export class LugaresService {
   }
 
   async findAll() {
-    return await this.repository.find();
+    return await this.repository.find({
+    relations: ['puntos', 'asociaciones', 'provincia']
+  });
   }
 
   async findOne(id: number) {

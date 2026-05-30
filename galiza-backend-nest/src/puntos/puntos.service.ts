@@ -16,7 +16,9 @@ export class PuntosService {
   }
 
   async findAll() {
-    return await this.repository.find();
+    return await this.repository.find({
+    relations: ['lugar', 'movimientos', 'bailes'] // 👈 ¡Esta es la única línea que necesitas añadir!
+  });
   }
 
   async findOne(id: number) {

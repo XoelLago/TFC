@@ -166,6 +166,10 @@
     margin-left: auto;
     color: #bbb;
   }
+
+  &.admin-highlight {
+    border-bottom-color: #d4af37;
+  }
 }
 
 /* --- BOTÓN DE CERRAR SESIÓN --- */
@@ -177,19 +181,31 @@
   border-bottom: none;
   justify-content: center;
   box-shadow: 0 8px 15px rgba(166, 77, 51, 0.3);
+  font-weight: 600;
 
   .icon-left {
     color: white;
   }
-
-  font-weight: 600;
 
   &:hover {
     background: #7a2a18;
   }
 }
 
-/* --- ESTILOS DE SUBMENÚS --- */
+/* --- BOTÓN GUARDAR (CONFIRMAR) --- */
+.save-btn {
+  border-bottom-color: #93331d;
+  color: #93331d;
+  font-weight: 600;
+  justify-content: center;
+  margin-top: 15px;
+
+  .icon-left {
+    color: #93331d;
+  }
+}
+
+/* --- ESTILOS DE SUBMENÚS Y LISTAS --- */
 .back-btn {
   background: transparent;
   border: 1px dashed #93331d;
@@ -221,31 +237,73 @@
   }
 }
 
-.input-container {
+/* --- FORMULARIOS DE EDICIÓN --- */
+.login-form {
   display: flex;
   flex-direction: column;
+  gap: 16px;
+  width: 100%;
 }
 
-.input-edit {
+.form-group {
+  text-align: left;
+  width: 100%;
+
+  label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem;
+    color: #93331d;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-left: 5px;
+    display: block;
+    margin-bottom: 6px;
+  }
+}
+
+/* --- NUEVO CONTENEDOR DE INPUT ESTILO BUSCADOR --- */
+.input-container {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-top: 10px;
-  margin-bottom: 5px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 0 15px;
+  height: 46px;
+  width: 100%;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.01);
+
+  .icon-left {
+    margin-right: 12px;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+  }
+
+  .icon-right {
+    margin-left: auto;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+  }
 
   input {
     flex: 1;
-    padding: 12px 15px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+    border: none;
+    background: transparent;
+    padding: 10px 0;
     font-size: 0.9rem;
     font-family: 'Montserrat', sans-serif;
+    color: #333;
+    width: 100%;
 
     &:focus {
       outline: none;
-      border-color: #93331d;
-      box-shadow: 0 0 5px rgba(147, 51, 29, 0.5);
     }
+  }
+
+  &:focus-within {
+    border-color: #93331d;
+    box-shadow: 0 0 5px rgba(147, 51, 29, 0.2);
   }
 }
 
@@ -286,4 +344,3 @@
     padding: 40px;
   }
 }
-/* ... Tus estilos anteriores de hero, main-page, etc ... */

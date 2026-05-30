@@ -1,1 +1,71 @@
-<p>busqueda-page works!</p>,
+<div class="search-wrapper">
+
+  <div class="section-title">
+    <h2>GESTIÓN</h2>
+  </div>
+
+  <div class="search-header">
+    <div class="input-container main-search">
+      <input type="text" placeholder="Buscar...">
+
+      <div class="search-actions">
+        <span class="material-icons search-icon">search</span>
+        <span class="material-icons filter-icon"
+              [class.active]="mostrarAvanzados"
+              (click)="toggleAvanzados()"
+              title="Filtros avanzados">
+          tune
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="pills-container">
+    <button *ngFor="let filtro of filtrosDisponibles"
+            class="pill-btn"
+            [class.active]="esFiltroActivo(filtro)"
+            (click)="toggleFiltro(filtro)">
+      {{ filtro }}
+    </button>
+  </div>
+
+  <div class="advanced-panel" *ngIf="mostrarAvanzados">
+    <button class="toggle-details-btn" (click)="toggleAvanzados()">
+      <span class="material-icons">expand_less</span> Ocultar detalles
+    </button>
+
+    <div class="advanced-grid">
+      <div class="form-group">
+        <label>Término específico</label>
+        <input type="text" class="simple-input" placeholder="Ej. Patada..." [(ngModel)]="busquedaAvanzada.texto">
+      </div>
+
+      <div class="form-group">
+        <label>Provincia</label>
+        <input type="text" class="simple-input" placeholder="Ej. A Coruña..." [(ngModel)]="busquedaAvanzada.provincia">
+      </div>
+
+      <div class="form-group">
+        <label>Localidad</label>
+        <input type="text" class="simple-input" placeholder="Buscar localidad...">
+      </div>
+    </div>
+
+    <div class="dashed-divider"></div>
+  </div>
+
+  <div class="results-section">
+    <h3 class="results-title">RESULTADOS ({{resultados.length}})</h3>
+
+    <div class="result-list">
+      <div class="result-item" *ngFor="let item of resultados">
+        <div class="item-info">
+          <span class="item-name">{{ item.nombre }}</span>
+          <span class="item-sub">📍 {{ item.localidad }}, {{ item.provincia }}</span>
+        </div>
+        <span class="item-badge" [ngClass]="item.tipo">{{ item.tipo }}</span>
+      </div>
+    </div>
+  </div>
+
+</div>

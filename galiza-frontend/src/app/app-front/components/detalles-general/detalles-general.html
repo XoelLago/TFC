@@ -1,0 +1,42 @@
+<div class="modal-overlay" *ngIf="isOpen" (click)="cerrar()">
+
+  <div class="modal-content" (click)="$event.stopPropagation()">
+
+    <button class="close-btn" (click)="cerrar()">
+      <span class="material-icons">close</span>
+    </button>
+
+    <div class="modal-header">
+      <span class="badge" *ngIf="item.tipo">{{ item.tipo }}</span>
+      <h2 class="modal-title">{{ tituloPrincipal }}</h2>
+    </div>
+
+    <div class="modal-image" *ngIf="item.imagenUrl">
+      <img [src]="item.imagenUrl" [alt]="tituloPrincipal">
+    </div>
+
+    <div class="modal-body">
+
+      <div class="data-row" *ngFor="let prop of propiedadesDinamicas">
+        <span class="data-label">{{ prop.clave }}:</span>
+
+        <div class="data-tags" *ngIf="esArray(prop.valor)">
+          <span class="tag-pill" *ngFor="let tag of prop.valor">{{ tag }}</span>
+        </div>
+
+        <span class="data-value" *ngIf="!esArray(prop.valor)">
+          {{ prop.valor }}
+        </span>
+      </div>
+
+    </div>
+
+    <div class="modal-footer" *ngIf="item.enlaceExterno">
+      <a [href]="item.enlaceExterno" target="_blank" class="btn-external">
+        <span class="material-icons">open_in_new</span>
+        Visitar enlace
+      </a>
+    </div>
+
+  </div>
+</div>

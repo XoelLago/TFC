@@ -1,0 +1,180 @@
+/* FONDOS Y POSICIONAMIENTO DEL OVERLAY */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(3px); /* Efecto de desenfoque moderno */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999999;
+  animation: fadeIn 0.2s ease-out;
+  padding: 20px;
+}
+
+/* CAJA DEL MODAL */
+.modal-content {
+  background-color: #f9f7f2;
+  width: 100%;
+  max-width: 500px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.3s ease-out;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* BOTÓN CERRAR */
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  color: #777;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  display: flex;
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.close-btn:hover {
+  background: rgba(0,0,0,0.05);
+  color: #222;
+}
+
+/* CABECERA */
+.modal-header {
+  padding: 25px 25px 15px 25px;
+  border-bottom: 1px solid #e0dcd3;
+}
+
+.modal-header .badge {
+  display: inline-block;
+  background-color: #93331d;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.modal-header .modal-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  color: #222;
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* IMAGEN */
+.modal-image {
+  width: 100%;
+  height: 200px;
+  background-color: #eee;
+}
+
+.modal-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* CUERPO Y DATOS GENÉRICOS */
+.modal-body {
+  padding: 20px 25px;
+  overflow-y: auto; /* Para que haga scroll si hay muchos datos */
+  flex: 1;
+}
+
+.data-row {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.data-row:last-child {
+  margin-bottom: 0;
+}
+
+.data-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #777;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.data-value {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+/* ETIQUETAS/ARRAYS */
+.data-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 5px;
+}
+
+.tag-pill {
+  background: #e8e4db;
+  color: #555;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+/* FOOTER */
+.modal-footer {
+  padding: 15px 25px;
+  background-color: #ebe6d9;
+  border-top: 1px solid #e0dcd3;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-external {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #222;
+  color: white;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.btn-external:hover {
+  background-color: #93331d;
+}
+
+/* ANIMACIONES */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}

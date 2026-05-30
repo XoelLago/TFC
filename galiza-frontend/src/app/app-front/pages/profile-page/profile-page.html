@@ -12,8 +12,7 @@
     <div class="profile-header-top">
       <div class="icon-badge">
         @if(seccionActual === 'principal'){ <span class="material-icons">person</span> }
-        @if(seccionActual === 'cuenta'){ <span class="material-icons">badge</span> }
-        @if(seccionActual === 'solicitar-evento'){ <span class="material-icons">add_location</span> }
+        @if(seccionActual === 'cuenta' || seccionActual.includes('cuenta-')){ <span class="material-icons">badge</span> }
         @if(seccionActual.includes('admin') || seccionActual === 'ver-solicitud'){ <span class="material-icons">admin_panel_settings</span> }
       </div>
 
@@ -22,7 +21,8 @@
         {{
         seccionActual === 'principal' ? 'Dancer & Storyteller' :
         seccionActual === 'cuenta' ? 'Gestión de Cuenta y Seguridad' :
-        seccionActual === 'solicitar-evento' ? 'Formulario de Solicitud de Evento' :
+        seccionActual === 'cuenta-nombre' ? 'Cambiar Nombre de Usuario' :
+        seccionActual === 'cuenta-password' ? 'Cambiar Contraseña' :
         seccionActual === 'admin' ? 'Panel de Administración' :
         seccionActual === 'admin-solicitudes' ? 'Solicitudes de Eventos Recibidas' :
         seccionActual === 'ver-solicitud' ? 'Revisión y Decisión de Solicitud' :
@@ -41,12 +41,6 @@
             <span class="material-icons icon-right">chevron_right</span>
           </button>
 
-          <button class="settings-btn admin-highlight" (click)="cambiarSeccion('solicitar-evento')">
-            <span class="material-icons icon-left" style="color: #d4af37;">event_note</span>
-            Solicitar Evento
-            <span class="material-icons icon-right">chevron_right</span>
-          </button>
-
           @if(usuario.rol.toUpperCase() === 'SUPERUSER'){
           <button class="settings-btn admin-highlight" (click)="cambiarSeccion('admin')">
             <span class="material-icons icon-left" style="color: #d4af37;">admin_panel_settings</span> Administrar
@@ -60,42 +54,71 @@
       </div>
 
       <div *ngSwitchCase="'cuenta'" class="menu-layout menu-fade">
-        <button class="settings-btn back-btn" (click)="volver()">
-          <span class="material-icons icon-left">arrow_back</span> Volver al menú
+        <div class="spacer"></div>
+        <div class="options-bottom">
+          <button class="settings-btn back-btn" (click)="volver()">
+            <span class="material-icons icon-left">arrow_back</span> Volver al menú
+          </button>
+
+          <button class="settings-btn" (click)="cambiarSeccion('cuenta-nombre')">
+            <span class="material-icons icon-left">badge</span> Cambiar Nombre
+            <span class="material-icons icon-right">chevron_right</span>
+          </button>
+
+          <button class="settings-btn" (click)="cambiarSeccion('cuenta-password')">
+            <span class="material-icons icon-left">lock</span> Cambiar Contraseña
+            <span class="material-icons icon-right">chevron_right</span>
+          </button>
+        </div>
+      </div>
+
+      <div *ngSwitchCase="'cuenta-nombre'" class="menu-layout menu-fade">
+        <button class="settings-btn back-btn" (click)="cambiarSeccion('cuenta')">
+          <span class="material-icons icon-left">arrow_back</span> Volver a Mi Cuenta
         </button>
 
         <div class="login-form">
           <div class="form-group">
-            <label>NOMBRE DE USUARIO</label>
+            <label>NUEVO NOMBRE DE USUARIO</label>
             <div class="input-container">
               <span class="material-icons icon-left" style="color: #93331d;">person</span>
-              <input type="text" [(ngModel)]="usuarioEditado.nome" placeholder="Tu nombre de usuario">
+              <input type="text" [(ngModel)]="usuarioEditado.nome" placeholder="Tu nuevo nombre">
             </div>
-          </div>
-
-          <div class="form-group">
-            <label>NUEVA CONTRASEÑA</label>
-            <div class="input-container">
-              <span class="material-icons icon-left" style="color: #93331d;">lock</span>
-              <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="usuarioEditado.contrasena" placeholder="Escribe para cambiarla...">
-              <span class="material-icons icon-right" style="cursor: pointer; color: #666;" (click)="showPassword = !showPassword"
-                title="{{ showPassword ? 'Ocultar contraseña' : 'Ver contraseña' }}">
-                {{ showPassword ? 'visibility_off' : 'visibility' }}
-              </span>
-            </div>
-            <small style="color: #666; font-size: 0.8rem; margin-top: 5px; display: block;">
-              Deja este campo en blanco si no deseas cambiar tu contraseña.
-            </small>
           </div>
         </div>
 
         <p *ngIf="errorMsg" style="color:red; margin-top:5px; text-align: center;">{{errorMsg}}</p>
 
         <button class="settings-btn save-btn" (click)="actualizarCuenta()" [disabled]="cargando">
-          <span class="material-icons icon-left">save</span> {{ cargando ? 'Guardando...' : 'Confirmar Cambios' }}
+          <span class="material-icons icon-left">save</span> {{ cargando ? 'Guardando...' : 'Confirmar Nombre' }}
         </button>
       </div>
 
+      <div *ngSwitchCase="'cuenta-password'" class="menu-layout menu-fade">
+        <button class="settings-btn back-btn" (click)="cambiarSeccion('cuenta')">
+          <span class="material-icons icon-left">arrow_back</span> Volver a Mi Cuenta
+        </button>
+
+        <div class="login-form">
+          <div class="form-group">
+            <label>NUEVA CONTRASEÑA</label>
+            <div class="input-container">
+              <span class="material-icons icon-left" style="color: #93331d;">lock</span>
+              <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="usuarioEditado.contrasena" placeholder="Escribe tu nueva contraseña...">
+              <span class="material-icons icon-right" style="cursor: pointer; color: #666;" (click)="showPassword = !showPassword"
+                title="{{ showPassword ? 'Ocultar contraseña' : 'Ver contraseña' }}">
+                {{ showPassword ? 'visibility_off' : 'visibility' }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <p *ngIf="errorMsg" style="color:red; margin-top:5px; text-align: center;">{{errorMsg}}</p>
+
+        <button class="settings-btn save-btn" (click)="actualizarCuenta()" [disabled]="cargando">
+          <span class="material-icons icon-left">save</span> {{ cargando ? 'Guardando...' : 'Confirmar Contraseña' }}
+        </button>
+      </div>
 
 
       <div *ngSwitchCase="'admin'" class="menu-layout menu-fade">
@@ -140,7 +163,7 @@
                   </div>
 
                   <div style="display: flex; gap: 8px;" (click)="$event.stopPropagation();">
-                    <button *ngIf="sol.estado === 'PENDIENTE'" (click)="aceptarSolicitud(sol)"
+                    <button *ngIf="sol.estado === 'APROBADA'" (click)="aceptarSolicitud(sol)"
                             style="background-color: #15803d; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.85rem;">
                       Aceptar
                     </button>
@@ -149,7 +172,7 @@
                       Rechazar
                     </button>
 
-                    <button *ngIf="sol.estado === 'APROBADA'" (click)="eliminarSolicitud(sol.id)"
+                    <button *ngIf="sol.estado === 'RECHAZADA'" (click)="eliminarSolicitud(sol.id)"
                             style="background-color: #424242; color: #ccc; border: 1px solid #666; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.85rem;">
                       Eliminar
                     </button>
@@ -169,8 +192,6 @@
           (cancelar)="cambiarSeccion('admin-solicitudes')">
         </form-evento>
       </div>
-
-
 
       <div *ngSwitchCase="'admin-usuarios'" class="menu-layout menu-fade">
         <button class="settings-btn back-btn" (click)="cambiarSeccion('admin')">

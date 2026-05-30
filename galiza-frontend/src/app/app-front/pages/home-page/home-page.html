@@ -54,23 +54,9 @@
       <div class="card-body">
         <h2>{{ selectedPlace.nome }}</h2>
         <p class="desc">{{ selectedPlace.descripcion }}</p>
-        <div class="info-grid">
-          <div class="info-box">
-            <span class="material-icons">directions_run</span>
-            <div><strong>Bailes</strong>
-              <p>{{ selectedPlace.bailes?.join(', ') }}</p>
-            </div>
-          </div>
-          <div class="info-box">
-            <span class="material-icons">audiotrack</span>
-            <div><strong>Música</strong>
-              <p>{{ selectedPlace.cancions?.join(', ') }}</p>
-            </div>
-          </div>
-        </div>
-        <div class="card-actions-row">
-          <button class="explore-btn">Ver detalles</button>
 
+        <div class="card-actions-row">
+          <button class="explore-btn" (click)="abrirDetallePopup(selectedPlace)">Ver detalles</button>
           @if(selectedPlace.tipo === 'personalizado') {
           <button class="btn-icon btn-edit" (click)="abrirParaEditar(selectedPlace)" title="Editar">
             <span class="material-icons">edit</span>
@@ -210,3 +196,11 @@
 <app-action-toast [visible]="toastConfig.visible" [mensaje]="toastConfig.mensaje" [icon]="toastConfig.icon"
   [txtConfirmar]="toastConfig.txtConfirmar" (confirmar)="ejecutarAccionToast()" (cancelar)="cerrarToast()">
 </app-action-toast>
+
+<app-detalles-general
+  [isOpen]="modalDetalleAberto"
+  [item]="itemDetalleSeleccionado"
+  (close)="modalDetalleAberto = false"
+  selectedPlace = false
+  >
+</app-detalles-general>

@@ -1,1 +1,73 @@
-<p>recomendacion-page works!</p>,
+<div class="curaduria-wrapper">
+
+  <header class="hero-section">
+    <span class="overline">CURADURÍA CULTURAL</span>
+    <h1 class="hero-title">Archivos de<br>la memoria y<br>el pulso</h1>
+    <div class="title-divider"></div>
+  </header>
+
+  <section class="search-section">
+    <div class="search-header">
+      <h2 class="section-subtitle">Explorar Archivo</h2>
+      <a href="#" class="view-all">Ver catálogo completo</a>
+    </div>
+
+    <div class="input-container">
+      <span class="material-icons icon-search">search</span>
+      <input type="text" placeholder="Buscar por título, autor o resumen..." [(ngModel)]="textoBusqueda">
+    </div>
+
+    <div class="pills-container">
+      <button
+        *ngFor="let filtro of filtros"
+        class="pill-btn"
+        [class.active]="filtroActivo === filtro.value"
+        (click)="setFiltro(filtro.value)">
+        {{ filtro.label }}
+      </button>
+    </div>
+  </section>
+
+  <section class="results-section">
+    <div class="empty-state" *ngIf="recomendacionesFiltradas.length === 0">
+      <p>No se encontraron recomendaciones en el archivo.</p>
+    </div>
+
+    <div class="rec-card" *ngFor="let rec of recomendacionesFiltradas">
+      <div class="img-wrapper">
+        <img *ngIf="rec.imagenUrl" [src]="rec.imagenUrl" [alt]="rec.titulo">
+        <div *ngIf="!rec.imagenUrl" class="img-placeholder">
+          <span class="material-icons">auto_stories</span>
+        </div>
+      </div>
+
+      <div class="info-wrapper">
+        <div class="rec-header">
+          <h3 class="rec-title">{{ rec.titulo }}</h3>
+          <p class="rec-author">{{ rec.autor }}</p>
+        </div>
+
+        <p class="rec-resume">{{ rec.resumo }}</p>
+
+        <div class="badges-row">
+          <span class="badge type-badge">{{ rec.tipo }}</span>
+          <ng-container *ngIf="rec.etiquetas">
+            <span class="badge outline-badge" *ngFor="let tag of rec.etiquetas">{{ tag }}</span>
+          </ng-container>
+        </div>
+      </div>
+
+      <a *ngIf="rec.enlaceExterno" [href]="rec.enlaceExterno" target="_blank" class="external-link" title="Ver recurso">
+        <span class="material-icons">open_in_new</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <h2 class="cta-title">El Valor del Archivo</h2>
+    <p class="cta-text">
+      Nuestra colección no solo busca entretener, sino preservar el hilo conductor de la humanidad a través de sus sonidos y sus letras.
+    </p>
+    <button class="btn-primary">Acceder a la Hemeroteca</button>
+  </section>
+</div>

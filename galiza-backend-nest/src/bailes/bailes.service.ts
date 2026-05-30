@@ -16,7 +16,9 @@ export class BailesService {
   }
 
   async findAll() {
-    return await this.repository.find();
+    return await this.repository.find({
+    relations: ['lugar', 'asociaciones', 'instrumentos', 'puntos'] 
+  });
   }
 
   async findOne(id: number) {

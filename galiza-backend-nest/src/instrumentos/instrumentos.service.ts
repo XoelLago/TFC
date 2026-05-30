@@ -16,7 +16,9 @@ export class InstrumentosService {
   }
 
   async findAll() {
-    return await this.repository.find();
+    return await this.repository.find({
+    relations: ['canciones', 'bailes'] // 👈 ¡Esta es la única línea que necesitas añadir!
+  });
   }
 
   async findOne(id: number) {

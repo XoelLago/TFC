@@ -16,7 +16,9 @@ export class ProvinciasService {
   }
 
   async findAll() {
-    return await this.repository.find();
+    return await this.repository.find({
+    relations: ['lugares'] 
+  });
   }
 
   async findOne(id: number) {

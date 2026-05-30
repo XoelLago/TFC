@@ -13,12 +13,13 @@ import { Rol } from '../../models/rol.model';
 import { FormLugar } from "../../components/form-lugar/form-lugar";
 import { FormAsociacion } from "../../components/form-asociacion/form-asociacion";
 import L from 'leaflet';
+import { DetallesGeneral } from '../../components/detalles-general/detalles-general';
 
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, ActionToastComponent, SpeedDialModule, SpeedDial, FormLugar, FormAsociacion],
+  imports: [CommonModule, FormsModule, ActionToastComponent, SpeedDialModule, SpeedDial, FormLugar, FormAsociacion,DetallesGeneral],
   templateUrl: './home-page.html',
   styleUrls: ['./home-page.css']
 })
@@ -50,6 +51,11 @@ export class HomePage implements AfterViewInit, OnInit {
 
   public places: DatosMapa[] = [];
   private lastMarker: L.Marker | null = null;
+
+
+public modalDetalleAberto: boolean = false;
+  public itemDetalleSeleccionado: any = null;
+
 
   public nuevoMarcador: CreateMarcadorForm = {
     nome: '',
@@ -463,6 +469,13 @@ export class HomePage implements AfterViewInit, OnInit {
     this.cargarDatos();
 
     // Forzamos la detección de cambios por si acaso
+    this.cdr.detectChanges();
+  }
+
+
+  abrirDetallePopup(item: any) {
+    this.itemDetalleSeleccionado = item;
+    this.modalDetalleAberto = true;
     this.cdr.detectChanges();
   }
 }

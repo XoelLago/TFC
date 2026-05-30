@@ -16,7 +16,9 @@ export class MovimientosService {
   }
 
   async findAll() {
-    return await this.repository.find();
+    return await this.repository.find({
+    relations: ['puntos']
+  });
   }
 
   async findOne(id: number) {
