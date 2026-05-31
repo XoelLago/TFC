@@ -1,346 +1,899 @@
 /* --- RESET Y CONFIGURACIÓN BASE --- */
+
 * {
+
   box-sizing: border-box;
+
   margin: 0;
+
   padding: 0;
+
 }
+
+
 
 :host {
+
   display: block;
+
   height: 90vh;
+
   width: 100%;
+
   overflow: hidden;
+
 }
+
+
 
 /* --- CONTENEDOR PRINCIPAL --- */
+
 .main-page {
+
   width: 100%;
+
   height: 90vh;
+
   background: #f9f7f2 url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l5 15h15l-12 10 5 15-13-9-13 9 5-15-12-10h15z' fill='%2393331d' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E") repeat;
+
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
+
 }
+
+
 
 /* --- CABECERA (HERO) --- */
+
 .hero-section {
+
   height: 10vh;
+
   width: 100%;
+
   position: relative;
+
   background: #93331d;
+
+
 
   .overlay {
+
     height: 100%;
+
     background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, rgba(166, 77, 51, 0.85) 100%);
+
     display: flex;
+
     align-items: flex-end;
+
     justify-content: center;
+
     padding: 20px;
 
+
+
     .header-content {
+
       color: white;
+
       text-align: center;
 
+
+
       .brand-tagline {
+
         font-family: 'Montserrat', sans-serif;
+
         font-size: 0.7rem;
+
         letter-spacing: 2px;
+
         text-transform: uppercase;
+
       }
+
+
 
       .logo-title {
+
         font-family: 'Playfair Display', serif;
+
         font-size: 1.8rem;
+
         margin-top: 5px;
+
       }
+
     }
+
   }
+
 }
+
+
 
 /* --- CUERPO DE LA PÁGINA --- */
+
 .content-section {
+
   flex: 1;
+
   padding: 30px 7% 10px 7%;
+
   width: 100%;
+
   max-width: 500px;
+
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
+
   overflow-y: auto;
+
 }
+
+
 
 /* --- AVATAR Y NOMBRE --- */
+
 .profile-header-top {
+
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
+
   width: 100%;
+
   margin-bottom: 20px;
 
+
+
   .icon-badge {
+
     width: 65px;
+
     height: 65px;
+
     background: #93331d;
+
     border-radius: 50%;
+
     display: flex;
+
     justify-content: center;
+
     align-items: center;
+
     color: white;
+
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+
     font-size: 1.8rem;
+
     margin-bottom: 15px;
+
   }
+
+
 
   .form-title {
+
     font-family: 'Playfair Display', serif;
+
     font-style: italic;
+
     color: #93331d;
+
     font-size: 2.2rem;
+
     margin-bottom: 5px;
+
   }
+
+
 
   .form-subtitle {
+
     font-family: 'Montserrat', sans-serif;
+
     color: #777;
+
     font-size: 0.85rem;
+
   }
+
 }
+
+
 
 /* --- CONTENEDOR DE MENÚS --- */
+
 .settings-wrapper {
+
   width: 100%;
+
   flex: 1;
+
   display: flex;
+
   flex-direction: column;
+
 }
+
+
 
 .menu-layout {
+
   display: flex;
+
   flex-direction: column;
+
   height: 100%;
+
   flex: 1;
+
 }
+
+
 
 .spacer {
+
   flex: 1;
+
 }
+
+
 
 /* --- BLOQUE DE BOTONES --- */
+
 .options-bottom {
+
   width: 100%;
+
   display: flex;
+
   flex-direction: column;
+
   gap: 12px;
+
   padding-bottom: 10px;
+
 }
+
+
 
 /* --- BOTONES DE CONFIGURACIÓN --- */
+
 .settings-btn {
+
   width: 100%;
+
   background: #eceae3;
+
   border: none;
+
   border-bottom: 2px solid #93331d;
+
   border-radius: 8px 8px 0 0;
+
   padding: 16px 20px;
+
   display: flex;
+
   align-items: center;
+
   font-family: 'Montserrat', sans-serif;
+
   font-size: 0.9rem;
+
   color: #333;
+
   cursor: pointer;
+
   transition: all 0.2s ease;
+
   margin: 3px;
 
+
+
   &:active {
+
     background: #e0ddd5;
+
     transform: scale(0.98);
+
   }
+
+
 
   .icon-left {
+
     margin-right: 15px;
+
     color: #93331d;
+
     font-size: 1.3rem;
+
   }
 
+
+
   .icon-right {
+
     margin-left: auto;
+
     color: #bbb;
+
   }
+
+
 
   &.admin-highlight {
+
     border-bottom-color: #d4af37;
+
   }
+
 }
+
+
 
 /* --- BOTÓN DE CERRAR SESIÓN --- */
+
 .logout-item-btn {
+
   margin-top: 10px;
+
   background: #93331d;
+
   color: white;
+
   border-radius: 30px;
+
   border-bottom: none;
+
   justify-content: center;
+
   box-shadow: 0 8px 15px rgba(166, 77, 51, 0.3);
+
   font-weight: 600;
 
+
+
   .icon-left {
+
     color: white;
+
   }
+
+
 
   &:hover {
+
     background: #7a2a18;
+
   }
+
 }
+
+
 
 /* --- BOTÓN GUARDAR (CONFIRMAR) --- */
+
 .save-btn {
+
   border-bottom-color: #93331d;
+
   color: #93331d;
+
   font-weight: 600;
+
   justify-content: center;
+
   margin-top: 15px;
 
+
+
   .icon-left {
+
     color: #93331d;
+
   }
+
 }
+
+
 
 /* --- ESTILOS DE SUBMENÚS Y LISTAS --- */
+
 .back-btn {
+
   background: transparent;
+
   border: 1px dashed #93331d;
+
   border-radius: 8px;
+
   color: #93331d;
+
   font-weight: 600;
+
   margin-bottom: 15px;
+
 }
+
+
 
 .info-group {
+
   text-align: left;
+
   margin-bottom: 15px;
 
+
+
   label {
+
     font-family: 'Montserrat', sans-serif;
+
     font-size: 0.65rem;
+
     color: #999;
+
     letter-spacing: 1px;
+
     margin-left: 5px;
+
   }
+
+
 
   .static-data {
+
     font-family: 'Montserrat', sans-serif;
+
     background: #eceae3;
+
     padding: 12px 15px;
+
     border-radius: 8px;
+
     color: #333;
+
     margin-top: 5px;
+
   }
+
 }
+
+
 
 /* --- FORMULARIOS DE EDICIÓN --- */
+
 .login-form {
+
   display: flex;
+
   flex-direction: column;
+
   gap: 16px;
+
   width: 100%;
+
 }
+
+
 
 .form-group {
+
   text-align: left;
+
   width: 100%;
+
+
 
   label {
+
     font-family: 'Montserrat', sans-serif;
+
     font-size: 0.65rem;
+
     color: #93331d;
+
     font-weight: 600;
+
     letter-spacing: 1px;
+
     margin-left: 5px;
+
     display: block;
+
     margin-bottom: 6px;
+
   }
+
 }
+
+
 
 /* --- NUEVO CONTENEDOR DE INPUT ESTILO BUSCADOR --- */
+
 .input-container {
+
   display: flex;
+
   align-items: center;
+
   background: white;
+
   border: 1px solid #ddd;
+
   border-radius: 8px;
+
   padding: 0 15px;
+
   height: 46px;
+
   width: 100%;
+
   transition: all 0.2s ease;
+
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.01);
 
+
+
   .icon-left {
+
     margin-right: 12px;
+
     font-size: 1.3rem;
+
     flex-shrink: 0;
+
   }
+
+
 
   .icon-right {
+
     margin-left: auto;
+
     font-size: 1.3rem;
+
     flex-shrink: 0;
+
   }
+
+
 
   input {
+
     flex: 1;
+
     border: none;
+
     background: transparent;
+
     padding: 10px 0;
+
     font-size: 0.9rem;
+
     font-family: 'Montserrat', sans-serif;
+
     color: #333;
+
     width: 100%;
 
+
+
     &:focus {
+
       outline: none;
+
     }
+
   }
+
+
 
   &:focus-within {
+
     border-color: #93331d;
+
     box-shadow: 0 0 5px rgba(147, 51, 29, 0.2);
+
   }
+
 }
+
+
 
 /* --- ANIMACIONES --- */
+
 .menu-fade {
+
   animation: fadeIn 0.3s ease-out;
+
 }
+
+
 
 @keyframes fadeIn {
+
   from { opacity: 0; transform: translateY(10px); }
+
   to { opacity: 1; transform: translateY(0); }
+
 }
+
+
 
 /* --- FOOTER --- */
+
 .footer {
+
   margin-top: 10px;
+
   padding-bottom: 15px;
+
   text-align: center;
+
   opacity: 0.6;
+
 }
 
+
+
 /* --- MEDIA QUERY ESCRITORIO --- */
+
 @media (min-width: 768px) {
+
   .main-page {
+
     flex-direction: row;
+
   }
+
+
 
   .hero-section {
+
     height: 100vh;
+
     width: 50%;
+
   }
 
+
+
   .content-section {
+
     width: 50%;
+
     height: 100vh;
+
     max-width: 450px;
+
     margin: 0 auto;
+
     padding: 40px;
+
   }
+
+}
+
+/* --- TARJETAS DE SOLICITUD (ESTILO RECUPERADO) --- */
+
+.solicitudes-container {
+
+  max-height: 420px;
+
+  overflow-y: auto;
+
+  padding-right: 4px;
+
+}
+
+
+
+.solicitud-card {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  width: 100%;
+
+  padding: 16px 0;
+
+  border-bottom: 2px solid #8b2b1a; /* La línea granate de tu captura */
+
+  cursor: pointer;
+
+  transition: background 0.2s ease;
+
+}
+
+
+
+.solicitud-info {
+
+  flex: 1;
+
+  display: flex;
+
+  flex-direction: column;
+
+  text-align: left;
+
+  padding-right: 10px;
+
+  gap: 4px; /* Separación natural entre elementos */
+
+}
+
+
+
+/* El título del evento vuelve a ser grande y elegante */
+
+.solicitud-title {
+
+  font-family: 'Playfair Display', serif;
+
+  font-size: 1.6rem;
+
+  color: #8b2b1a; /* Granate */
+
+  font-weight: 500;
+
+  margin-bottom: 2px;
+
+}
+
+
+
+.solicitud-asociacion {
+
+  font-family: 'Montserrat', sans-serif;
+
+  font-size: 0.9rem;
+
+  color: #666;
+
+}
+
+
+
+.solicitud-location {
+
+  display: flex;
+
+  align-items: center;
+
+  color: #666;
+
+  font-size: 0.85rem;
+
+  font-family: 'Montserrat', sans-serif;
+
+  margin-bottom: 8px; /* Hueco antes del estado */
+
+}
+
+
+
+.location-icon {
+
+  color: #c91028; /* Rojo vivo del pin */
+
+  font-size: 1.1rem;
+
+  margin-right: 4px;
+
+}
+
+
+
+/* Estado textual inferior calcado a tu captura */
+
+.solicitud-estado-row {
+
+  margin-top: 4px;
+
+}
+
+
+
+.text-status {
+
+  font-family: 'Montserrat', sans-serif;
+
+  font-size: 0.85rem;
+
+  font-weight: 600;
+
+}
+
+.status-pendiente { color: #b45309; } /* Naranja/Marrón */
+
+.status-aprobada { color: #047857; }
+
+.status-rechazada { color: #b91c1c; }
+
+
+
+/* Botones estilo captura (Cuadrados con bordes ligeros) */
+
+.solicitud-actions {
+
+  display: flex;
+
+  gap: 10px;
+
+}
+
+
+
+.badge-btn {
+
+  border: none;
+
+  padding: 8px 16px;
+
+  border-radius: 4px; /* Bordes ligeramente redondeados */
+
+  cursor: pointer;
+
+  font-family: 'Montserrat', sans-serif;
+
+  font-size: 0.85rem;
+
+  font-weight: 600;
+
+  transition: opacity 0.15s ease;
+
+}
+
+
+
+.badge-btn:hover {
+
+  opacity: 0.85;
+
+}
+
+
+
+.btn-aceptar {
+
+  background-color: #1a3673; /* Azul oscuro de tu captura */
+
+  color: white;
+
+}
+
+.btn-rechazar {
+
+  background-color: #b51a22; /* Rojo oscuro de tu captura */
+
+  color: white;
+
+}
+
+.btn-eliminar {
+
+  background-color: #4b5563;
+
+  color: white;
+
 }

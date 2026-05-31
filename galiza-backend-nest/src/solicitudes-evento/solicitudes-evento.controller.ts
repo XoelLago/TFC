@@ -12,6 +12,7 @@ export class SolicitudesEventoController {
   constructor(private readonly solicitudesEventoService: SolicitudesEventoService) {}
 
   @Post()
+    @Roles(Rol.USER, Rol.ADMIN, Rol.SUPERUSER)
   create(@Body() createDto: any) {
     return this.solicitudesEventoService.create(createDto);
   }

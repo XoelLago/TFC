@@ -9,7 +9,7 @@ export class Evento {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, unique: true})
   nome!: string;
 
   @Column({ type: 'timestamp', nullable: false })
@@ -50,6 +50,16 @@ export class Evento {
 
   // RELACIÓN: Muchas asociaciones pueden organizar un mismo evento
   @ManyToMany(() => Asociacion, (asociacion) => asociacion.eventos)
-  @JoinTable({ name: 'evento_asociaciones' }) // Tabla intermedia
+  @JoinTable({ 
+    name: 'asociacion_eventos', 
+    joinColumn: {
+      name: 'eventosId',
+      referencedColumnName: 'id'
+    },
+    inverseJoinColumn: {
+      name: 'asociacionesId', 
+      referencedColumnName: 'id'
+    }
+  }) 
   asociaciones?: Asociacion[];
 }

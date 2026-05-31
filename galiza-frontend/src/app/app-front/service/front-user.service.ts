@@ -67,19 +67,13 @@ esSuperuser(): boolean {
     this.router.navigate(['/login']);
   }
 
-  private getHeaders() {
-    const token = localStorage.getItem('access_token');
-    return new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-  }
 
   getPerfil() {
-    return this.http.get(`${this.URL_API}/auth/profile`, { headers: this.getHeaders() });
+    return this.http.get(`${this.URL_API}/auth/profile`);
   }
 
   updateUsuario(id: number, datos: any) {
-    return this.http.patch(`${this.URL_API}/usuarios/${id}`, datos, { headers: this.getHeaders() }).pipe(
+    return this.http.patch(`${this.URL_API}/usuarios/${id}`, datos).pipe(
       tap((usuarioActualizado: any) => {
         if (datos.nombre || datos.rol) {
           localStorage.setItem('user_nombre', usuarioActualizado.nombre);
@@ -95,19 +89,19 @@ esSuperuser(): boolean {
   }
 
 getUsuarios(): Observable<any[]> {
-  return this.http.get<any[]>(`${this.URL_API}/usuarios`, { headers: this.getHeaders() });
+  return this.http.get<any[]>(`${this.URL_API}/usuarios`);
 }
 
 ascenderUsuario(id: number): Observable<any> {
-  return this.http.patch(`${this.URL_API}/usuarios/${id}/ascender`, {}, { headers: this.getHeaders() });
+  return this.http.patch(`${this.URL_API}/usuarios/${id}/ascender`, {});
 }
 
 descenderUsuario(id: number): Observable<any> {
-  return this.http.patch(`${this.URL_API}/usuarios/${id}/descender`, {}, { headers: this.getHeaders() });
+  return this.http.patch(`${this.URL_API}/usuarios/${id}/descender`, {});
 }
 
 eliminarUsuario(id: number): Observable<any> {
-  return this.http.delete(`${this.URL_API}/usuarios/${id}`, { headers: this.getHeaders() });
+  return this.http.delete(`${this.URL_API}/usuarios/${id}`);
 }
 
  capitalizarNombre(texto: string): string {

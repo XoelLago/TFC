@@ -27,5 +27,5 @@ export class CreateEventoDto {
 
   @IsBoolean()
   @IsNotEmpty()
-  publicado!: boolean; // Normalmente se enviará false desde el formulario de propuesta
+  publicado!: boolean;
 }

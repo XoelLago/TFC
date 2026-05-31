@@ -13,7 +13,7 @@ export class ActionToastComponent {
   @Input() mensaje: string = '';
   @Input() icon: string = 'priority_high';
   @Input() tipo: string = '';
-  @Input() txtConfirmar: string = 'SÍ, CONTINUAR';
+  @Input() txtConfirmar: string = 'SÍ';
   @Input() txtCancelar: string = 'NO';
 
   @Output() confirmar = new EventEmitter<void>();

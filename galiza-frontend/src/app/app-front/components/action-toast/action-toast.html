@@ -5,13 +5,13 @@
   </div>
 
   <div class="toast-actions">
-    @if(tipo !== 'cancelar'){
+    @if(tipo == 'ascender' || tipo == 'descender' || tipo == 'eliminar' || tipo == 'aceptar-solicitud' || tipo == 'rechazar-solicitud' || tipo == 'eliminar-solicitud'){
     <button type="button" class="toast-btn confirm" (click)="onConfirmar()">
       {{ txtConfirmar }}
     </button>
   }
     <button type="button" class="toast-btn cancel" (click)="onCancelar()">
-      @if(tipo === 'cancelar'){
+      @if(tipo === 'cancelar' || tipo == 'info'){
         CANCELAR
       }@else{
         {{ txtCancelar }}

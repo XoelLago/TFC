@@ -43,6 +43,5 @@ export class Asociacion {
   cancions?: Cancion[];
 
   @ManyToMany(() => Evento, (evento) => evento.asociaciones)
-  @JoinTable({ name: 'asociacion_eventos' })
-  eventos?: Evento[];
+eventos?: Evento[];
 }

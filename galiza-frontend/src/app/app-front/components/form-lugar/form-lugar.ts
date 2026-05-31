@@ -158,7 +158,7 @@ guardar() {
   // Control de duplicados (solo si es un registro nuevo)
   // Esto asume que tienes la lista de lugares cargada o el servicio tiene un buscador
   if (!this.datos) {
-     this.lugaresService.getLugares().subscribe(lugares => {
+     this.lugaresService.findAll().subscribe(lugares => {
         const existe = lugares.find(l => this.frontUserService.capitalizarNombre(l.nome) === nombreNormalizado);
         if (existe) {
            this.errorMsg = 'Este lugar ya existe en el sistema.';

@@ -104,8 +104,10 @@
             <label>NUEVA CONTRASEÑA</label>
             <div class="input-container">
               <span class="material-icons icon-left" style="color: #93331d;">lock</span>
-              <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="usuarioEditado.contrasena" placeholder="Escribe tu nueva contraseña...">
-              <span class="material-icons icon-right" style="cursor: pointer; color: #666;" (click)="showPassword = !showPassword"
+              <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="usuarioEditado.contrasena"
+                placeholder="Escribe tu nueva contraseña...">
+              <span class="material-icons icon-right" style="cursor: pointer; color: #666;"
+                (click)="showPassword = !showPassword"
                 title="{{ showPassword ? 'Ocultar contraseña' : 'Ver contraseña' }}">
                 {{ showPassword ? 'visibility_off' : 'visibility' }}
               </span>
@@ -119,7 +121,6 @@
           <span class="material-icons icon-left">save</span> {{ cargando ? 'Guardando...' : 'Confirmar Contraseña' }}
         </button>
       </div>
-
 
       <div *ngSwitchCase="'admin'" class="menu-layout menu-fade">
         <div class="spacer"></div>
@@ -141,41 +142,76 @@
       <div *ngSwitchCase="'admin-solicitudes'" class="menu-layout menu-fade">
         <div class="spacer"></div>
         <div class="options-bottom">
+
           <button class="settings-btn back-btn" (click)="cambiarSeccion('admin')">
             <span class="material-icons icon-left">arrow_back</span> Volver a Admin
           </button>
 
           <div class="info-group">
-            <label>PETICIONES EN COLA</label>
+            <label class="section-main-label">GESTIÓN</label>
+
+            <div class="search-container">
+              <input type="text" [(ngModel)]="terminoBusqueda" placeholder="Buscar..." class="input-buscar">
+              <span class="material-icons search-icon">search</span>
+            </div>
+
+            <div class="filter-pills">
+              <button class="pill-btn" [class.active]="filtroEstado === 'TODOS'"
+                (click)="filtroEstado = 'TODOS'">Todos</button>
+              <button class="pill-btn" [class.active]="filtroEstado === 'PENDIENTE'"
+                (click)="filtroEstado = 'PENDIENTE'">Pendientes</button>
+              <button class="pill-btn" [class.active]="filtroEstado === 'APROBADA'"
+                (click)="filtroEstado = 'APROBADA'">Aprobadas</button>
+            </div>
+
+            <label class="section-main-label uppercase-label">RESULTADOS ({{ obtenerSolicitudesFiltradas().length }})</label>
+
             <div *ngIf="cargando" class="static-data">Cargando solicitudes...</div>
+
             <ng-container *ngIf="!cargando">
-              <div *ngIf="solicitudes.length === 0" class="static-data">No hay solicitudes.</div>
+              <div *ngIf="obtenerSolicitudesFiltradas().length === 0" class="static-data">No se encontraron solicitudes.</div>
 
-              <div *ngIf="solicitudes.length > 0" style="max-height: 350px; overflow-y: auto; padding-right: 5px;">
-                <div *ngFor="let sol of solicitudes"
-                     style="margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; width: 100%; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px;">
+              <div *ngIf="obtenerSolicitudesFiltradas().length > 0" class="solicitudes-container">
 
-                  <div (click)="verDetalleSolicitud(sol)" style="cursor: pointer; flex: 1; display: flex; flex-direction: column; text-align: left;">
-                    <span style="font-weight: bold; color: #fff;">Solicitud #{{sol.id}}</span>
-                    <span [style.color]="sol.estado === 'PENDIENTE' ? '#d4af37' : 'green'" style="font-size: 0.85rem;">
-                      Estado: {{sol.estado}}
+                <div *ngFor="let sol of obtenerSolicitudesFiltradas()" class="solicitud-card"
+                  (click)="verDetalleSolicitud(sol)">
+
+                  <div class="solicitud-info">
+                    <span class="solicitud-title">
+                      {{ sol.evento?.nome || sol.evento?.nombre || 'Solicitud #' + sol.id }}
                     </span>
+                    <span class="solicitud-asociacion">
+                      {{ sol.evento?.asociacion || 'Sin Asociación asignada' }}
+                    </span>
+
+                    <div class="solicitud-meta-row">
+                      <div class="solicitud-location">
+                        <span class="material-icons location-icon">place</span>
+                        <span>{{ sol.evento?.lugar?.nome || 'A Coruña, Desconocida' }}</span>
+                      </div>
+                      <span class="text-status" [ngClass]="'status-' + sol.estado?.toLowerCase()">
+                        Estado: {{ sol.estado }}
+                      </span>
+                    </div>
                   </div>
 
-                  <div style="display: flex; gap: 8px;" (click)="$event.stopPropagation();">
-                    <button *ngIf="sol.estado === 'APROBADA'" (click)="aceptarSolicitud(sol)"
-                            style="background-color: #15803d; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.85rem;">
-                      Aceptar
-                    </button>
-                    <button *ngIf="sol.estado === 'PENDIENTE'" (click)="rechazarSolicitud(sol)"
-                            style="background-color: #b91c1c; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.85rem;">
-                      Rechazar
-                    </button>
+                  <div class="solicitud-actions" (click)="$event.stopPropagation();">
 
-                    <button *ngIf="sol.estado === 'RECHAZADA'" (click)="eliminarSolicitud(sol.id)"
-                            style="background-color: #424242; color: #ccc; border: 1px solid #666; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.85rem;">
-                      Eliminar
-                    </button>
+                    <ng-container *ngIf="sol.estado === 'PENDIENTE'">
+                      <button (click)="prepararAceptar(sol)" class="badge-btn btn-aceptar">
+                        Aceptar
+                      </button>
+                      <button (click)="prepararRechazar(sol)" class="badge-btn btn-rechazar">
+                        Rechazar
+                      </button>
+                    </ng-container>
+
+                    <ng-container *ngIf="sol.estado !== 'PENDIENTE'">
+                      <button (click)="prepararEliminarSol(sol)" class="badge-btn btn-eliminar">
+                        Eliminar
+                      </button>
+                    </ng-container>
+
                   </div>
 
                 </div>
@@ -183,25 +219,31 @@
             </ng-container>
           </div>
         </div>
-      </div>
 
-      <div *ngSwitchCase="'ver-solicitud'" class="menu-layout menu-fade">
-        <form-evento
-          [eventoData]="eventoDeSolicitud"
-          [modoLectura]="true"
-          (cancelar)="cambiarSeccion('admin-solicitudes')">
-        </form-evento>
       </div>
 
       <div *ngSwitchCase="'admin-usuarios'" class="menu-layout menu-fade">
         <button class="settings-btn back-btn" (click)="cambiarSeccion('admin')">
           <span class="material-icons icon-left">arrow_back</span> Volver a Admin
         </button>
-        <app-admin-users [items]="usuariosMapeados" [miRol]="usuario.rol.toLowerCase()" [cargando]="cargando" (accionRealizada)="manejarAccionUsuario($event)"></app-admin-users>
+        <app-admin-users [items]="usuariosMapeados" [miRol]="usuario.rol.toLowerCase()" [cargando]="cargando"
+          (accionRealizada)="manejarAccionUsuario($event)"></app-admin-users>
       </div>
 
     </div>
   </section>
 </div>
 
-<app-action-toast [visible]="confirmacion.visible" [mensaje]="confirmacion.mensaje" [tipo]="confirmacion.tipo" (confirmar)="confirmarAccionApp()" (cancelar)="cancelarConfirmacion()"></app-action-toast>
+<app-action-toast
+  [visible]="confirmacion.visible"
+  [mensaje]="confirmacion.mensaje"
+  [tipo]="confirmacion.tipo"
+  (confirmar)="confirmarAccionApp()"
+  (cancelar)="cancelarConfirmacion()">
+</app-action-toast>
+
+<app-detalles-general
+  [isOpen]="modalDetalleAbierto"
+  [item]="eventoDeSolicitudFormateado"
+  (close)="cerrarModalDetalle()">
+</app-detalles-general>

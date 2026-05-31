@@ -32,8 +32,8 @@ export class EventosService {
     return this.http.post(this.URL_SOLICITUDES, solicitud);
   }
 
-  obtenerSolicitudes(): Observable<any[]> {
-    return this.http.get<any[]>(this.URL_SOLICITUDES);
+  obtenerSolicitudes(): Observable<any> {
+    return this.http.get(this.URL_SOLICITUDES);
   }
 
   actualizarSolicitud(id: number, data: any): Observable<any> {
@@ -42,5 +42,9 @@ export class EventosService {
 
   eliminarSolicitud(id: number): Observable<any>{
     return this.http.delete(`${this.URL_SOLICITUDES}/${id}`)
+  }
+
+  eliminarEvento(id: number): Observable<any>{
+    return this.http.delete(`${this.URL_EVENTOS}/${id}`)
   }
 }

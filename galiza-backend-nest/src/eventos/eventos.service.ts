@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Evento } from './entities/evento.entity';
@@ -11,6 +11,7 @@ export class EventosService {
   ) {}
 
   async create(dto: any) {
+    try{
     const data = {
       ...dto,
       lat: dto.coords?.lat,
@@ -18,8 +19,14 @@ export class EventosService {
     };
     const nuevo = this.repository.create(data);
     return await this.repository.save(nuevo);
+  } catch (error: any) {
+    if (error.code === 'ER_DUP_ENTRY') {
+      throw new ConflictException('Xa existe un evento con ese nome.');
+    }
+    throw error;
   }
-
+}
+  
   async findAll() {
     return await this.repository.find({
     relations: ['lugar', 'asociaciones'] 

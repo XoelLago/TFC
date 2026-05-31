@@ -12,16 +12,13 @@ export class MapaService {
 
   constructor(private http: HttpClient) {}
 
-  private getHeaders() {
-    return new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`);
-  }
 
 getTodoElMapa(): Observable<DatosMapa[]> {
   return forkJoin({
-    lugares: this.http.get<DatosMapa[]>(`${this.apiUrl}/lugares`,{headers: this.getHeaders()}),
-    asociaciones: this.http.get<DatosMapa[]>(`${this.apiUrl}/asociaciones`,{headers: this.getHeaders()}),
-    eventos: this.http.get<DatosMapa[]>(`${this.apiUrl}/eventos`,{headers: this.getHeaders()}),
-    personalizados: this.http.get<DatosMapa[]>(`${this.apiUrl}/marcadores`,{headers: this.getHeaders()})
+    lugares: this.http.get<DatosMapa[]>(`${this.apiUrl}/lugares`),
+    asociaciones: this.http.get<DatosMapa[]>(`${this.apiUrl}/asociaciones`),
+    eventos: this.http.get<DatosMapa[]>(`${this.apiUrl}/eventos`),
+    personalizados: this.http.get<DatosMapa[]>(`${this.apiUrl}/marcadores`)
   }).pipe(
     map(resp => [
       ...resp.lugares,
@@ -33,7 +30,7 @@ getTodoElMapa(): Observable<DatosMapa[]> {
 }
 
   guardarMarcador(dto: CreateMarcadorForm): Observable<DatosMapa> {
-    return this.http.post<DatosMapa>(`${this.apiUrl}/marcadores`, dto, { headers: this.getHeaders() });
+    return this.http.post<DatosMapa>(`${this.apiUrl}/marcadores`, dto);
   }
 
   // Actualizar un marcador existente (PUT o PATCH)

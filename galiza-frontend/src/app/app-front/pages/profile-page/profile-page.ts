@@ -3,40 +3,65 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { switchMap } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { forkJoin, of } from 'rxjs';
 
+// Modelos e Interfaces
+import { Usuario, UsuarioMapeado } from '../../models/usuario.model';
+import { Rol } from '../../models/rol.model';
+
+// Servicios y Componentes
 import { FrontUserService } from '../../service/front-user.service';
 import { EventosService } from '../../service/eventos.service';
 import { AdminUsersComponent } from '../../components/admin-users/admin-users';
 import { ActionToastComponent } from "../../components/action-toast/action-toast";
 import { FormEvento } from '../../components/form-evento/form-evento';
+import { DetallesGeneral } from "../../components/detalles-general/detalles-general";
 
 @Component({
   standalone: true,
-  imports: [FormsModule, CommonModule, AdminUsersComponent, ActionToastComponent, FormEvento],
+  imports: [FormsModule, CommonModule, AdminUsersComponent, ActionToastComponent, FormEvento, DetallesGeneral],
   selector: 'app-profile-page',
   templateUrl: './profile-page.html',
   styleUrls: ['./profile-page.css']
 })
 export class ProfilePage implements OnInit {
 
-  // ESTADO UI
+  // Usuario principal tipado
+  usuario: Usuario = {
+    id: 0,
+    nombre: localStorage.getItem('user_nombre') || '',
+    rol: (localStorage.getItem('user_rol') as Rol),
+  };
+
+  // Estado de edición
+  usuarioEditado = { nome: '', contrasena: '' };
+  showPassword = false;
+
+  // Estado de la UI
   seccionActual: string = 'principal';
   cargando: boolean = false;
   errorMsg: string = '';
-  showPassword = false;
 
-  // DATOS USUARIO
-  usuario = { id: 0, nombre: '', rol: '' };
-  usuarioEditado = { nome: '', contrasena: '' };
+  // ADMIN USUARIOS
+  usuariosMapeados: UsuarioMapeado[] = [];
 
   // ADMIN SOLICITUDES
   solicitudes: any[] = [];
   solicitudSeleccionada: any = null;
   eventoDeSolicitud: any = null;
-  usuariosMapeados: any[] = [];
+  terminoBusqueda: string = '';
+  filtroEstado: 'TODOS' | 'PENDIENTE' | 'APROBADA' = 'TODOS';
 
-  confirmacion = { visible: false, mensaje: '', tipo: 'info', id: null as number | null };
+  // Sistema de confirmación / Toast
+  confirmacion = {
+    visible: false,
+    mensaje: '',
+    tipo: '',
+    id: null as number | null
+  };
+
+  modalDetalleAbierto: boolean = false;
+  eventoDeSolicitudFormateado: any = null;
 
   constructor(
     private frontUserService: FrontUserService,
@@ -52,24 +77,37 @@ export class ProfilePage implements OnInit {
   obtenerDatosPerfil(): void {
     this.cargando = true;
     this.frontUserService.getPerfil().subscribe({
-      next: (res: any) => {
-        this.usuario = res;
-        this.usuarioEditado.nome = res.nombre;
-        localStorage.setItem('user_rol', res.rol);
-        localStorage.setItem('user_nombre', res.nombre);
-        localStorage.setItem('user_id', res.id);
+      next: (res) => {
+        const usuario = res as Usuario;
+        this.usuario = usuario;
+        this.usuarioEditado.nome = usuario.nombre;
+        localStorage.setItem('user_rol', usuario.rol);
+        localStorage.setItem('user_nombre', usuario.nombre);
+        localStorage.setItem('user_id', String(usuario.id));
         this.cargando = false;
         this.cdr.detectChanges();
       },
-      error: () => this.onLogout()
+      error: () => {
+        this.cargando = false;
+        this.onLogout();
+      }
     });
   }
 
   cambiarSeccion(nuevaSeccion: string): void {
     this.seccionActual = nuevaSeccion;
     this.errorMsg = '';
+
+    if (nuevaSeccion === 'cuenta') {
+      this.usuarioEditado.nome = this.usuario.nombre;
+      this.usuarioEditado.contrasena = '';
+    }
     if (nuevaSeccion === 'admin-usuarios') this.listarUsuarios();
-    if (nuevaSeccion === 'admin-solicitudes') this.listarSolicitudes();
+    if (nuevaSeccion === 'admin-solicitudes') {
+      this.terminoBusqueda = '';
+      this.filtroEstado = 'TODOS';
+      this.listarSolicitudes();
+    }
   }
 
   volver(): void {
@@ -77,7 +115,7 @@ export class ProfilePage implements OnInit {
     this.errorMsg = '';
   }
 
-  // --- GESTIÓN DE CUENTA (FUSIONADO) ---
+  // --- GESTIÓN DE CUENTA ---
   actualizarCuenta(): void {
     if (!this.usuarioEditado.nome || this.usuarioEditado.nome.trim().length < 3) {
       this.errorMsg = 'El nombre debe tener al menos 3 caracteres';
@@ -93,7 +131,7 @@ export class ProfilePage implements OnInit {
         localStorage.setItem('user_nombre', res.nombre);
         this.usuarioEditado.contrasena = '';
         this.cargando = false;
-        this.mostrarToastInformativo('¡Cambios guardados!');
+        this.mostrarToastExito('¡Cambios guardados con éxito!');
         this.volver();
       },
       error: (err) => {
@@ -104,76 +142,25 @@ export class ProfilePage implements OnInit {
     });
   }
 
-  // --- ADMINISTRACIÓN DE SOLICITUDES ---
-  listarSolicitudes(): void {
-    this.cargando = true;
-    this.eventosService.obtenerSolicitudes().subscribe({
-      next: (res) => {
-        this.solicitudes = res;
-        this.cargando = false;
-        this.cdr.detectChanges();
-      },
-      error: () => this.cargando = false
-    });
-  }
-
-  verDetalleSolicitud(sol: any): void {
-    this.cargando = true;
-    this.solicitudSeleccionada = sol;
-    this.eventosService.obtenerEventoPorId(sol.eventoId).subscribe({
-      next: (evento) => {
-        this.eventoDeSolicitud = evento;
-        this.seccionActual = 'ver-solicitud';
-        this.cargando = false;
-        this.cdr.detectChanges();
-      },
-      error: () => this.cargando = false
-    });
-  }
-
-
-
-  // --- OTROS MÉTODOS ---
   onLogout(): void {
-    localStorage.clear();
+    this.frontUserService.logout();
     this.router.navigate(['/login']);
   }
 
-  mostrarToastInformativo(msg: string) {
-    this.confirmacion = { visible: true, mensaje: msg, tipo: 'info', id: null };
-    this.cdr.detectChanges();
-  }
-
+  // --- ADMINISTRACIÓN DE USUARIOS ---
   listarUsuarios(): void {
     this.cargando = true;
     this.frontUserService.getUsuarios().subscribe({
-      next: (res: any[]) => {
-        this.usuariosMapeados = res.map(u => ({ id: u.id, titulo: u.nombre, etiqueta: u.rol, claseCss: u.rol.toLowerCase(), original: u }));
+      next: (res: Usuario[]) => {
+        this.usuariosMapeados = res.map(u => ({
+          id: u.id,
+          titulo: u.nombre,
+          etiqueta: u.rol.toUpperCase(),
+          claseCss: u.rol.toLowerCase(),
+          original: u
+        }));
         this.cargando = false;
         this.cdr.detectChanges();
-      },
-      error: () => this.cargando = false
-    });
-  }
-
-  manejarAccionUsuario(evento: any): void {
-    // Lógica de ascender/descender ya existente...
-  }
-
-  cancelarConfirmacion() { this.confirmacion.visible = false; }
-  confirmarAccionApp() { this.cancelarConfirmacion(); }
-
-
-  aceptarSolicitud(sol: any): void {
-    this.cargando = true;
-    // 1. Cambia el estado de la solicitud a APROBADA
-    this.eventosService.actualizarSolicitud(sol.id, { estado: 'APROBADA' }).pipe(
-      // 2. Cambia el publicado del evento asociado a true
-      switchMap(() => this.eventosService.actualizarEvento(sol.eventoId, { publicado: true }))
-    ).subscribe({
-      next: () => {
-        this.mostrarToastInformativo('Solicitud aprobada y evento publicado con éxito.');
-        this.listarSolicitudes(); // Recarga la lista para refrescar los botones
       },
       error: () => {
         this.cargando = false;
@@ -182,26 +169,233 @@ export class ProfilePage implements OnInit {
     });
   }
 
-  rechazarSolicitud(sol: any): void {
+  manejarAccionUsuario(evento: { tipo: string, item: UsuarioMapeado }): void {
+    const user = evento.item.original;
+    const tipoAccion = evento.tipo.toLowerCase().trim();
+
+    if (tipoAccion === 'ascender' && user.rol === 'ADMIN') {
+      this.mostrarToastExito(`El usuario ${user.nombre} ya es Administrador.`);
+      return;
+    }
+
+    if (tipoAccion === 'descender' && user.rol === 'USER') {
+      this.mostrarToastExito(`El usuario ${user.nombre} ya tiene el rango mínimo.`);
+      return;
+    }
+
+    const mensajes: Record<string, string> = {
+      'ascender': `¿Deseas ascender a ${user.nombre} a Administrador?`,
+      'descender': `¿Deseas quitar los privilegios a ${user.nombre}?`,
+      'eliminar': `¿Eliminar permanentemente a ${user.nombre}?`
+    };
+
+    this.pedirConfirmacion(mensajes[tipoAccion] || '¿Confirmar acción?', tipoAccion, user.id);
+  }
+
+  private ejecutarAccionUsuario(tipo: string, id: number): void {
     this.cargando = true;
-    // Al rechazar se borra la solicitud directamente
-    this.eventosService.eliminarSolicitud(sol.id).subscribe({
+    this.errorMsg = '';
+
+    let peticion;
+    if (tipo === 'ascender') peticion = this.frontUserService.ascenderUsuario(id);
+    else if (tipo === 'descender') peticion = this.frontUserService.descenderUsuario(id);
+    else peticion = this.frontUserService.eliminarUsuario(id);
+
+    peticion.subscribe({
       next: () => {
-        this.mostrarToastInformativo('Solicitud rechazada y eliminada.');
-        this.listarSolicitudes();
+        this.mostrarToastExito(`Operación completada con éxito.`);
+        this.listarUsuarios();
       },
-      error: () => this.cargando = false
+      error: (err) => {
+        this.cargando = false;
+        this.errorMsg = err.error?.message || 'Error en la operación';
+        this.cdr.detectChanges();
+      }
     });
   }
 
-  eliminarSolicitud(solId: number): void {
+  // --- ADMINISTRACIÓN DE SOLICITUDES ---
+  listarSolicitudes(): void {
+  this.cargando = true;
+  forkJoin({
+    solicitudes: this.eventosService.obtenerSolicitudes(),
+    eventos: this.eventosService.findAll() // Necesitas este método
+  }).subscribe({
+    next: (res: any) => {
+      this.solicitudes = res.solicitudes.map((sol: any) => ({
+        ...sol,
+        evento: res.eventos.find((e: any) => e.id === sol.eventoId)
+      }));
+      this.cargando = false;
+      this.cdr.detectChanges();
+    },
+    error: () => this.cargando = false
+  });
+}
+
+  obtenerSolicitudesFiltradas() {
+    return this.solicitudes.filter(sol => {
+      const coincideEstado = this.filtroEstado === 'TODOS' || sol.estado === this.filtroEstado;
+      const nombreEvento = (sol.evento?.nome || sol.evento?.nombre || '').toLowerCase();
+      const asociacionEvento = (sol.evento?.asociacion || '').toLowerCase();
+      const busqueda = this.terminoBusqueda.toLowerCase();
+
+      const coincideBusqueda = nombreEvento.includes(busqueda) || asociacionEvento.includes(busqueda);
+      return coincideEstado && coincideBusqueda;
+    });
+  }
+
+
+
+  // Preparadores de confirmación para solicitudes (vinculados al HTML)
+  prepararAceptar(sol: any): void {
+    const nombre = sol.evento?.nome || sol.evento?.nombre || 'este evento';
+    this.pedirConfirmacion(`¿Aprobar y publicar ${nombre}?`, 'aceptar-solicitud', sol.id);
+  }
+
+  prepararRechazar(sol: any): void {
+    const nombre = sol.evento?.nome || sol.evento?.nombre || 'este evento';
+    this.pedirConfirmacion(`¿Rechazar la solicitud para ${nombre}?`, 'rechazar-solicitud', sol.id);
+  }
+
+  prepararEliminarSol(sol: any): void {
+    this.pedirConfirmacion(`¿Eliminar esta solicitud permanentemente?`, 'eliminar-solicitud', sol.id);
+  }
+
+  // Ejecutores reales tras confirmar
+  private ejecutarAceptarSolicitud(solId: number): void {
     this.cargando = true;
-    this.eventosService.eliminarSolicitud(solId).subscribe({
+    const sol = this.solicitudes.find(s => s.id === solId);
+
+    if (!sol) {
+      this.cargando = false;
+      return;
+    }
+
+    this.eventosService.actualizarSolicitud(solId, { estado: 'APROBADA' }).pipe(
+      switchMap(() => this.eventosService.actualizarEvento(sol.eventoId, { publicado: true }))
+    ).subscribe({
       next: () => {
-        this.mostrarToastInformativo('Solicitud eliminada de los registros.');
+        this.mostrarToastExito('Solicitud aprobada y evento publicado.');
         this.listarSolicitudes();
       },
-      error: () => this.cargando = false
+      error: () => {
+        this.cargando = false;
+        this.cdr.detectChanges();
+      }
     });
+  }
+
+ private ejecutarEliminarSolicitud(solId: number, esRechazo: boolean = false): void {
+  this.cargando = true;
+  const solicitud = this.solicitudes.find(s => s.id === solId);
+
+  if (!solicitud || !solicitud.eventoId) {
+    this.cargando = false;
+    return;
+  }
+
+  // Usamos switchMap para encadenar: primero borra evento, luego solicitud
+  this.eventosService.eliminarSolicitud(solId).pipe(
+    switchMap(() => this.eventosService.eliminarEvento(solicitud.eventoId))
+  ).subscribe({
+    next: () => {
+      this.mostrarToastExito(esRechazo ? 'Solicitud rechazada.' : 'Solicitud eliminada.');
+      this.listarSolicitudes();
+    },
+    error: (err) => {
+      console.error('Error en cadena de borrado:', err);
+      this.cargando = false;
+      this.cdr.detectChanges();
+    }
+  });
+}
+
+  // --- NUEVO SISTEMA DE TOAST / CONFIRMACIÓN ---
+
+  // Para mensajes de éxito (Sin botones, cierre automático)
+  private mostrarToastExito(msg: string): void {
+    this.confirmacion = { visible: true, mensaje: msg, tipo: 'info', id: null };
+    this.cdr.detectChanges();
+
+    // Se cierra solo tras 2 segundos (2000 ms)
+    setTimeout(() => {
+      if (this.confirmacion.visible && this.confirmacion.tipo === 'info') {
+        this.cancelarConfirmacion();
+      }
+    }, 2000);
+  }
+
+  // Para acciones que requieren confirmación (Con botones SI/NO)
+  private pedirConfirmacion(msg: string, tipo: string, id: number): void {
+    this.confirmacion = { visible: true, mensaje: msg, tipo: tipo, id: id };
+    this.cdr.detectChanges();
+  }
+
+  confirmarAccionApp(): void {
+    const { tipo, id } = this.confirmacion;
+    this.cancelarConfirmacion();
+
+    if (id === null) return;
+
+    if (tipo === 'aceptar-solicitud') {
+      this.ejecutarAceptarSolicitud(id);
+    }
+    else if (tipo === 'rechazar-solicitud') {
+      this.ejecutarEliminarSolicitud(id, true);
+    }
+    else if (tipo === 'eliminar-solicitud') {
+      this.ejecutarEliminarSolicitud(id, false);
+    }
+    else {
+      this.ejecutarAccionUsuario(tipo, id);
+    }
+  }
+
+  cancelarConfirmacion(): void {
+    this.confirmacion.visible = false;
+    this.cdr.detectChanges();
+  }
+
+  verDetalleSolicitud(sol: any): void {
+    this.cargando = true;
+    this.solicitudSeleccionada = sol;
+    this.eventosService.obtenerEventoPorId(sol.eventoId).subscribe({
+      next: (evento) => {
+        console.log(evento)
+        this.eventoDeSolicitudFormateado = {
+          nombre: evento.nome || evento.nombre || 'Solicitud de Evento',
+          tipo: 'SOLICITUD DE EVENTO',
+          estado: sol.estado,
+          organización: evento.asociacion || 'No especificada',
+          fecha: evento.data ? new Date(evento.data).toLocaleDateString() : 'Sin fecha',
+          ubicación: evento.lugar?.nome || 'A Coruña, Desconocida',
+          descripción: evento.descripcion || 'Este evento no cuenta con una descripción detallada.'
+        };
+
+        this.modalDetalleAbierto = true;
+        this.cargando = false;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.cargando = false;
+        // Fallback por si la petición falla pero tenemos los datos básicos en la lista
+        this.eventoDeSolicitudFormateado = {
+          nombre: sol.evento?.nome || sol.evento?.nombre || 'Error al cargar',
+          tipo: 'SOLICITUD DE EVENTO',
+          estado: sol.estado,
+          organización: sol.evento?.asociacion || 'No especificada'
+        };
+        this.modalDetalleAbierto = true;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  // --- AÑADE ESTE MÉTODO PARA CERRAR EL MODAL ---
+  cerrarModalDetalle(): void {
+    this.modalDetalleAbierto = false;
+    this.eventoDeSolicitudFormateado = null;
+    this.solicitudSeleccionada = null;
   }
 }

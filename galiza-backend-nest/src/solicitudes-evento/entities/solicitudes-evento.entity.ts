@@ -13,9 +13,12 @@ export class SolicitudEvento {
     enum: EstadoSolicitud,
     default: EstadoSolicitud.PENDIENTE
   })
-  estado!: EstadoSolicitud; // Obligatorio
+  estado!: EstadoSolicitud;
 
-  @OneToOne(() => Evento, { nullable: false, onDelete: 'NO ACTION' }) 
-  @JoinColumn()
+  @Column({ nullable: true })
+  eventoId!: number; 
+
+  @OneToOne(() => Evento, { nullable: false, onDelete: 'NO ACTION' })
+  @JoinColumn({ name: 'eventoId' }) 
   evento!: Evento;
 }

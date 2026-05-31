@@ -117,12 +117,16 @@
 
     </div>
 
-    <div class="form-actions">
-  <button type="button" (click)="cancelar.emit()">Cancelar</button>
+    <div class="form-footer">
+      <button type="button" class="btn-cancel" (click)="cancelar.emit()">
+        Cancelar
+      </button>
 
-  @if (!modoLectura) {
-    <button type="submit" (click)="guardar()">Guardar / Enviar Propuesta</button>
-  }
-</div>
+      @if (!modoLectura) {
+        <button type="submit" class="btn-save" (click)="guardar()">
+          <span class="material-icons">save</span> Enviar propuesta
+        </button>
+      }
+    </div>
   </div>
 </div>

@@ -249,3 +249,35 @@
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+/* DISEÑO CALCADO DE LA IMAGEN PARA EL BOTÓN */
+.btn-ocultar-detalles {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  background-color: #fdf5f4; /* Fondo rosita/crema muy suave */
+  color: #9d3125; /* Granate texto */
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: background-color 0.2s ease;
+}
+
+.btn-ocultar-detalles:hover {
+  background-color: #fbeae8; /* Un pelín más oscuro al hacer hover */
+}
+
+/* EFECTO HOVER EN RESULTADOS PARA INDICAR QUE ABREN DETALLES */
+.result-item {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.result-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}

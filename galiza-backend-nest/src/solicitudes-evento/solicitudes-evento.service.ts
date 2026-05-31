@@ -8,18 +8,29 @@ export class SolicitudesEventoService {
   constructor(
     @InjectRepository(SolicitudEvento)
     private readonly repository: Repository<SolicitudEvento>,
-  ) {}
+  ) { }
 
   async create(dto: any) {
-    const nuevaSolicitud = this.repository.create(dto);
+    console.log('DTO recibido en backend:', dto);
+
+    // Mapeo manual: obligamos a TypeORM a entender que es una relación
+    const nuevaSolicitud = this.repository.create({
+      estado: dto.estado || 'PENDIENTE',
+      evento: { id: dto.eventoId || (dto.evento && dto.evento.id) }
+    });
+
     return await this.repository.save(nuevaSolicitud);
   }
 
   async findAll() {
-    return await this.repository.find();
+    return await this.repository.find({
+      relations: ['evento']
+    });
   }
 
   async findOne(id: number) { // MySQL usa IDs numéricos
+    console.log('DTO recibido en backend:', id);
+
     return await this.repository.findOneBy({ id });
   }
 

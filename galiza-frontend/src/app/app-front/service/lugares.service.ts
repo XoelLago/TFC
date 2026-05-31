@@ -15,14 +15,14 @@ export class LugaresService {
   /**
    * Obtener todos los lugares
    */
-  getLugares(): Observable<Lugar[]> {
+  findAll(): Observable<Lugar[]> {
     return this.http.get<Lugar[]>(this.API_URL);
   }
 
   /**
    * Obtener un lugar por ID
    */
-  getLugar(id: number): Observable<Lugar> {
+  obtenerLugarPorId(id: number): Observable<Lugar> {
     return this.http.get<Lugar>(`${this.API_URL}/${id}`);
   }
 

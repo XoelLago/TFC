@@ -4,11 +4,10 @@ import { FormsModule } from '@angular/forms';
 import * as L from 'leaflet';
 import { EventosService } from '../../service/eventos.service';
 import { LugaresService } from '../../service/lugares.service';
-// Asume la existencia del servicio de asociaciones
+import { AsociacionesService } from '../../service/asociaciones.service';
 import { Lugar } from '../../models/lugar.model';
 import { Asociacion } from '../../models/asociacion.model';
 import { TipoEvento } from '../../models/enums';
-import { AsociacionesService } from '../../service/asociaciones.service';
 
 @Component({
   selector: 'form-evento',
@@ -18,8 +17,8 @@ import { AsociacionesService } from '../../service/asociaciones.service';
   styleUrls: ['./form-evento.css']
 })
 export class FormEvento implements OnInit {
-  @Input() eventoData: any = null;     // Recibe los datos del evento a revisar
-  @Input() modoLectura: boolean = false; // Controla si se ocultan los controles de guardado
+  @Input() eventoData: any = null;
+  @Input() modoLectura: boolean = false;
 
   @Output() cancelar = new EventEmitter<void>();
   @Output() guardado = new EventEmitter<any>();
@@ -31,7 +30,7 @@ export class FormEvento implements OnInit {
   // Modelo del formulario
   public evento: any = {
     nome: '',
-    fecha: '', // Bind con datetime-local
+    fecha: '',
     tipo: TipoEvento.FESTIVAL,
     precio: 0.00,
     descripcion: '',
@@ -69,7 +68,7 @@ export class FormEvento implements OnInit {
   }
 
   cargarDatos() {
-    this.lugaresService.getLugares().subscribe(res => {
+    this.lugaresService.findAll().subscribe(res => {
       this.listaLugares = res;
       this.lugaresFiltrados = res;
     });
@@ -111,7 +110,7 @@ export class FormEvento implements OnInit {
 
   seleccionarLugar(lugar: Lugar) {
     this.evento.lugar = lugar;
-    this.textoBusquedaLugar = lugar.nome; // Mostrar el nombre seleccionado en el input
+    this.textoBusquedaLugar = lugar.nome;
     this.mostrarLugares = false;
   }
 
@@ -126,15 +125,22 @@ export class FormEvento implements OnInit {
     this.asociacionesFiltradas = this.listaAsociaciones.filter(a => a.nome.toLowerCase().includes(v));
   }
 
-  seleccionarAsociacion(aso: Asociacion) {
-    const existe = this.evento.asociaciones.some((a:any) => a.id === aso._id);
-    if (!existe) this.evento.asociaciones.push(aso);
+  seleccionarAsociacion(aso: any) {
+    const idReal = aso.id || aso._id;
+    const existe = this.evento.asociaciones.some((a:any) => (a.id || a._id) === idReal);
+
+    if (!existe) {
+      this.evento.asociaciones.push({
+        id: idReal,
+        nome: aso.nome
+      });
+    }
     this.textoBusquedaAso = '';
     this.mostrarAsociaciones = false;
   }
 
   removerAso(id: number) {
-    this.evento.asociaciones = this.evento.asociaciones.filter((a:any) => a.id !== id);
+    this.evento.asociaciones = this.evento.asociaciones.filter((a:any) => (a.id || a._id) !== id);
   }
 
   ocultarLista(tipo: string) {
@@ -145,7 +151,6 @@ export class FormEvento implements OnInit {
   }
 
   guardar() {
-    // Validaciones
     if (!this.evento.nome || !this.evento.fecha || !this.evento.lugar) {
       this.errorMsg = 'Nome, Data e Lugar son obrigatorios.';
       return;
@@ -155,12 +160,15 @@ export class FormEvento implements OnInit {
       nome: this.evento.nome.trim(),
       fecha: new Date(this.evento.fecha),
       tipo: this.evento.tipo,
-      precio: this.evento.precio,
-      descripcion: this.evento.descripcion,
-      enlaceExterno: this.evento.enlaceExterno,
-      coords: this.evento.coords,
-      lugar: this.evento.lugar,
-      asociaciones: this.evento.asociaciones,
+      precio: this.evento.precio ? Number(this.evento.precio) : 0,
+      descripcion: this.evento.descripcion || '',
+      enlaceExterno: this.evento.enlaceExterno || '',
+      coords: {
+        lat: Number(this.evento.coords.lat),
+        lng: Number(this.evento.coords.lng)
+      },
+      lugar: { id: this.evento.lugar.id || this.evento.lugar._id },
+      asociaciones: this.evento.asociaciones.map((a: any) => ({ id: a.id || a._id })),
       publicado: false
     };
 
@@ -168,14 +176,10 @@ export class FormEvento implements OnInit {
     this.eventosService.crearEvento(payload).subscribe({
       next: (evtCreado) => {
         // 2. Crear Solicitud Automáticamente
-        console.log(evtCreado);
-        let idsum = 1;
         const solicitud = {
-          id: idsum,
           estado: 'PENDIENTE',
-          eventoId: evtCreado.id // Enviamos el ID para la relación OneToOne
+          eventoId:  evtCreado.id
         };
-        idsum += 1;
 
         this.eventosService.crearSolicitud(solicitud).subscribe({
           next: () => {
@@ -184,16 +188,13 @@ export class FormEvento implements OnInit {
           },
           error: (errSol) => {
             console.error('Error creando solicitud:', errSol);
-            // Aunque falle la solicitud, el evento se creó. Avisamos o emitimos.
             this.guardado.emit(evtCreado);
           }
         });
-
-
       },
       error: (err) => {
-        this.errorMsg = 'Erro ao crear o evento.';
-        console.error(err);
+        this.errorMsg = 'Erro ao crear o evento. Revisa a consola.';
+        console.error('Error del backend:', err);
       }
     });
   }
