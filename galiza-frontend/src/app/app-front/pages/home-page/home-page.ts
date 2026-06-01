@@ -98,7 +98,7 @@ public modalDetalleAberto: boolean = false;
       },
 
       {
-        icon: 'groups',
+        icon: 'pi pi-star',
         tooltipOptions: { tooltipLabel: 'Nova Asociación', tooltipPosition: 'left' },
         command: () => this.mostrarFormAsociacion = true
       }

@@ -176,21 +176,14 @@
     (guardado)="recargarMapa()">
   </app-form-lugar>
 }
-<!-- @if (mostrarFormEvento) {
-  <evento-form
-    [datos]="selectedPlace"
-    (cancelar)="mostrarFormEvento = false"
-    (guardado)="recargarMapa()">
-  </evento-form>
-} -->
-<!--
+
 @if (mostrarFormAsociacion) {
   <app-form-asociacion
     [datos]="selectedPlace"
-    (cancelar)="mostrarFormLugar = false"
+    (cancelar)="mostrarFormAsociacion = false"
     (guardado)="recargarMapa()">
   </app-form-asociacion>
-} -->
+}
 
 </div>
 <app-action-toast [visible]="toastConfig.visible" [mensaje]="toastConfig.mensaje" [icon]="toastConfig.icon"

@@ -75,4 +75,22 @@
     (close)="cerrarDetalle()">
   </app-detalles-general>
 
+
+  <button *ngIf="esAdminOSuper" class="fab-button" (click)="abrirFormulario()" title="Añadir recomendación">
+  <span class="material-icons">add</span>
+</button>
+
+  <app-detalles-general
+    [isOpen]="modalAbierto"
+    [item]="itemSeleccionado"
+    (close)="cerrarDetalle()">
+  </app-detalles-general>
+
+  <app-form-recomendacion
+  *ngIf="formAbierto"
+  [datos]="itemSeleccionado"
+  (cancelar)="cerrarFormulario()"
+  (guardado)="guardarNuevaRecomendacion($event)">
+</app-form-recomendacion>
+
 </div>

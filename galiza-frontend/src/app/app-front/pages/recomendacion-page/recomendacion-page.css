@@ -299,3 +299,29 @@
 .cta-section .btn-primary:hover {
   background: #7a220f;
 }
+.fab-button {
+  position: fixed;
+  bottom: 115px; /* <-- MODIFICADO: Lo subimos para que libre los 92px del menú inferior sin hacer scroll */
+  right: 20px;
+  width: 56px;
+  height: 56px;
+  background-color: #93331d;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 4px 15px rgba(147, 51, 29, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 9999 !important; /* Aseguramos que flote sobre todo */
+}
+
+.fab-add-btn:hover {
+  transform: scale(1.08);
+  background-color: #722414;
+}
+
+.fab-add-btn .material-icons {
+  font-size: 28px;
+}

@@ -1,0 +1,66 @@
+<div class="overlay-container active">
+  <div class="form-card">
+    <div class="form-header">
+      <h2>
+        <span class="material-icons">auto_stories</span>
+        {{ datos ? 'Editar Recomendación' : 'Nova Recomendación' }}
+      </h2>
+      <button class="btn-close" (click)="cancelar.emit()">×</button>
+    </div>
+
+    <div class="form-body">
+
+      <div class="input-group">
+        <label>Título da Obra *</label>
+        <input type="text" [(ngModel)]="recomendacion.titulo" placeholder="Ex: Las venas abiertas de América Latina...">
+        @if(errorMsg && !recomendacion.titulo){
+          <label class="error-inline-label">{{ errorMsg }}</label>
+        }
+      </div>
+
+      <div class="input-group">
+        <label>Autor / Creador *</label>
+        <input type="text" [(ngModel)]="recomendacion.autor" placeholder="Ex: Eduardo Galeano...">
+        @if(errorMsg && !recomendacion.autor){
+          <label class="error-inline-label">{{ errorMsg }}</label>
+        }
+      </div>
+
+      <div class="input-group">
+        <label>Tipo de Recurso *</label>
+        <div class="combo-wrapper">
+          <span class="material-icons combo-icon">category</span>
+          <select class="custom-select" [(ngModel)]="recomendacion.tipo">
+            @for (t of tipos; track $index) {
+              <option [value]="t">{{ t }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label>Ligazón / Enlace Externo (Opcional)</label>
+        <input type="url" [(ngModel)]="recomendacion.enlaceExterno" placeholder="https://ejemplo.com/recurso">
+      </div>
+
+      <div class="input-group">
+        <label>Descrición / Resumo</label>
+        <textarea [(ngModel)]="recomendacion.resumo" placeholder="Escribe unha breve sinopse ou notas sobre o valor desta obra..." rows="4"></textarea>
+      </div>
+
+      @if(errorMsg && recomendacion.titulo && recomendacion.autor){
+        <div class="error-block">
+          <span class="material-icons">error_outline</span> {{ errorMsg }}
+        </div>
+      }
+
+    </div>
+
+    <div class="form-footer">
+      <button class="btn-cancel" (click)="cancelar.emit()">Cancelar</button>
+      <button class="btn-save" (click)="guardar()">
+        <span class="material-icons">save</span> Gardar
+      </button>
+    </div>
+  </div>
+</div>
