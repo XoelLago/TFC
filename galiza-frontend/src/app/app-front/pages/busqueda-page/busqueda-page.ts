@@ -4,8 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { forkJoin, Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
-
-// IMPORTAMOS TU COMPONENTE DE DETALLES
 import { DetallesGeneral } from '../../components/detalles-general/detalles-general';
 
 import { AsociacionesService } from '../../service/asociaciones.service';
@@ -15,20 +13,22 @@ import { InstrumentosService } from '../../service/instrumentos.service';
 import { MovimientosService } from '../../service/movimientos.service';
 import { BaileService } from '../../service/bailes.service';
 import { CancionService } from '../../service/canciones.service';
-import { ProvinciaService } from '../../service/provincias.service';
 import { normalizarTexto } from '../../utils/text-utils';
+
+
 
 export interface ResultadoBusqueda {
   tipo: string;
   nombre: string;
   provincia: string;
+  provinciaId?: string;
   localidad: string;
-  datosOriginales: any; // 👈 ¡CLAVE! Guardamos el objeto completo para pasarlo al popup
+  datosOriginales: any;
 }
 
 @Component({
   selector: 'app-busqueda',
-  imports: [CommonModule, FormsModule, DetallesGeneral], // 👈 Añadido aquí
+  imports: [CommonModule, FormsModule, DetallesGeneral],
   standalone: true,
   templateUrl: './busqueda-page.html',
   styleUrls: ['./busqueda-page.css']
@@ -38,10 +38,9 @@ export class BusquedaPage implements OnInit {
 
   filtrosDisponibles: string[] = [
     'Asociaciones', 'Bailes', 'Puntos', 'Lugares',
-    'Canciones', 'Instrumentos', 'Movimientos', 'Provincias'
+    'Canciones', 'Instrumentos', 'Movimientos'
   ];
 
-  // Empezamos vacío. 0 filtros = Mostrar TODO
   filtrosSeleccionados: string[] = [];
 
   busquedaPrincipal: string = '';
@@ -54,7 +53,6 @@ export class BusquedaPage implements OnInit {
   resultadosBrutos: ResultadoBusqueda[] = [];
   resultadosFiltrados: ResultadoBusqueda[] = [];
 
-  // Variables para el Modal de Detalles
   modalDetalleAberto: boolean = false;
   itemDetalleSeleccionado: any = null;
 
@@ -66,7 +64,6 @@ export class BusquedaPage implements OnInit {
     private cancionesService: CancionService,
     private instrumentosService: InstrumentosService,
     private movimientosService: MovimientosService,
-    private provinciasService: ProvinciaService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -100,29 +97,39 @@ export class BusquedaPage implements OnInit {
       this.mapService(this.lugaresService.findAll(), 'LUGAR'),
       this.mapService(this.cancionesService.findAll(), 'CANCIÓN'),
       this.mapService(this.instrumentosService.findAll(), 'INSTRUMENTO'),
-      this.mapService(this.movimientosService.findAll(), 'MOVIMIENTO'),
-      this.mapService(this.provinciasService.findAll(), 'PROVINCIA')
+      this.mapService(this.movimientosService.findAll(), 'MOVIMIENTO')
     ]).subscribe({
       next: (resultadosMultiples) => {
         this.resultadosBrutos = resultadosMultiples.flat();
         this.aplicarFiltrosDeTexto();
       },
-      error: (err) => console.error('Error al precargar el buscador:', err)
+      error: (err) => console.error('Error al cargar datos:', err)
     });
   }
 
   private mapService(request: Observable<any[]>, tipo: string): Observable<ResultadoBusqueda[]> {
-    return request.pipe(
-      map(items => items.map(item => ({
+  return request.pipe(
+    map(items => items.map(item => {
+      // Lógica inteligente:
+      // Si el tipo es 'LUGAR', la provincia está en 'item.provincia'
+      // Si el tipo es otra cosa, buscamos dentro de 'item.lugar.provincia'
+      const provincia = (tipo === 'LUGAR')
+                        ? item.provincia
+                        : item.lugar?.provincia;
+
+      return {
         tipo: tipo,
-        nombre: item.nome || item.nombre || 'Sin nombre',
-        provincia: item.lugar?.provincia?.nome || item.provincia?.nome || 'Desconocida',
-        localidad: item.lugar?.nome || (tipo === 'LUGAR' ? item.nome : 'Desconocida'),
-        datosOriginales: item // 👈 Guardamos toda la base de datos de este elemento aquí
-      }))),
-      catchError(() => of([]))
-    );
-  }
+        nombre: item.nome || item.nombre || item.titulo || 'Sin nombre',
+        provincia: provincia?.nome || 'Sin provincia',
+        provinciaId: provincia?.id ? provincia.id.toString() : '',
+        // Si es lugar, su nombre es el propio nombre, si no, es el del lugar asociado
+        localidad: (tipo === 'LUGAR') ? item.nome : (item.lugar?.nome || 'Desconocida'),
+        datosOriginales: item
+      };
+    })),
+    catchError(() => of([]))
+  );
+}
 
   aplicarFiltrosDeTexto() {
     const buscarPrincipal = normalizarTexto(this.busquedaPrincipal);
@@ -132,19 +139,22 @@ export class BusquedaPage implements OnInit {
 
     const mapaFiltros: { [key: string]: string } = {
       'Asociaciones': 'ASOCIACIÓN', 'Bailes': 'BAILE', 'Puntos': 'PUNTO', 'Lugares': 'LUGAR',
-      'Canciones': 'CANCIÓN', 'Instrumentos': 'INSTRUMENTO', 'Movimientos': 'MOVIMIENTO', 'Provincias': 'PROVINCIA'
+      'Canciones': 'CANCIÓN', 'Instrumentos': 'INSTRUMENTO', 'Movimientos': 'MOVIMIENTO'
     };
 
     const tiposPermitidos = this.filtrosSeleccionados.map(f => mapaFiltros[f]);
 
     this.resultadosFiltrados = this.resultadosBrutos.filter(item => {
-
-      // 👈 REGLA NUEVA: Si el array de permitidos está vacío, dejamos pasar TODOS
       const pasaFiltroPill = tiposPermitidos.length === 0 ? true : tiposPermitidos.includes(item.tipo);
 
       const matchPrincipal = buscarPrincipal ? normalizarTexto(item.nombre).includes(buscarPrincipal) : true;
       const matchAvanzado = buscarAvanzado ? normalizarTexto(item.nombre).includes(buscarAvanzado) : true;
-      const matchProvincia = buscarProvincia ? normalizarTexto(item.provincia).includes(buscarProvincia) : true;
+
+      const matchProvincia = buscarProvincia
+        ? (normalizarTexto(item.provincia).includes(buscarProvincia) ||
+           (item.provinciaId && item.provinciaId.includes(buscarProvincia)))
+        : true;
+
       const matchLocalidad = buscarLocalidad ? normalizarTexto(item.localidad).includes(buscarLocalidad) : true;
 
       return pasaFiltroPill && matchPrincipal && matchAvanzado && matchProvincia && matchLocalidad;
@@ -153,11 +163,7 @@ export class BusquedaPage implements OnInit {
     this.cdr.detectChanges();
   }
 
-  // ==========================================
-  // APERTURA DE DETALLES
-  // ==========================================
   abrirDetallePopup(item: ResultadoBusqueda) {
-    // Le pasamos el objeto original con TODOS sus campos al componente de detalles
     this.itemDetalleSeleccionado = item.datosOriginales;
     this.modalDetalleAberto = true;
     this.cdr.detectChanges();

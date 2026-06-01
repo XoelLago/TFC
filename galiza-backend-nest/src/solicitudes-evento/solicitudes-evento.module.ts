@@ -7,7 +7,7 @@ import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([SolicitudEvento]),
+    TypeOrmModule.forFeature([SolicitudEvento],),
     AuthModule
   ],
   controllers: [SolicitudesEventoController],

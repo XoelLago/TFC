@@ -88,3 +88,150 @@
   cursor: pointer;
   z-index: 9999 !important; /* Aseguramos que flote sobre todo */
 }
+/* --- FILTROS --- */
+.filters-row {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.filters-row .search-box {
+  flex: 1;
+  min-width: 200px;
+}
+.select-box select {
+  width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: inherit;
+  font-size: 1rem;
+  color: #333;
+  cursor: pointer;
+}
+
+/* --- DÍA SELECCIONADO EN EL CALENDARIO --- */
+.day-cell.selected {
+  background-color: #f0f4f8; /* Color de fondo ligero para destacarlo */
+  border: 2px solid #0056b3; /* Borde azul para marcar selección */
+  border-radius: 4px;
+}
+
+/* --- LISTA DE EVENTOS --- */
+.events-list-section {
+  margin-top: 30px;
+  padding: 10px 0 40px 0;
+}
+
+.list-title {
+  text-transform: uppercase;
+  color: #333;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.list-subtitle {
+  text-transform: none;
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: normal;
+}
+
+.empty-list {
+  color: #666;
+  font-style: italic;
+}
+
+.events-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.event-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 2px solid #8c2d19; /* El color granate de la línea de tu captura */
+}
+
+.event-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.event-name {
+  color: #8c2d19; /* El mismo color granate para el nombre */
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.event-details {
+  font-size: 0.8rem;
+  color: #777;
+}
+
+.event-badge {
+  color: white;
+  padding: 4px 10px;
+  border-radius: 4px; /* Bordes ligeramente redondeados como en la imagen */
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.section-subtitle {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.filters-inputs-row {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+
+.filters-inputs-row .search-box {
+  flex: 1;
+  min-width: 240px;
+}
+
+/* CONTENEDOR DE PÍLDORAS */
+.pills-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  margin-bottom: 25px;
+}
+
+/* DISEÑO BASE DE CADA PÍLDORA (INACTIVA) */
+.pill-filter {
+  border: none;
+  background-color: #e8e6e2; /* Color grisáceo/beige claro suave */
+  color: #8a8884;            /* Texto gris mitigado */
+  padding: 6px 18px;
+  border-radius: 50px;       /* Redondeado perfecto tipo píldora */
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  font-family: inherit;
+}
+
+.pill-filter:hover {
+  background-color: #dfdeda;
+}
+
+/* ESTADO ACTIVO (SELECCIONADO) */
+.pill-filter.active {
+  background-color: #8c2d19; /* El color granate oscuro de la captura */
+  color: #ffffff;            /* Texto blanco */
+}

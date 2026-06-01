@@ -12,6 +12,9 @@ import { ProvinciasModule } from './provincias/provincias.module';
 import { AuthModule } from './auth/auth.module';
 import { MarcadoresModule } from './marcadores/marcadores.module';
 import { SolicitudesEventoModule } from './solicitudes-evento/solicitudes-evento.module';
+import { MovimientosModule } from './movimientos/movimientos.module';
+import { PuntosModule } from './puntos/puntos.module';
+import { RecomendacionesModule } from './recomendaciones/recomendaciones.module';
 // Importa aquí los módulos según los vayas actualizando
 
 @Module({
@@ -43,7 +46,10 @@ import { SolicitudesEventoModule } from './solicitudes-evento/solicitudes-evento
     EventosModule,
     InstrumentosModule,
     MarcadoresModule,
-    SolicitudesEventoModule
+    SolicitudesEventoModule,
+    MovimientosModule,
+    PuntosModule,
+    RecomendacionesModule
     
   ],
 })

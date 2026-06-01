@@ -17,8 +17,8 @@ export class MovimientosService {
     return this.http.post(this.URL_MOVIMIENTOS, movimiento);
   }
 
-  findAll(): Observable<any[]> {
-    return this.http.get<any[]>(this.URL_MOVIMIENTOS);
+  findAll(): Observable<any> {
+    return this.http.get(this.URL_MOVIMIENTOS);
   }
 
   obtenerMovimientoPorId(id: number): Observable<any> {

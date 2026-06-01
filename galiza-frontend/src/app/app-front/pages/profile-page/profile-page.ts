@@ -216,22 +216,22 @@ export class ProfilePage implements OnInit {
 
   // --- ADMINISTRACIÓN DE SOLICITUDES ---
   listarSolicitudes(): void {
-  this.cargando = true;
-  forkJoin({
-    solicitudes: this.eventosService.obtenerSolicitudes(),
-    eventos: this.eventosService.findAll() // Necesitas este método
-  }).subscribe({
-    next: (res: any) => {
-      this.solicitudes = res.solicitudes.map((sol: any) => ({
-        ...sol,
-        evento: res.eventos.find((e: any) => e.id === sol.eventoId)
-      }));
-      this.cargando = false;
-      this.cdr.detectChanges();
-    },
-    error: () => this.cargando = false
-  });
-}
+    this.cargando = true;
+    forkJoin({
+      solicitudes: this.eventosService.obtenerSolicitudes(),
+      eventos: this.eventosService.findAll() // Necesitas este método
+    }).subscribe({
+      next: (res: any) => {
+        this.solicitudes = res.solicitudes.map((sol: any) => ({
+          ...sol,
+          evento: res.eventos.find((e: any) => e.id === sol.eventoId)
+        }));
+        this.cargando = false;
+        this.cdr.detectChanges();
+      },
+      error: () => this.cargando = false
+    });
+  }
 
   obtenerSolicitudesFiltradas() {
     return this.solicitudes.filter(sol => {
@@ -286,30 +286,30 @@ export class ProfilePage implements OnInit {
     });
   }
 
- private ejecutarEliminarSolicitud(solId: number, esRechazo: boolean = false): void {
-  this.cargando = true;
-  const solicitud = this.solicitudes.find(s => s.id === solId);
+  private ejecutarEliminarSolicitud(solId: number, esRechazo: boolean = false): void {
+    this.cargando = true;
+    const solicitud = this.solicitudes.find(s => s.id === solId);
 
-  if (!solicitud || !solicitud.eventoId) {
-    this.cargando = false;
-    return;
-  }
-
-  // Usamos switchMap para encadenar: primero borra evento, luego solicitud
-  this.eventosService.eliminarSolicitud(solId).pipe(
-    switchMap(() => this.eventosService.eliminarEvento(solicitud.eventoId))
-  ).subscribe({
-    next: () => {
-      this.mostrarToastExito(esRechazo ? 'Solicitud rechazada.' : 'Solicitud eliminada.');
-      this.listarSolicitudes();
-    },
-    error: (err) => {
-      console.error('Error en cadena de borrado:', err);
+    if (!solicitud || !solicitud.eventoId) {
       this.cargando = false;
-      this.cdr.detectChanges();
+      return;
     }
-  });
-}
+
+    // Usamos switchMap para encadenar: primero borra evento, luego solicitud
+    this.eventosService.eliminarSolicitud(solId).pipe(
+      switchMap(() => this.eventosService.eliminarEvento(solicitud.eventoId))
+    ).subscribe({
+      next: () => {
+        this.mostrarToastExito(esRechazo ? 'Solicitud rechazada.' : 'Solicitud eliminada.');
+        this.listarSolicitudes();
+      },
+      error: (err) => {
+        console.error('Error en cadena de borrado:', err);
+        this.cargando = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
 
   // --- NUEVO SISTEMA DE TOAST / CONFIRMACIÓN ---
 
@@ -358,39 +358,43 @@ export class ProfilePage implements OnInit {
   }
 
   verDetalleSolicitud(sol: any): void {
-    this.cargando = true;
-    this.solicitudSeleccionada = sol;
-    this.eventosService.obtenerEventoPorId(sol.eventoId).subscribe({
-      next: (evento) => {
-        console.log(evento)
-        this.eventoDeSolicitudFormateado = {
-          nombre: evento.nome || evento.nombre || 'Solicitud de Evento',
-          tipo: 'SOLICITUD DE EVENTO',
-          estado: sol.estado,
-          organización: evento.asociacion || 'No especificada',
-          fecha: evento.data ? new Date(evento.data).toLocaleDateString() : 'Sin fecha',
-          ubicación: evento.lugar?.nome || 'A Coruña, Desconocida',
-          descripción: evento.descripcion || 'Este evento no cuenta con una descripción detallada.'
-        };
+  this.cargando = true;
+  this.solicitudSeleccionada = sol;
 
-        this.modalDetalleAbierto = true;
-        this.cargando = false;
-        this.cdr.detectChanges();
-      },
-      error: () => {
-        this.cargando = false;
-        // Fallback por si la petición falla pero tenemos los datos básicos en la lista
-        this.eventoDeSolicitudFormateado = {
-          nombre: sol.evento?.nome || sol.evento?.nombre || 'Error al cargar',
-          tipo: 'SOLICITUD DE EVENTO',
-          estado: sol.estado,
-          organización: sol.evento?.asociacion || 'No especificada'
-        };
-        this.modalDetalleAbierto = true;
-        this.cdr.detectChanges();
-      }
-    });
+  // Usamos el evento que ya tienes en la solicitud (ya viene con asociaciones del listarSolicitudes)
+  const evento = sol.evento;
+
+  if (evento) {
+    const nombreAsociacion = (evento.asociaciones && evento.asociaciones.length > 0)
+      ? evento.asociaciones[0].nome
+      : 'No especificada';
+
+    this.eventoDeSolicitudFormateado = {
+      nombre: evento.nome || evento.nombre || 'Solicitud de Evento',
+      tipo: 'SOLICITUD DE EVENTO',
+      estado: sol.estado,
+      organización: nombreAsociacion,
+      fecha: evento.fecha ? new Date(evento.fecha).toLocaleString('es-ES', {
+        day: '2-digit', month: '2-digit', year: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+      }) : 'Sin fecha',
+      ubicación: evento.lugar?.nome || 'A Coruña, Desconocida',
+      descripción: evento.descripcion
+    };
+  } else {
+    // Si por alguna razón sol.evento no existe, mantenemos el fallback
+    this.eventoDeSolicitudFormateado = {
+      nombre: 'Error al cargar',
+      tipo: 'SOLICITUD DE EVENTO',
+      estado: sol.estado,
+      organización: 'No especificada'
+    };
   }
+
+  this.modalDetalleAbierto = true;
+  this.cargando = false;
+  this.cdr.detectChanges();
+}
 
   // --- AÑADE ESTE MÉTODO PARA CERRAR EL MODAL ---
   cerrarModalDetalle(): void {

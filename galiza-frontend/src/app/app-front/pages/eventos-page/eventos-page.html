@@ -1,4 +1,6 @@
 <div class="page-container">
+
+
   <div class="calendar-card">
     <div class="calendar-header">
       <button (click)="cambiarMes(-1)"><span class="material-icons">chevron_left</span></button>
@@ -15,7 +17,10 @@
     <div class="calendar-grid days">
       @for (dia of diasCalendario; track $index) {
         @if (dia) {
-          <div class="day-cell">
+          <div class="day-cell"
+               (click)="seleccionarDia(dia)"
+               [class.selected]="isDiaSeleccionado(dia)"
+               style="cursor: pointer;">
             <span class="day-number">{{ dia.numero }}</span>
             <div class="events-container">
               @for (evt of dia.eventos; track evt.id) {
@@ -38,11 +43,61 @@
       </div>
     }
   </div>
+<div class="search-container">
+    <h3 class="section-subtitle">GESTIÓN</h3>
 
-  <div class="search-container">
-    <div class="search-box">
-      <span class="material-icons search-icon">search</span>
-      <input type="text" placeholder="Buscar evento..." [(ngModel)]="textoBusqueda" (input)="filtrarEventos()">
+    <div class="filters-inputs-row">
+      <div class="search-box">
+        <span class="material-icons search-icon">search</span>
+        <input type="text" placeholder="Buscar por nome..." [(ngModel)]="textoBusqueda" (input)="filtrarEventos()">
+      </div>
+
+      <div class="search-box">
+        <span class="material-icons search-icon">place</span>
+        <input type="text" placeholder="Buscar por lugar..." [(ngModel)]="filtroLugar" (input)="filtrarEventos()">
+      </div>
+    </div>
+
+    <div class="pills-row">
+      <button class="pill-filter"
+              [class.active]="filtroTipo === ''"
+              (click)="seleccionarTipo('')">
+        Todos
+      </button>
+      @for (item of leyenda; track item.tipo) {
+        <button class="pill-filter"
+                [class.active]="filtroTipo === item.tipo"
+                (click)="seleccionarTipo(item.tipo)">
+          {{ item.label }}
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="events-list-section">
+    <h3 class="list-title">
+      RESULTADOS ({{ eventosEnLista.length }})
+      @if (diaSeleccionado) { <span class="list-subtitle">- {{ diaSeleccionado | date:'dd/MM/yyyy' }}</span> }
+    </h3>
+
+    @if (eventosEnLista.length === 0) {
+      <p class="empty-list">Non se atoparon eventos con estes criterios.</p>
+    }
+
+    <div class="events-list">
+      @for (evt of eventosEnLista; track evt.id) {
+        <div class="event-row">
+          <div class="event-info">
+            <div class="event-name">{{ evt.nome }}</div>
+            <div class="event-details" *ngIf="evt.lugar || evt.fecha">
+              <span *ngIf="evt.lugar">{{ evt.lugar }}</span>
+              <span *ngIf="evt.lugar && evt.fecha"> | </span>
+              <span *ngIf="evt.fecha">{{ evt.fecha | date:'dd/MM/yyyy HH:mm' }}</span>
+            </div>
+          </div>
+          <span class="event-badge" [style.backgroundColor]="getColorLeyenda(evt.tipo)">{{ evt.tipo }}</span>
+        </div>
+      }
     </div>
   </div>
 

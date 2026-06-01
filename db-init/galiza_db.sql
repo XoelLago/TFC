@@ -82,8 +82,8 @@ CREATE TABLE `asociacion_eventos` (
   PRIMARY KEY (`asociacionesId`,`eventosId`),
   KEY `IDX_2d98c370db0c0c208649c8a23f` (`asociacionesId`),
   KEY `IDX_b6c301eb3762c5db2dfe2a99b3` (`eventosId`),
-  CONSTRAINT `FK_2d98c370db0c0c208649c8a23f2` FOREIGN KEY (`asociacionesId`) REFERENCES `asociaciones` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_b6c301eb3762c5db2dfe2a99b3b` FOREIGN KEY (`eventosId`) REFERENCES `eventos` (`id`)
+  CONSTRAINT `FK_2d98c370db0c0c208649c8a23f2` FOREIGN KEY (`asociacionesId`) REFERENCES `asociaciones` (`id`),
+  CONSTRAINT `FK_b6c301eb3762c5db2dfe2a99b3b` FOREIGN KEY (`eventosId`) REFERENCES `eventos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -114,7 +114,7 @@ CREATE TABLE `asociaciones` (
   PRIMARY KEY (`id`),
   KEY `FK_3327e56508e489e851e150568ef` (`lugarId`),
   CONSTRAINT `FK_3327e56508e489e851e150568ef` FOREIGN KEY (`lugarId`) REFERENCES `lugares` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -123,6 +123,7 @@ CREATE TABLE `asociaciones` (
 
 LOCK TABLES `asociaciones` WRITE;
 /*!40000 ALTER TABLE `asociaciones` DISABLE KEYS */;
+INSERT INTO `asociaciones` VALUES (1,'Cantigas da Terra','{\"lat\": 43.3685, \"lng\": -8.4062}','asociacion','groups','Coro histórico fundado en 1916 en A Coruña, declarado Ben de Interese Cultural.',1),(2,'Sondaqui','{\"lat\": 43.3551, \"lng\": -8.4120}','asociacion','groups','Reconocido colectivo y grupo de música tradicional de la zona herculina.',1),(3,'AC Donaire','{\"lat\": 43.3578, \"lng\": -8.4132}','asociacion','groups','Asociación Cultural Donaire, referentes modernos en investigación y ejecución de baile y música tradicional.',1),(4,'Xacarandaina','{\"lat\": 43.3590, \"lng\": -8.4180}','asociacion','groups','Una de las mayores instituciones culturales de Galicia dedicada al folklore desde A Coruña.',1),(5,'Cantigas e Agarimos','{\"lat\": 42.8780, \"lng\": -8.5440}','asociacion','groups','Fundada en Santiago en 1921. Cuartetos, coros y un cuerpo de baile legendario.',2),(6,'Santiaguiños de Boimorto','{\"lat\": 43.0075, \"lng\": -8.1265}','asociacion','groups','Agrupación folclórica mítica del interior que mantiene vivas las piezas de rueda tradicionales.',3),(7,'O Fiadeiro','{\"lat\": 42.2350, \"lng\": -8.7250}','asociacion','groups','Asociación Cultural de Vigo, famosísima por su rigor en el rescate de vestimenta antigua y pandereteras.',15),(8,'Cántigas do Avia','{\"lat\": 42.2870, \"lng\": -8.1430}','asociacion','groups','Agrupación folclórica mítica centrada en la tradición musical de las tierras de Ourense.',12);
 /*!40000 ALTER TABLE `asociaciones` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -208,7 +209,6 @@ CREATE TABLE `bailes` (
 
 LOCK TABLES `bailes` WRITE;
 /*!40000 ALTER TABLE `bailes` DISABLE KEYS */;
-INSERT INTO `bailes` VALUES (1,'Golpellas',NULL,'Muiñeira Nova',NULL,NULL,2);
 /*!40000 ALTER TABLE `bailes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -314,9 +314,10 @@ CREATE TABLE `eventos` (
   `publicado` tinyint NOT NULL DEFAULT '0',
   `lugarId` int NOT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `IDX_5ebb57c49e7444a6c6fe912a83` (`nome`),
   KEY `FK_fe781db320254e72c01c939d0e0` (`lugarId`),
   CONSTRAINT `FK_fe781db320254e72c01c939d0e0` FOREIGN KEY (`lugarId`) REFERENCES `lugares` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -376,7 +377,7 @@ CREATE TABLE `lugares` (
   PRIMARY KEY (`id`),
   KEY `FK_8870a592b189c1e9ff216238c9b` (`provinciaId`),
   CONSTRAINT `FK_8870a592b189c1e9ff216238c9b` FOREIGN KEY (`provinciaId`) REFERENCES `provincias` (`id`) ON DELETE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -385,7 +386,7 @@ CREATE TABLE `lugares` (
 
 LOCK TABLES `lugares` WRITE;
 /*!40000 ALTER TABLE `lugares` DISABLE KEYS */;
-INSERT INTO `lugares` VALUES (2,'A Coruña','{\"lat\":43.35779531515394,\"lng\":-8.413218067813007}','lugar','castle','','[]','[]','[]',1),(3,'Lugo','{\"lat\":43.007151905994085,\"lng\":-7.556564659335151}','lugar','castle','','[]','[]','[]',1),(5,'Arzua','{\"lat\":42.755,\"lng\":-7.863}','lugar','castle','','[{\"id\":1,\"nome\":\"Golpellas\",\"descripcion\":null,\"compas\":\"Muiñeira Nova\",\"image\":null,\"video\":null}]','[]','[]',1);
+INSERT INTO `lugares` VALUES (1,'A Coruña','{\"lat\": 43.3623, \"lng\": -8.4115}','lugar','castle','Ciudad herculina, hogar de la Torre de Hércules y una enorme tradición coral.','[]','[]','[]',1),(2,'Santiago de Compostela','{\"lat\": 42.8782, \"lng\": -8.5448}','lugar','castle','Capital cultural e histórica, meta del Camino de Santiago.','[]','[]','[]',1),(3,'Boimorto','{\"lat\": 43.0076, \"lng\": -8.1269}','lugar','castle','Municipio del interior coruñés con un arraigo brutal a la música tradicional.','[]','[]','[]',1),(4,'Betanzos','{\"lat\": 43.2809, \"lng\": -8.2113}','lugar','castle','Betanzos de los Caballeros, una de las siete capitales del antiguo Reino de Galicia.','[]','[]','[]',1),(5,'Ferrol','{\"lat\": 43.4834, \"lng\": -8.2253}','lugar','castle','Ciudad naval e ilustrada del norte gallego.','[]','[]','[]',1),(6,'Muros','{\"lat\": 42.7745, \"lng\": -9.0576}','lugar','castle','Villa marinera tradicional con un casco antiguo espectacular.','[]','[]','[]',1),(7,'Lugo','{\"lat\": 43.0123, \"lng\": -7.5550}','lugar','castle','La ciudad de la muralla romana bimilenaria intacta.','[]','[]','[]',2),(8,'Ribadeo','{\"lat\": 43.5358, \"lng\": -7.0398}','lugar','castle','Villa costera de la Mariña Lucense orientada al Cantábrico.','[]','[]','[]',2),(9,'Monforte de Lemos','{\"lat\": 42.5218, \"lng\": -7.5142}','lugar','castle','Centro neurálgico e histórico de la Ribeira Sacra lucense.','[]','[]','[]',2),(10,'Viveiro','{\"lat\": 43.6617, \"lng\": -7.5954}','lugar','castle','Villa señorial con un patrimonio medieval espectacular.','[]','[]','[]',2),(11,'Ourense','{\"lat\": 42.3358, \"lng\": -7.8639}','lugar','castle','La ciudad de Las Burgas y los puentes sobre el río Miño.','[]','[]','[]',4),(12,'Ribadavia','{\"lat\": 42.2872, \"lng\": -8.1436}','lugar','castle','Sede histórica del Ribeiro, con su judería y castillo medieval.','[]','[]','[]',4),(13,'Allariz','{\"lat\": 42.1901, \"lng\": -7.8016}','lugar','castle','Villa modélica restaurada a orillas del río Arnoia.','[]','[]','[]',4),(14,'Xinzo de Limia','{\"lat\": 42.0634, \"lng\": -7.7244}','lugar','castle','Famoso por su Entroido tradicional y el sonido de las pantallas.','[]','[]','[]',4),(15,'Vigo','{\"lat\": 42.2406, \"lng\": -8.7207}','lugar','castle','Gran motor industrial de las Rías Baixas y cuna de grandísimos baluartes folclóricos.','[]','[]','[]',6),(16,'Pontevedra','{\"lat\": 42.4310, \"lng\": -8.6444}','lugar','castle','Ciudad del Lérez, famosa por su histórico y hermoso casco viejo peatonal.','[]','[]','[]',6),(17,'Cambados','{\"lat\": 42.5165, \"lng\": -8.8147}','lugar','castle','Villa solariega del Salnés, capital indiscutible del Albariño.','[]','[]','[]',6),(18,'Lalín','{\"lat\": 42.6614, \"lng\": -8.1123}','lugar','castle','Kilómetro cero de Galicia, tierra de gran tradición musical.','[]','[]','[]',6);
 /*!40000 ALTER TABLE `lugares` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -457,7 +458,7 @@ CREATE TABLE `movimientos` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -466,6 +467,7 @@ CREATE TABLE `movimientos` (
 
 LOCK TABLES `movimientos` WRITE;
 /*!40000 ALTER TABLE `movimientos` DISABLE KEYS */;
+INSERT INTO `movimientos` VALUES (1,'Picado valseado'),(2,'Picado cruzado por detrás'),(3,'Picado cruzado por diante'),(4,'Hop'),(5,'Diante'),(6,'Detrás'),(7,'Diante detrás desprazado'),(8,'Punta-tacón'),(9,'Punta'),(10,'Tacón'),(11,'Diante-atrás'),(12,'Atrás-diante'),(13,'Aire por diante'),(14,'Aire por detrás'),(15,'Paso'),(16,'Punta adiante'),(17,'Punta atrás');
 /*!40000 ALTER TABLE `movimientos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -561,11 +563,11 @@ DROP TABLE IF EXISTS `solicitudes_eventos`;
 CREATE TABLE `solicitudes_eventos` (
   `id` int NOT NULL AUTO_INCREMENT,
   `estado` enum('PENDIENTE','APROBADA','RECHAZADA') NOT NULL DEFAULT 'PENDIENTE',
-  `eventoId` int NOT NULL,
+  `eventoId` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `REL_77dfe9c0eebe3ddd13bff3a122` (`eventoId`),
   CONSTRAINT `FK_77dfe9c0eebe3ddd13bff3a1221` FOREIGN KEY (`eventoId`) REFERENCES `eventos` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -591,7 +593,7 @@ CREATE TABLE `usuarios` (
   `rol` enum('USER','ADMIN','SUPERUSER') NOT NULL DEFAULT 'USER',
   PRIMARY KEY (`id`),
   UNIQUE KEY `IDX_8699a5bc72f5c2ca7c46b420e8` (`nombre`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -613,4 +615,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-04-23  7:24:38
+-- Dump completed on 2026-06-01  7:00:32

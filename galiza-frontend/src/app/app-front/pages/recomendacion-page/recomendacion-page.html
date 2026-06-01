@@ -9,7 +9,6 @@
   <section class="search-section">
     <div class="search-header">
       <h2 class="section-subtitle">Explorar Archivo</h2>
-      <a href="#" class="view-all">Ver catálogo completo</a>
     </div>
 
     <div class="input-container">
@@ -33,13 +32,13 @@
       <p>No se encontraron recomendaciones en el archivo.</p>
     </div>
 
-    <div class="rec-card" *ngFor="let rec of recomendacionesFiltradas">
-      <div class="img-wrapper">
+    <div class="rec-card" *ngFor="let rec of recomendacionesFiltradas" (click)="abrirDetalle(rec)" style="cursor: pointer;">
+      <!-- <div class="img-wrapper">
         <img *ngIf="rec.imagenUrl" [src]="rec.imagenUrl" [alt]="rec.titulo">
         <div *ngIf="!rec.imagenUrl" class="img-placeholder">
           <span class="material-icons">auto_stories</span>
         </div>
-      </div>
+      </div> -->
 
       <div class="info-wrapper">
         <div class="rec-header">
@@ -57,7 +56,7 @@
         </div>
       </div>
 
-      <a *ngIf="rec.enlaceExterno" [href]="rec.enlaceExterno" target="_blank" class="external-link" title="Ver recurso">
+      <a *ngIf="rec.enlaceExterno" [href]="rec.enlaceExterno" target="_blank" class="external-link" title="Ver recurso" (click)="$event.stopPropagation()">
         <span class="material-icons">open_in_new</span>
       </a>
     </div>
@@ -68,6 +67,12 @@
     <p class="cta-text">
       Nuestra colección no solo busca entretener, sino preservar el hilo conductor de la humanidad a través de sus sonidos y sus letras.
     </p>
-    <button class="btn-primary">Acceder a la Hemeroteca</button>
   </section>
+
+  <app-detalles-general
+    [isOpen]="modalAbierto"
+    [item]="itemSeleccionado"
+    (close)="cerrarDetalle()">
+  </app-detalles-general>
+
 </div>

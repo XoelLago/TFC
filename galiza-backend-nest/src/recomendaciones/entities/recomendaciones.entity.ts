@@ -8,22 +8,22 @@ export class Recomendacion {
   id!: number; // PK
 
   @Column({ nullable: false })
-  titulo!: string; // Obligatorio (ej: "A gaita galega")
+  titulo!: string;
 
   @Column({ nullable: false })
-  autor!: string; // Obligatorio (ej: "Xosé Lois Foxo")
+  autor!: string;
 
   @Column({
     type: 'enum',
     enum: TipoRecomendacion,
     default: TipoRecomendacion.LIBRO
   })
-  tipo!: TipoRecomendacion; // Obligatorio vía Enum
+  tipo!: TipoRecomendacion;
 
   @Column({ nullable: true })
-  enlaceExterno?: string; // Opcional (URL a Amazon, PDF o Web)
+  enlaceExterno?: string;
 
-  // Opcional: Podrías añadir una descripción corta si quieres
+
   @Column('text', { nullable: true })
   resumo?: string;
 }
