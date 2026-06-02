@@ -6,7 +6,7 @@ import { MapaService } from '../../service/mapa.service';
 import { ActionToastComponent } from "../../components/action-toast/action-toast";
 import { FrontUserService } from '../../service/front-user.service';
 import { Router } from '@angular/router';
-import { SpeedDialModule, SpeedDial } from 'primeng/speeddial';
+import { SpeedDialModule } from 'primeng/speeddial';
 import { MenuItem } from 'primeng/api';
 import { Usuario } from '../../models/usuario.model';
 import { Rol } from '../../models/rol.model';
@@ -14,12 +14,14 @@ import { FormLugar } from "../../components/form-lugar/form-lugar";
 import { FormAsociacion } from "../../components/form-asociacion/form-asociacion";
 import L from 'leaflet';
 import { DetallesGeneral } from '../../components/detalles-general/detalles-general';
-
+import { FormBaile } from "../../components/form-baile/form-baile";
+import { FormCancion } from "../../components/form-cancion/form-cancion";
+import { FormPunto } from "../../components/form-puntos/form-puntos";
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, ActionToastComponent, SpeedDialModule, SpeedDial, FormLugar, FormAsociacion,DetallesGeneral],
+  imports: [CommonModule, FormsModule, ActionToastComponent, SpeedDialModule, FormLugar, FormAsociacion, DetallesGeneral, FormBaile, FormCancion, FormPunto],
   templateUrl: './home-page.html',
   styleUrls: ['./home-page.css']
 })
@@ -47,15 +49,15 @@ export class HomePage implements AfterViewInit, OnInit {
   public mostrarFormAsociacion: boolean = false;
   public mostrarFormEvento: boolean = false;
   public mostrarFormLugar: boolean = false;
-
+  public mostrarFormBaile: boolean = false;
+  public mostrarFormCancion: boolean = false;
+  public mostrarFormPuntos: boolean = false;
 
   public places: DatosMapa[] = [];
   private lastMarker: L.Marker | null = null;
 
-
-public modalDetalleAberto: boolean = false;
+  public modalDetalleAberto: boolean = false;
   public itemDetalleSeleccionado: any = null;
-
 
   public nuevoMarcador: CreateMarcadorForm = {
     nome: '',
@@ -72,9 +74,11 @@ public modalDetalleAberto: boolean = false;
     rol: (localStorage.getItem('user_rol') as Rol),
   };
 
-
-  public adminMenuItems: MenuItem[] = [];
-
+  // Variables para el control de los menús SpeedDial flotantes
+  public mostrarMenuCultura: boolean = false;
+  public menuPrincipal: MenuItem[] = [];
+  public menuCultura: MenuItem[] = [];
+public menuPrincipalVisible: boolean = false;
 
 
   constructor(
@@ -85,34 +89,59 @@ public modalDetalleAberto: boolean = false;
     private frontUserService: FrontUserService
   ) {
 
-    this.adminMenuItems = [
+    // Configuración del Menú Principal
+    this.menuPrincipal = [
       {
         icon: 'pi pi-star',
         tooltipOptions: { tooltipLabel: 'Marcador Personalizado', tooltipPosition: 'left' },
         command: () => this.abrirFormulario()
       },
       {
-        icon: 'pi pi-star',
+        icon: 'pi pi-map-marker',
         tooltipOptions: { tooltipLabel: 'Novo Lugar', tooltipPosition: 'left' },
         command: () => this.mostrarFormLugar = true
       },
-
       {
-        icon: 'pi pi-star',
+        icon: 'pi pi-users',
         tooltipOptions: { tooltipLabel: 'Nova Asociación', tooltipPosition: 'left' },
         command: () => this.mostrarFormAsociacion = true
+      },
+      {
+        icon: 'pi pi-folder-open',
+        tooltipOptions: { tooltipLabel: 'Cultura', tooltipPosition: 'left' },
+        command: () => this.mostrarMenuCultura = true
+      }
+    ];
+
+    // Configuración del Menú Cultura (Secundario)
+    this.menuCultura = [
+      {
+        icon: 'pi pi-arrow-left',
+        tooltipOptions: { tooltipLabel: 'Volver', tooltipPosition: 'left' },
+        command: () => {this.mostrarMenuCultura = false;this.menuPrincipalVisible = true;}
+      },
+      {
+        icon: 'pi pi-user',
+        tooltipOptions: { tooltipLabel: 'Novo Baile', tooltipPosition: 'left' },
+        command: () => { this.mostrarFormBaile = true; this.mostrarMenuCultura = false; }
+      },
+      {
+        icon: 'pi pi-volume-up',
+        tooltipOptions: { tooltipLabel: 'Nova Canción', tooltipPosition: 'left' },
+        command: () => { this.mostrarFormCancion = true; this.mostrarMenuCultura = false; }
+      },
+      {
+        icon: 'pi pi-star',
+        tooltipOptions: { tooltipLabel: 'Novo Punto', tooltipPosition: 'left' },
+        command: () => { this.mostrarFormPuntos = true; this.mostrarMenuCultura = false; }
       }
     ];
 
   }
 
-
-
   ngOnInit(): void {
     this.cdr.detectChanges();
   }
-
-
 
   ngAfterViewInit() {
     setTimeout(() => {
@@ -121,11 +150,7 @@ public modalDetalleAberto: boolean = false;
     }, 100);
 
     this.cdr.detectChanges();
-
   }
-
-
-
 
   get rolUsuario(): string {
     const userJson = localStorage.getItem('user');
@@ -145,8 +170,6 @@ public modalDetalleAberto: boolean = false;
     };
   }
 
-
-
   private initMap(): void {
     this.map = L.map('map', {
       center: this.centroGalicia,
@@ -157,22 +180,19 @@ public modalDetalleAberto: boolean = false;
       maxBoundsViscosity: 1.0
     });
 
-    // CAPA FONDO: El Mar (ArcGIS Ocean) - Restaurado
     L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Esri',
       zIndex: 1
     }).addTo(this.map);
 
-    // CAPA TERREO: Satélite PNOA (Con transparencia para que se vea el mar debajo)
     L.tileLayer.wms('https://www.ign.es/wms-inspire/pnoa-ma', {
       layers: 'OI.OrthoimageCoverage',
       format: 'image/png',
-      transparent: true, // Importante para ver el mar de fondo
+      transparent: true,
       version: '1.3.0',
       zIndex: 2
     }).addTo(this.map);
 
-    // CAPA HISTÓRICA: Minutas
     this.oldMapLayer = L.tileLayer.wms('https://www.ign.es/wms/minutas-cartograficas', {
       layers: 'Minutas',
       format: 'image/png',
@@ -182,7 +202,6 @@ public modalDetalleAberto: boolean = false;
       zIndex: 5
     }).addTo(this.map);
 
-    // CAPA ETIQUETAS: Nombres con "Halo" para que se lean sobre cualquier fondo
     L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; CartoDB',
       zIndex: 10
@@ -191,13 +210,12 @@ public modalDetalleAberto: boolean = false;
     this.map.on('zoomend', () => this.updateMarkersSize());
 
     const mapDiv = document.getElementById('map');
-    if (mapDiv) mapDiv.style.backgroundColor = '#abd3df'; // Color de seguridad
+    if (mapDiv) mapDiv.style.backgroundColor = '#abd3df';
   }
 
   private cargarDatos() {
     this.mapaService.getTodoElMapa().subscribe({
       next: (data) => {
-
         this.places = data.filter((e: any) => {
           const esEvento = 'publicado' in e;
           if (esEvento) {
@@ -288,14 +306,13 @@ public modalDetalleAberto: boolean = false;
     const marker = this.markers.find(m => m.getLatLng().lat === place.coords.lat && m.getLatLng().lng === place.coords.lng);
     if (marker) this.seleccionarLugar(place, marker);
   }
+
   CrearMarcadorPersonalizado() {
     this.errorMsg = '';
     if (!this.nuevoMarcador.nome || this.nuevoMarcador.nome.trim().length === 0) {
       this.errorMsg = 'O nome do marcador é obrigatorio para poder gardalo.';
       return;
     }
-
-
 
     const body = {
       nome: this.frontUserService.capitalizarNombre(this.nuevoMarcador.nome),
@@ -305,22 +322,17 @@ public modalDetalleAberto: boolean = false;
       coords: this.nuevoMarcador.coords
     };
 
-
-
     if (this.idMarcadorEditando) {
       this.mapaService.actualizarMarcador(this.idMarcadorEditando, body).subscribe({
         next: (res) => {
           const index = this.places.findIndex(p => p.id === this.idMarcadorEditando);
-
           if (index !== -1) {
             this.places[index] = res;
           }
-
           this.finalizarAccion();
         }
       });
     } else {
-      // --- MODO CREAR ---
       this.mapaService.guardarMarcador(body).subscribe({
         next: (res) => {
           this.places.push(res);
@@ -332,12 +344,13 @@ public modalDetalleAberto: boolean = false;
       });
     }
   }
+
   private finalizarAccion() {
-    this.renderMarkers(); // Dibuja todo de cero (limpiando capas si usas LayerGroup)
+    this.renderMarkers();
     this.cerrarFormulario();
     this.idMarcadorEditando = null;
     this.textoBotonForm = 'Gardar';
-    this.selectedPlace = null; // Cerramos la card de info por si el ID cambió
+    this.selectedPlace = null;
     this.cdr.detectChanges();
   }
 
@@ -383,15 +396,12 @@ public modalDetalleAberto: boolean = false;
     this.cdr.detectChanges();
   }
 
-
   public idMarcadorEditando: number | string | null = null;
 
   abrirParaEditar(place: DatosMapa) {
-    // Guardamos el ID por si luego en tu guardarMarcador tienes que hacer un PUT/UPDATE en vez de POST
     this.idMarcadorEditando = place.id || null;
     this.textoBotonForm = 'Actualizar';
 
-    // Copiamos los datos del marcador seleccionado al modelo del formulario
     this.nuevoMarcador = {
       nome: place.nome,
       descripcion: place.descripcion || '',
@@ -406,10 +416,8 @@ public modalDetalleAberto: boolean = false;
     this.mostrarFormularioMarcadores = true;
     this.cdr.detectChanges();
 
-    // Iniciamos el minimapa centrado en las coordenadas de este marcador
     setTimeout(() => {
       this.initMiniMap();
-      // Movemos el mapa pequeño y el pin a la posición del marcador que estamos editando
       if (this.mapPick && this.pickMarker) {
         const latlng = L.latLng(place.coords.lat, place.coords.lng);
         this.pickMarker.setLatLng(latlng);
@@ -423,9 +431,8 @@ public modalDetalleAberto: boolean = false;
     mensaje: '',
     icon: 'priority_high',
     txtConfirmar: 'ELIMINAR',
-    accion: () => { } // Aquí guardaremos la función que queremos ejecutar
+    accion: () => { }
   };
-
 
   borrarMarcador(place: any) {
     this.toastConfig = {
@@ -434,7 +441,6 @@ public modalDetalleAberto: boolean = false;
       icon: 'delete_forever',
       txtConfirmar: 'SÍ, ELIMINAR',
       accion: () => {
-        // Esta es la lógica real de borrado que se ejecutará al confirmar
         this.mapaService.borrarMarcador(place.id).subscribe({
           next: () => {
             this.places = this.places.filter(p => p.id !== place.id);
@@ -449,9 +455,8 @@ public modalDetalleAberto: boolean = false;
     this.cdr.detectChanges();
   }
 
-  // Funciones de control del Toast
   ejecutarAccionToast() {
-    this.toastConfig.accion(); // Ejecuta lo que guardamos arriba
+    this.toastConfig.accion();
   }
 
   cerrarToast() {
@@ -460,18 +465,11 @@ public modalDetalleAberto: boolean = false;
   }
 
   public recargarMapa() {
-    // Cerramos todos los posibles formularios abiertos
     this.mostrarFormularioMarcadores = false;
     this.mostrarFormLugar = false;
-
-    // Llamamos a cargarDatos que ya tienes definido
-    // Este método hace el subscribe y luego llama a renderMarkers()
     this.cargarDatos();
-
-    // Forzamos la detección de cambios por si acaso
     this.cdr.detectChanges();
   }
-
 
   abrirDetallePopup(item: any) {
     this.itemDetalleSeleccionado = item;

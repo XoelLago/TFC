@@ -93,6 +93,7 @@ CREATE TABLE `asociacion_eventos` (
 
 LOCK TABLES `asociacion_eventos` WRITE;
 /*!40000 ALTER TABLE `asociacion_eventos` DISABLE KEYS */;
+INSERT INTO `asociacion_eventos` VALUES (2,7);
 /*!40000 ALTER TABLE `asociacion_eventos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -317,7 +318,7 @@ CREATE TABLE `eventos` (
   UNIQUE KEY `IDX_5ebb57c49e7444a6c6fe912a83` (`nome`),
   KEY `FK_fe781db320254e72c01c939d0e0` (`lugarId`),
   CONSTRAINT `FK_fe781db320254e72c01c939d0e0` FOREIGN KEY (`lugarId`) REFERENCES `lugares` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -326,6 +327,7 @@ CREATE TABLE `eventos` (
 
 LOCK TABLES `eventos` WRITE;
 /*!40000 ALTER TABLE `eventos` DISABLE KEYS */;
+INSERT INTO `eventos` VALUES (7,'pruebauser','2026-06-02 10:17:00','{\"lat\":42.755,\"lng\":-7.863}','Charla',10.00,'theater_comedy','asdfasda','asdfas',1,2);
 /*!40000 ALTER TABLE `eventos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -541,7 +543,7 @@ CREATE TABLE `recomendacions` (
   `enlaceExterno` varchar(255) DEFAULT NULL,
   `resumo` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -550,6 +552,7 @@ CREATE TABLE `recomendacions` (
 
 LOCK TABLES `recomendacions` WRITE;
 /*!40000 ALTER TABLE `recomendacions` DISABLE KEYS */;
+INSERT INTO `recomendacions` VALUES (1,'Terra','Dakidarría','CANCION','https://www.youtube.com/watch?v=ZngKOuwbDzs','Ska / Punk'),(2,'Linguas Mortas','Dakidarría','CANCION',NULL,'Ska / Punk'),(3,'Imos Durmir Ó Raso','Willowghz','CANCION',NULL,'Rap / Urbano'),(4,'Compliqueime','Willowghz','CANCION',NULL,'Rap / Urbano'),(5,'O Avión','The Rapants','CANCION',NULL,'Indie / Surf Rock'),(6,'La Tía','The Rapants','CANCION',NULL,'Indie / Surf Rock'),(7,'Muiñeira de Costa','Terbutalina','CANCION',NULL,'Punk / Garage'),(8,'Benvida ao desastre','Terbutalina','CANCION',NULL,'Punk / Garage'),(9,'Fisterra','Pelepau','CANCION',NULL,'Percusión / Tradicional'),(10,'O Jato','Pelepau','CANCION',NULL,'Percusión / Tradicional'),(11,'Pigarzos','Untovello','CANCION',NULL,'Tradicional / Recollida'),(12,'Seixedos','Untovello','CANCION',NULL,'Tradicional / Recollida'),(13,'Tempestades de Sal','SÉS','CANCION',NULL,'Rock / Cantautora'),(14,'Milagreira','SÉS','CANCION',NULL,'Rock / Cantautora'),(15,'O Mandil','Xabier Díaz','CANCION',NULL,'Folk / Tradicional'),(16,'Muiñeira de Tareixa','Xabier Díaz','CANCION',NULL,'Folk / Tradicional'),(17,'Morriña','Baiuca','CANCION',NULL,'Folktrónica'),(18,'Veleno','Baiuca','CANCION',NULL,'Folktrónica'),(19,'Ruando','Mondra','CANCION',NULL,'Foliada Pop / Electrónica'),(20,'Punheta!','Mondra','CANCION',NULL,'Foliada Pop / Electrónica'),(21,'Morena','De Ninghures','CANCION',NULL,'Folk Contemporáneo'),(22,'O Fillo do Mar','De Ninghures','CANCION',NULL,'Folk Contemporáneo'),(23,'Liñares','Alana','CANCION',NULL,'Pop Tradicional / Electrónica'),(24,'Consulo de Muiñeira','Alana','CANCION',NULL,'Pop Tradicional / Electrónica'),(25,'Bailegramas','Serxio Cobos','LIBRO',NULL,'Sistema de notación coreográfica e análise do baile tradicional galego.'),(26,'Do palco ao escenario','Xenaro Suárez','LIBRO',NULL,'Análise sobre la evolución do baile tradicional cara o espectáculo coreográfico.'),(27,'Dakidarría','Banda','ARTISTA',NULL,'Banda mítica galega de Ska, Punk e Reggae.'),(28,'Willowghz','Artista','ARTISTA',NULL,'Referente do Rap e a música urbana en galego.'),(29,'The Rapants','Banda','ARTISTA',NULL,'Indie e Surf Rock cheo de enerxía e bo rollo dende Muros.'),(30,'Terbutalina','Banda','ARTISTA',NULL,'Punk e Garage acelerado e irreverente.'),(31,'Pelepau','Colectivo','ARTISTA',NULL,'Grupo de percusionistas que levan a tradición ao límite.'),(32,'Untovello','Dúo','ARTISTA',NULL,'Traballo puro de recollida e música tradicional para o baile.'),(33,'SÉS','Cantautora','ARTISTA',NULL,'Rock, Blues e canción de autora con moitísima forza.'),(34,'Xabier Díaz','Músico','ARTISTA',NULL,'Mestre da percusión e renovador da música tradicional.'),(35,'Baiuca','Produtor','ARTISTA',NULL,'Pioneiro na mestura de folclore galego e electrónica (Folktrónica).'),(36,'Mondra','Artista','ARTISTA',NULL,'Revolución da foliada pop, mesturando electrónica, tradición e baile.'),(37,'De Ninghures','Banda','ARTISTA',NULL,'Savia nova do Folk contemporáneo e de raíz atlántica.'),(38,'Alana','Trío','ARTISTA',NULL,'Fusión de cantos tradicionais, pop e produción electrónica.');
 /*!40000 ALTER TABLE `recomendacions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -567,7 +570,7 @@ CREATE TABLE `solicitudes_eventos` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `REL_77dfe9c0eebe3ddd13bff3a122` (`eventoId`),
   CONSTRAINT `FK_77dfe9c0eebe3ddd13bff3a1221` FOREIGN KEY (`eventoId`) REFERENCES `eventos` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -576,6 +579,7 @@ CREATE TABLE `solicitudes_eventos` (
 
 LOCK TABLES `solicitudes_eventos` WRITE;
 /*!40000 ALTER TABLE `solicitudes_eventos` DISABLE KEYS */;
+INSERT INTO `solicitudes_eventos` VALUES (3,'APROBADA',7);
 /*!40000 ALTER TABLE `solicitudes_eventos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -615,4 +619,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-06-01  7:00:32
+-- Dump completed on 2026-06-02  6:55:14

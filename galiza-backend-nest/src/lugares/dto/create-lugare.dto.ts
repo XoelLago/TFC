@@ -2,7 +2,7 @@ import { IsString, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 
 export class CreateLugarDto {
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty( {message: 'O nome é obrigatorio' })
   nome!: string;
 
   @IsNumber()

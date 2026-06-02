@@ -2,18 +2,29 @@ import { IsString, IsNotEmpty, IsOptional, IsArray, IsNumber } from 'class-valid
 
 export class CreateCancionDto {
   @IsString()
-  @IsNotEmpty()
-  titulo!: string;
+  @IsNotEmpty( {message: 'O nome é obrigatorio' })
+  nome!: string; 
 
   @IsString()
   @IsOptional()
   letra?: string;
 
+  @IsString()
+  @IsOptional()
+  audioUrl?: string;
+
+
   @IsNumber()
-  @IsNotEmpty()
-  lugarId!: number; // Orixe da canción
+  @IsNotEmpty( {message: 'O lugar é obrigatorio' })
+  lugarId!: number; 
 
   @IsArray()
   @IsOptional()
-  instrumentosIds?: number[]; // IDs dos instrumentos que se usan
+  @IsNumber({}, { each: true })
+  instrumentosIds?: number[];
+
+  @IsArray()
+  @IsOptional()
+  @IsNumber({}, { each: true })
+  asociacionesIds?: number[];
 }

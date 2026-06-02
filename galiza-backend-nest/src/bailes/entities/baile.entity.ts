@@ -12,7 +12,7 @@ export class Baile {
   id!: number;
 
   @Column({ nullable: false, unique: true })
-  nome!: string; // Ej: 'Muiñeira', 'Xota'
+  nome!: string; 
 
   @Column('text', { nullable: true })
   descripcion?: string = 'Baile tradicional gallego'; // Opcional

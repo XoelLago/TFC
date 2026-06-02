@@ -1,0 +1,87 @@
+<div class="overlay-container active">
+  <div class="form-card">
+
+    <div class="form-header">
+      <h2><span class="material-icons">my_location</span> Novo Punto</h2>
+      <button class="btn-close" (click)="cancelar.emit()">×</button>
+    </div>
+
+    <div class="form-body">
+
+      <div class="input-group">
+        <label>Descrición *</label>
+        <textarea
+          (input)="errorMsg = ''"
+          [(ngModel)]="nuevoPunto.descripcion"
+          placeholder="Escribe a descrición do punto..."
+          rows="3">
+        </textarea>
+      </div>
+
+      <div class="input-group">
+        <label>Tipo de Punto</label>
+        <div class="combo-wrapper">
+          <select [(ngModel)]="nuevoPunto.tipo" class="custom-select">
+            <option *ngFor="let t of tiposPunto" [value]="t">{{ t }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label>URL do Vídeo</label>
+        <input
+          type="url"
+          [(ngModel)]="nuevoPunto.videoUrl"
+          placeholder="https://youtube.com/..."
+          class="input-group input">
+      </div>
+
+      <div class="input-group">
+        <label>Lugar Asociado *</label>
+        <div class="combo-wrapper">
+          <select [(ngModel)]="nuevoPunto.lugarId" class="custom-select" (change)="errorMsg = ''">
+            <option [ngValue]="null">-- Selecciona un Lugar --</option>
+            <option *ngFor="let lugar of listaLugares" [value]="lugar.id">
+              {{ lugar.nome }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label>Bailes (Opcional)</label>
+        <select multiple [(ngModel)]="nuevoPunto.bailesIds" class="custom-select" style="min-height: 100px;">
+          <option *ngFor="let baile of listaBailes" [value]="baile.id">
+            {{ baile.nome }}
+          </option>
+        </select>
+        <small style="color:#888; font-size: 0.8rem; margin-top: 5px;">Mantén pulsado Ctrl (ou Cmd) para seleccionar varios</small>
+      </div>
+
+      <div class="input-group">
+        <label>Movementos (Opcional)</label>
+        <select multiple [(ngModel)]="nuevoPunto.movimientosIds" class="custom-select" style="min-height: 100px;">
+          <option *ngFor="let mov of listaMovimientos" [value]="mov.id">
+            {{ mov.nome }}
+          </option>
+        </select>
+        <small style="color:#888; font-size: 0.8rem; margin-top: 5px;">Mantén pulsado Ctrl (ou Cmd) para seleccionar varios</small>
+      </div>
+
+      @if (errorMsg) {
+        <label style="color: #93331d; margin-top: 10px; display: block; font-weight: bold;">
+          {{ errorMsg }}
+        </label>
+      }
+
+    </div>
+
+    <div class="form-footer">
+      <button class="btn-cancel" (click)="cancelar.emit()">Cancelar</button>
+      <button class="btn-save" (click)="guardarPunto()">
+        <span class="material-icons">save</span> {{ textoBotonForm }}
+      </button>
+    </div>
+
+  </div>
+</div>

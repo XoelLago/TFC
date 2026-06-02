@@ -10,7 +10,7 @@ export class Lugar {
   @PrimaryGeneratedColumn()
   id!: number; // PK
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, unique: true  })
   nome!: string; // Obligatorio
 
   // Coordenadas (Igual que en asociación, pero obligatorias según lo hablado)

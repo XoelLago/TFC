@@ -1,10 +1,7 @@
 <div class="home-container">
   <header class="header">
     <h1 class="main-title">Mapa de Galiza</h1>
-
   </header>
-
-
 
   <div class="home-map-container">
     <div class="map-wrapper">
@@ -31,7 +28,6 @@
       </div>
     </div>
 
-
     <div class="map-legend">
       <div class="legend-item">
         <div class="dot marker-lugar"></div><span class="material-icons sm">castle</span><span>Lugar</span>
@@ -42,9 +38,8 @@
       <div class="legend-item">
         <div class="dot marker-evento"></div><span class="material-icons sm">theater_comedy</span><span>Evento</span>
       </div>
-
-
     </div>
+
     @if(selectedPlace){
     <div class="place-card">
       <div class="card-header">
@@ -92,27 +87,46 @@
 
   </div>
 
+  <div class="contenedor-boton-final">
+    @if (rolUsuario === 'ADMIN' || rolUsuario === 'SUPERUSER') {
 
-<div class="contenedor-boton-final" >
-  @if (rolUsuario === 'ADMIN' || rolUsuario === 'SUPERUSER') {
-    <p-speeddial
-  [model]="adminMenuItems"
-  type="quarter-circle"
-  direction="up-left"
-  [radius]="100"
-  showIcon="pi pi-plus"
-  hideIcon="pi pi-times"
-  buttonClassName="p-button-rounded custom-main-btn"
-  tooltipPosition="left"
-  [style]="{ position: 'fixed', right: '25px', bottom: '110px' }">
-</p-speeddial>
-  } @else {
-    <div class="boton-flotante" (click)="abrirFormulario()">
-      <span class="material-icons">add</span>
-    </div>
-  }
+      @if (!mostrarMenuCultura) {
+        <p-speeddial
+          [(visible)]="menuPrincipalVisible"
+          [model]="menuPrincipal"
+          type="quarter-circle"
+          direction="up-left"
+          [radius]="100"
+          showIcon="pi pi-plus"
+          hideIcon="pi pi-times"
+          buttonClassName="p-button-rounded custom-main-btn"
+          tooltipPosition="left"
+          [style]="{ position: 'fixed', right: '25px', bottom: '110px' }">
+        </p-speeddial>
+      }
 
-</div>
+      @if (mostrarMenuCultura) {
+        <p-speeddial
+          [visible]="true"
+          (onHide)="mostrarMenuCultura = false"
+          [model]="menuCultura"
+          type="quarter-circle"
+          direction="up-left"
+          [radius]="100"
+          showIcon="pi pi-folder-open"
+          hideIcon="pi pi-times"
+          buttonClassName="p-button-rounded custom-main-btn"
+          tooltipPosition="left"
+          [style]="{ position: 'fixed', right: '25px', bottom: '110px' }">
+        </p-speeddial>
+      }
+
+    } @else {
+      <div class="boton-flotante" (click)="abrirFormulario()">
+        <span class="material-icons">add</span>
+      </div>
+    }
+  </div>
 
   @if (mostrarFormularioMarcadores) {
   <div class="overlay-container" [class.active]="mostrarFormularioMarcadores" [hidden]="!mostrarFormularioMarcadores">
@@ -138,7 +152,7 @@
           <label class="input-group">Descripción:</label>
           <textarea class="textarea" [(ngModel)]="nuevoMarcador.descripcion" placeholder="Escribe aquí os detalles..."
             rows="3">
-  </textarea>
+          </textarea>
         </div>
 
         <div class="map-picker-container">
@@ -159,9 +173,7 @@
       </div>
 
       <div class="form-footer">
-
         <button class="btn-cancel" (click)="cerrarFormulario()">Cancelar</button>
-
         <button class="btn-save" (click)="CrearMarcadorPersonalizado()">
           <span class="material-icons">save</span> {{textoBotonForm}}
         </button>
@@ -169,23 +181,48 @@
     </div>
   </div>
   }
- @if (mostrarFormLugar) {
-  <app-form-lugar
-    [datos]="selectedPlace"
-    (cancelar)="mostrarFormLugar = false"
-    (guardado)="recargarMapa()">
-  </app-form-lugar>
-}
 
-@if (mostrarFormAsociacion) {
-  <app-form-asociacion
-    [datos]="selectedPlace"
-    (cancelar)="mostrarFormAsociacion = false"
-    (guardado)="recargarMapa()">
-  </app-form-asociacion>
-}
+  @if (mostrarFormLugar) {
+    <app-form-lugar
+      [datos]="selectedPlace"
+      (cancelar)="mostrarFormLugar = false"
+      (guardado)="recargarMapa()">
+    </app-form-lugar>
+  }
+
+  @if (mostrarFormAsociacion) {
+    <app-form-asociacion
+      [datos]="selectedPlace"
+      (cancelar)="mostrarFormAsociacion = false"
+      (guardado)="recargarMapa()">
+    </app-form-asociacion>
+  }
+
+  @if (mostrarFormBaile) {
+    <app-form-baile
+      [datos]="selectedPlace"
+      (cancelar)="mostrarFormBaile = false"
+      (guardado)="recargarMapa()">
+    </app-form-baile>
+  }
+
+  @if (mostrarFormCancion) {
+    <app-form-cancion
+      [datos]="selectedPlace"
+      (cancelar)="mostrarFormCancion = false"
+      (guardado)="recargarMapa()">
+    </app-form-cancion>
+  }
+  @if(mostrarFormPuntos){
+    <app-form-punto
+      [datos]="selectedPlace"
+      (cancelar)="mostrarFormPuntos = false"
+      (guardado)="recargarMapa()">
+    </app-form-punto>
+  }
 
 </div>
+
 <app-action-toast [visible]="toastConfig.visible" [mensaje]="toastConfig.mensaje" [icon]="toastConfig.icon"
   [txtConfirmar]="toastConfig.txtConfirmar" (confirmar)="ejecutarAccionToast()" (cancelar)="cerrarToast()">
 </app-action-toast>

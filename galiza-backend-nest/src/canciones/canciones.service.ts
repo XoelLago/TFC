@@ -11,9 +11,18 @@ export class CancionesService {
   ) {}
 
   async create(dto: any) {
-    const nueva = this.repository.create(dto);
-    return await this.repository.save(nueva);
-  }
+  // Extraemos el lugarId y los arrays de IDs
+  const { lugarId, instrumentosIds, asociacionesIds, ...datosCancion } = dto;
+
+  const nueva = this.repository.create({
+    ...datosCancion,
+    lugar: { id: lugarId }, 
+    instrumentos: instrumentosIds?.map((id: number) => ({ id })), 
+    asociaciones: asociacionesIds?.map((id: number) => ({ id })) 
+  });
+
+  return await this.repository.save(nueva);
+}
 
   async findAll() {
     return await this.repository.find({
@@ -31,6 +40,22 @@ export class CancionesService {
   }
 
   async remove(id: number) {
-    return await this.repository.delete(id);
-  }
+  // 1. Buscamos la canción con sus relaciones para ver si tiene datos
+  const cancion = await this.repository.findOne({
+    where: { id },
+    relations: ['asociaciones', 'instrumentos']
+  });
+
+  if (!cancion) return;
+
+  // 2. Limpiamos las relaciones manualmente
+  // Al dejar los arrays vacíos y guardar, TypeORM borra las filas en las tablas intermedias
+  cancion.asociaciones = [];
+  cancion.instrumentos = [];
+  
+  await this.repository.save(cancion);
+
+  // 3. Ahora que ya no tiene relaciones, podemos borrar la canción sin error
+  return await this.repository.delete(id);
+}
 }

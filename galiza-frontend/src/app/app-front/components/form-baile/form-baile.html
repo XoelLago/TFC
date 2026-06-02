@@ -1,0 +1,152 @@
+<div class="overlay-container">
+  <div class="form-card">
+
+    <!-- Cabecera de Ventana -->
+    <div class="form-header">
+      <h2>
+        <span class="material-icons">library_music</span>
+        {{ datos ? 'Editar Baile' : 'Engadir Novo Baile' }}
+      </h2>
+      <button type="button" class="btn-close" (click)="cancelar.emit()">×</button>
+    </div>
+
+    <!-- Cuerpo del Formulario con Desplazamiento Vertical -->
+    <div class="form-body">
+
+      <!-- Alerta de Errores del Servidor -->
+      <div *ngIf="errorMsg" class="alert alert-danger">
+        {{ errorMsg }}
+      </div>
+
+      <form #baileForm="ngForm">
+
+        <div class="advanced-section">
+
+          <!-- Nome do Baile -->
+          <div class="input-group">
+            <label for="nome">Nome do Baile *</label>
+            <input type="text" id="nome" name="nome" [(ngModel)]="baile.nome" required placeholder="Ex: Muiñeira de Chantada">
+          </div>
+
+          <!-- Selector de Compás Estilizado -->
+          <div class="input-group">
+            <label for="compas">Compás *</label>
+            <div class="combo-wrapper">
+              <span class="material-icons combo-icon">av_timer</span>
+              <select id="compas" name="compas" [(ngModel)]="baile.compas" class="custom-select">
+                <option *ngFor="let c of listaCompas" [value]="c">{{ c }}</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Autocompletado: Lugar de Orixe (Relación de selección única) -->
+          <div class="input-group relative-container">
+            <label>Lugar / Orixe de procedencia *</label>
+
+            <!-- Estado 1: Ya hay un lugar seleccionado -->
+            <div class="chips-container" *ngIf="baile.lugar" style="margin-bottom: 5px;">
+              <span class="chip chip-evento">
+                <span class="material-icons" style="font-size: 14px; margin-right: 4px;">place</span>
+                {{ baile.lugar.nome }}
+                <span class="chip-close" (click)="removerLugar()">×</span>
+              </span>
+            </div>
+
+            <!-- Estado 2: Caja de búsqueda si no hay selección -->
+            <div class="search-box-custom" *ngIf="!baile.lugar">
+              <input type="text" placeholder="Buscar e seleccionar lugar..."
+                     [(ngModel)]="textoBusquedaLugar" name="busquedaLugar"
+                     (input)="filtrarLugares($event)" (focus)="mostrarLugares = true" (blur)="ocultarLista('lugares')">
+            </div>
+
+            <!-- Lista desplegable -->
+            <ul class="custom-dropdown" *ngIf="mostrarLugares && !baile.lugar">
+              <li *ngFor="let lug of lugaresFiltrados" (mousedown)="seleccionarLugar(lug)">
+                {{ lug.nome }}
+              </li>
+              <li *ngIf="lugaresFiltrados.length === 0" class="empty-message">Non se atoparon lugares</li>
+            </ul>
+          </div>
+
+          <!-- Descrición -->
+          <div class="input-group">
+            <label for="descripcion">Descrición</label>
+            <textarea id="descripcion" name="descripcion" [(ngModel)]="baile.descripcion" rows="3" placeholder="Baile tradicional gallego"></textarea>
+          </div>
+
+          <!-- Autocompletado: Instrumentos Acompañantes (Relación Múltiple) -->
+          <div class="input-group relative-container">
+            <label>Instrumentos tradicionais acompañantes</label>
+            <div class="search-box-custom">
+              <input type="text" placeholder="Buscar e engadir instrumentos..."
+                     [(ngModel)]="textoBusquedaInstrumento" name="busquedaInstrumento"
+                     (input)="filtrarInstrumentos($event)" (focus)="mostrarInstrumentos = true" (blur)="ocultarLista('instrumentos')">
+            </div>
+
+            <ul class="custom-dropdown" *ngIf="mostrarInstrumentos">
+              <li *ngFor="let inst of instrumentosFiltrados" (mousedown)="seleccionarInstrumento(inst.nome)">
+                {{ inst.nome }}
+              </li>
+              <li *ngIf="instrumentosFiltrados.length === 0" class="empty-message">Non hai instrumentos dispoñibles</li>
+            </ul>
+
+            <!-- Sección de etiquetas (Chips) -->
+            <div class="chips-container" *ngIf="baile.instrumentos?.length > 0" style="margin-top: 8px;">
+              <span class="chip chip-baile" *ngFor="let inst of baile.instrumentos">
+                {{ inst.nome }}
+                <span class="chip-close" (click)="removerInstrumento(inst.nome)">×</span>
+              </span>
+            </div>
+          </div>
+
+          <!-- Autocompletado: Puntos do Baile (Relación Múltiple) -->
+          <div class="input-group relative-container">
+            <label>Puntos característicos do baile</label>
+            <div class="search-box-custom">
+              <input type="text" placeholder="Buscar e engadir puntos estruturais..."
+                     [(ngModel)]="textoBusquedaPunto" name="busquedaPunto"
+                     (input)="filtrarPuntos($event)" (focus)="mostrarPuntos = true" (blur)="ocultarLista('puntos')">
+            </div>
+
+            <ul class="custom-dropdown" *ngIf="mostrarPuntos">
+              <li *ngFor="let p of puntosFiltrados" (mousedown)="seleccionarPunto(p.nome)">
+                {{ p.nome }}
+              </li>
+              <li *ngIf="puntosFiltrados.length === 0" class="empty-message">Non se atoparon puntos</li>
+            </ul>
+
+            <!-- Sección de etiquetas (Chips) -->
+            <div class="chips-container" *ngIf="baile.puntos?.length > 0" style="margin-top: 8px;">
+              <span class="chip chip-cancion" *ngFor="let p of baile.puntos">
+                {{ p.nome }}
+                <span class="chip-close" (click)="removerPunto(p.nome)">×</span>
+              </span>
+            </div>
+          </div>
+
+          <!-- URLs Multimedia distribuidas en dos columnas -->
+          <div class="row-expand">
+            <div class="input-group">
+              <label for="image">URL da Imaxe</label>
+              <input type="text" id="image" name="image" [(ngModel)]="baile.image" placeholder="https://...">
+            </div>
+            <div class="input-group">
+              <label for="video">URL do Vídeo</label>
+              <input type="text" id="video" name="video" [(ngModel)]="baile.video" placeholder="https://...">
+            </div>
+          </div>
+
+        </div>
+      </form>
+    </div>
+
+    <!-- Botonera Inferior del Formulario -->
+    <div class="form-footer">
+      <button type="button" class="btn-cancel" (click)="cancelar.emit()">Cancelar</button>
+      <button type="submit" class="btn-save" (click)="guardar()">
+        <span class="material-icons">save</span> Gardar Baile
+      </button>
+    </div>
+
+  </div>
+</div>

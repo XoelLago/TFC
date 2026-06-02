@@ -10,7 +10,7 @@ class CoordsDto {
 // En el backend: create-marcador.dto.ts
 export class CreateMarcadorDto {
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty( {message: 'O nome é obrigatorio' })
   nome!: string;
 
   @IsString()

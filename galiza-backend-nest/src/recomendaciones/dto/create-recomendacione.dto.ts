@@ -3,11 +3,11 @@ import { TipoRecomendacion } from '../../common/enums';
 
 export class CreateRecomendacionDto {
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty( {message: 'O titulo é obrigatorio' })
   titulo!: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty( {message: 'O autor é obrigatorio' })
   autor!: string;
 
   @IsEnum(TipoRecomendacion)

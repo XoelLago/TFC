@@ -6,7 +6,7 @@ export class Movimiento {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, unique: true  })
   nombre!: string; // Obligatorio
 
   // RELACIÓN: Un movimiento tiene varios puntos

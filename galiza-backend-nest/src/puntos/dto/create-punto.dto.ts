@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsEnum, IsOptional, IsUrl, IsNumber, IsArray, IsInt } from 'class-validator';
+import { IsString, IsNotEmpty, IsEnum, IsOptional, IsUrl, IsArray, IsInt } from 'class-validator';
 import { TipoPunto } from '../../common/enums';
 
 export class CreatePuntoDto {
@@ -7,28 +7,24 @@ export class CreatePuntoDto {
   descripcion!: string;
 
   @IsEnum(TipoPunto)
-  tipo!: TipoPunto;
+  @IsOptional() // Puede ser opcional porque la entidad tiene un valor por defecto
+  tipo?: TipoPunto;
 
   @IsUrl()
   @IsOptional()
   videoUrl?: string;
 
-  @IsNumber()
-  lat!: number;
-
-  @IsNumber()
-  lng!: number;
-
   @IsInt()
+  @IsNotEmpty() // Es obligatorio por la relación ManyToOne
   lugarId!: number;
 
   @IsArray()
   @IsInt({ each: true })
   @IsOptional()
-  bailesIds?: number[]; // Relación con bailes
+  bailesIds?: number[]; 
 
   @IsArray()
   @IsInt({ each: true })
   @IsOptional()
-  movimientosIds?: number[]; // Relación con movimientos
+  movimientosIds?: number[];
 }

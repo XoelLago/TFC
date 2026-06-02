@@ -1,0 +1,157 @@
+<div class="overlay-container">
+  <div class="form-card">
+
+    <!-- CABECERA CALCADA -->
+    <div class="form-header">
+      <h2>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 18V5l12-2v13"></path>
+          <circle cx="6" cy="18" r="3"></circle>
+          <circle cx="18" cy="16" r="3"></circle>
+        </svg>
+        {{ datos?.id ? 'Editar Canción' : 'Nova Canción' }}
+      </h2>
+      <button type="button" class="btn-close" (click)="cancelar.emit()">&times;</button>
+    </div>
+
+    <!-- CUERPO CON SCROLL -->
+    <div class="form-body">
+
+      <!-- Mensaje de Error General -->
+      <div *ngIf="errorMsg"
+        style="color: #93331d; background: #fdf2f0; padding: 12px; border-radius: 10px; font-weight: 500; font-size: 0.9rem;">
+        {{ errorMsg }}
+      </div>
+
+      <form #cancionForm="ngForm" autocomplete="off" style="display: flex; flex-direction: column; gap: 15px;">
+
+        <!-- CAMPO: NOME -->
+        <div class="input-group">
+          <label for="nome">Nome da Canción *</label>
+          <input type="text" id="nome" name="nome" [(ngModel)]="cancion.nome" placeholder="Ex: A Carolina" required>
+        </div>
+
+        <!-- CAMPO: LETRA -->
+        <div class="input-group">
+          <label for="letra">Letra / Copla</label>
+          <textarea id="letra" name="letra" rows="3" [(ngModel)]="cancion.letra"
+            placeholder="Escribe aquí a letra ou as coplas populares da canción...">
+          </textarea>
+        </div>
+
+        <!-- CAMPO: AUDIO URL -->
+        <div class="input-group">
+          <label for="audioUrl">URL do Audio (MP3 / Spotify / Soundcloud)</label>
+          <input type="url" id="audioUrl" name="audioUrl" [(ngModel)]="cancion.audioUrl"
+            placeholder="https://example.com/audio.mp3">
+        </div>
+
+        <!-- CAMPO: LUGAR / ORIXE (Autocompletado Personalizado) -->
+        <div class="input-group relative-container">
+          <label>Lugar / Orixe de Procedencia *</label>
+
+          <!-- Chip de elemento ya seleccionado -->
+          <div *ngIf="cancion.lugar" class="chips-container" style="margin-bottom: 8px;">
+            <div class="chip chip-baile">
+              {{ cancion.lugar.nome }}
+              <span class="chip-close" (click)="removerLugar()">&times;</span>
+            </div>
+          </div>
+
+          <!-- Input buscador estilo custom -->
+          <div *ngIf="!cancion.lugar" class="search-box-custom">
+            <input type="text" placeholder="Buscar lugar..." [(ngModel)]="textoBusquedaLugar" name="textoBusquedaLugar"
+              (keyup)="filtrarLugares($event)" (focus)="mostrarLugares = true" (blur)="ocultarLista('lugares')">
+          </div>
+
+          <!-- Desplegable Pegado -->
+          <ul *ngIf="mostrarLugares" class="custom-dropdown">
+            <li *ngFor="let lug of lugaresFiltrados" (mousedown)="seleccionarLugar(lug)">
+              {{ lug.nome }}
+            </li>
+            <li *ngIf="lugaresFiltrados.length === 0" class="empty-message">
+              Non se atoparon lugares
+            </li>
+          </ul>
+        </div>
+
+        <!-- SECCIÓN DE CHIPS PARA RELACIONES MÚLTIPLES -->
+        <div class="chips-section">
+
+          <!-- CAMPO: INSTRUMENTOS -->
+          <div class="input-group relative-container">
+            <label>Instrumentos empregados</label>
+
+            <div class="chips-container" style="margin-bottom: 8px;" *ngIf="cancion.instrumentos?.length > 0">
+              <div *ngFor="let inst of cancion.instrumentos" class="chip chip-cancion">
+                {{ inst.nome }}
+                <span class="chip-close" (click)="removerInstrumento(inst.nome)">&times;</span>
+              </div>
+            </div>
+
+            <div class="search-box-custom">
+              <input type="text" placeholder="Engadir instrumento..." [(ngModel)]="textoBusquedaInstrumento"
+                name="textoBusquedaInstrumento" (keyup)="filtrarInstrumentos($event)"
+                (focus)="mostrarInstrumentos = true" (blur)="ocultarLista('instrumentos')">
+            </div>
+
+            <ul *ngIf="mostrarInstrumentos" class="custom-dropdown">
+              <li *ngFor="let inst of instrumentosFiltrados" (mousedown)="seleccionarInstrumento(inst.nome)">
+                {{ inst.nome }}
+              </li>
+              <li *ngIf="instrumentosFiltrados.length === 0" class="empty-message">
+                Non se atoparon instrumentos
+              </li>
+            </ul>
+          </div>
+
+          <!-- CAMPO: ASOCIACIONES -->
+          <div class="input-group relative-container" style="margin-top: 5px;">
+            <label>Asociacións que a compilan / interpretan</label>
+
+
+
+            <div class="search-box-custom">
+              <input type="text" placeholder="Engadir asociación..." [(ngModel)]="textoBusquedaAsociacion"
+                name="textoBusquedaAsociacion" (keyup)="filtrarAsociaciones($event)"
+                (focus)="mostrarAsociaciones = true" (blur)="ocultarLista('asociaciones')">
+            </div>
+
+
+            <div class="chips-container" style="margin-bottom: 8px;" *ngIf="cancion.asociaciones?.length > 0">
+              <div *ngFor="let asoc of cancion.asociaciones" class="chip chip-evento">
+                {{ asoc.nome }}
+                <span class="chip-close" (click)="removerAsociacion(asoc.nome)">&times;</span>
+              </div>
+            </div>
+
+
+
+            <ul *ngIf="mostrarAsociaciones" class="custom-dropdown">
+              <li *ngFor="let asoc of asociacionesFiltrados" (mousedown)="seleccionarAsociacion(asoc.nome)">
+                {{ asoc.nome }}
+              </li>
+              <li *ngIf="asociacionesFiltrados.length === 0" class="empty-message">
+                Non se atoparon asociacións
+              </li>
+            </ul>
+
+          </div>
+
+        </div>
+      </form>
+    </div>
+
+    <!-- PIE DEL FORMULARIO CALCADO -->
+    <div class="form-footer">
+      <button type="button" class="btn-cancel" (click)="cancelar.emit()">
+        Cancelar
+      </button>
+      <button type="button" class="btn-save" [disabled]="!cancionForm.form.valid" (click)="guardar()">
+        {{ datos?.id ? 'Actualizar' : 'Gardar' }}
+      </button>
+    </div>
+
+  </div>
+</div>

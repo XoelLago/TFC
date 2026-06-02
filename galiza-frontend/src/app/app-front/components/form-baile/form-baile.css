@@ -1,0 +1,306 @@
+/* Contenedor oscurecido de fondo con desenfoque */
+.overlay-container {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999 !important;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* Tarjeta principal contenedora */
+.form-card {
+  background: white;
+  width: 95%;
+  max-width: 500px;
+  margin-bottom: 92px; /* Margen para respetar el menú inferior móvil */
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  max-height: 80vh; /* Evita desbordamiento superior */
+}
+
+/* Cabecera corporativa */
+.form-header {
+  background: #93331d;
+  color: white;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.form-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 28px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+/* Cuerpo interno con auto-scroll activo */
+.form-body {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Secciones avanzadas y estructuración */
+.advanced-section {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.input-group label {
+  font-weight: bold;
+  color: #444;
+  font-size: 0.85rem;
+  margin-bottom: 2px;
+  display: block;
+}
+
+.input-group input,
+.input-group textarea {
+  padding: 12px;
+  border: 2px solid #eee;
+  border-radius: 10px;
+  outline: none;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Enfoque en controles de formulario */
+input:focus,
+textarea:focus,
+.custom-select:focus,
+.search-box-custom:focus-within {
+  outline: none;
+  border-color: #93331d !important;
+  box-shadow: 0 0 0 3px rgba(147, 51, 29, 0.1) !important;
+  background-color: #fff;
+  transition: all 0.2s ease;
+}
+
+/* Layout en dos columnas para campos multimedia */
+.row-expand {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+}
+
+@media (max-width: 440px) {
+  .row-expand {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Controles de Selección e Inputs de autocompletado */
+.combo-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.combo-icon {
+  position: absolute;
+  left: 12px;
+  color: #93331d;
+  pointer-events: none;
+}
+
+.custom-select {
+  width: 100%;
+  padding: 12px 12px 12px 40px;
+  border: 2px solid #eee;
+  border-radius: 10px;
+  background: white url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2393331d' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 15px center;
+  background-size: 15px;
+  appearance: none;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+.relative-container {
+  position: relative;
+}
+
+.search-box-custom {
+  background: white;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  border-radius: 10px;
+  border: 2px solid #eee;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.search-box-custom input {
+  border: none !important;
+  outline: none !important;
+  width: 100%;
+  padding: 12px 0;
+  font-size: 14px;
+  background: transparent;
+  color: #333;
+  box-shadow: none !important;
+}
+
+/* Listas Desplegables acopladas */
+.custom-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: white;
+  border-radius: 8px;
+  list-style: none;
+  padding: 5px 0;
+  margin: 0;
+  max-height: 160px;
+  overflow-y: auto;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  border: 1px solid #ddd;
+  z-index: 2000;
+}
+
+.custom-dropdown li {
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #444;
+  border-bottom: 1px solid #f9f9f9;
+}
+
+.custom-dropdown li:last-child {
+  border-bottom: none;
+}
+
+.custom-dropdown li:hover {
+  background-color: #fdf2f0;
+  color: #93331d;
+}
+
+.empty-message {
+  color: #999 !important;
+  font-style: italic;
+  text-align: center;
+  cursor: default !important;
+}
+
+/* Bloques de Etiquetas / Chips */
+.chips-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.chip-baile { background-color: #e3f2fd; color: #1565c0; border: 1px solid #bbdefb; }
+.chip-cancion { background-color: #f3e5f5; color: #7b1fa2; border: 1px solid #e1bee7; }
+.chip-evento { background-color: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
+
+.chip-close {
+  font-size: 16px;
+  margin-left: 8px;
+  cursor: pointer;
+  border-radius: 50%;
+  padding: 0 2px;
+  opacity: 0.7;
+}
+
+.chip-close:hover {
+  opacity: 1;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Mensajes de Alerta del Servidor */
+.alert {
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+.alert-danger {
+  background-color: #fdf2f0;
+  border: 1px solid #f5c2c7;
+  color: #93331d;
+}
+
+/* Pie de formulario fija */
+.form-footer {
+  padding: 15px 20px;
+  background: #fcfcfc;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn-save {
+  background: #93331d;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+}
+
+.btn-cancel {
+  background: #eee;
+  color: #444;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-save:hover {
+  background: #732514;
+}
+
+.btn-cancel:hover {
+  background: #e0e0e0;
+}

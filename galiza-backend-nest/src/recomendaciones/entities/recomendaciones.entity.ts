@@ -7,7 +7,7 @@ export class Recomendacion {
   @PrimaryGeneratedColumn()
   id!: number; // PK
 
-  @Column({ nullable: false })
+  @Column({ nullable: false,  unique: true  })
   titulo!: string;
 
   @Column({ nullable: false })

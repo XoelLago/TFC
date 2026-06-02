@@ -13,7 +13,7 @@ export class Asociacion {
   @PrimaryGeneratedColumn()
   id!: number; // PK Autoincremental
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, unique: true })
   nome!: string; // Obligatorio
 
   @Column('simple-json', { nullable: true })
