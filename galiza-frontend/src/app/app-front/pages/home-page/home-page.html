@@ -223,8 +223,14 @@
 
 </div>
 
-<app-action-toast [visible]="toastConfig.visible" [mensaje]="toastConfig.mensaje" [icon]="toastConfig.icon"
-  [txtConfirmar]="toastConfig.txtConfirmar" (confirmar)="ejecutarAccionToast()" (cancelar)="cerrarToast()">
+<app-action-toast
+  [visible]="toastConfig.visible"
+  [mensaje]="toastConfig.mensaje"
+  [icon]="toastConfig.icon"
+  [tipo]="toastConfig.tipo"
+  [txtConfirmar]="toastConfig.txtConfirmar"
+  (confirmar)="ejecutarAccionToast()"
+  (cancelar)="cerrarToast()">
 </app-action-toast>
 
 <app-detalles-general

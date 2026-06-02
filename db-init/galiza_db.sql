@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.45, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.46, for Linux (x86_64)
 --
 -- Host: localhost    Database: galiza_db
 -- ------------------------------------------------------
--- Server version	8.0.45
+-- Server version	8.0.46
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -93,7 +93,7 @@ CREATE TABLE `asociacion_eventos` (
 
 LOCK TABLES `asociacion_eventos` WRITE;
 /*!40000 ALTER TABLE `asociacion_eventos` DISABLE KEYS */;
-INSERT INTO `asociacion_eventos` VALUES (2,7);
+INSERT INTO `asociacion_eventos` VALUES (1,9),(2,7);
 /*!40000 ALTER TABLE `asociacion_eventos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -319,7 +319,7 @@ CREATE TABLE `eventos` (
   UNIQUE KEY `IDX_5ebb57c49e7444a6c6fe912a83` (`nome`),
   KEY `FK_fe781db320254e72c01c939d0e0` (`lugarId`),
   CONSTRAINT `FK_fe781db320254e72c01c939d0e0` FOREIGN KEY (`lugarId`) REFERENCES `lugares` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -328,7 +328,7 @@ CREATE TABLE `eventos` (
 
 LOCK TABLES `eventos` WRITE;
 /*!40000 ALTER TABLE `eventos` DISABLE KEYS */;
-INSERT INTO `eventos` VALUES (7,'pruebauser','2026-06-02 10:17:00','{\"lat\":42.755,\"lng\":-7.863}','Charla',10.00,'theater_comedy','asdfasda','asdfas',1,2);
+INSERT INTO `eventos` VALUES (7,'pruebauser','2026-06-02 10:17:00','{\"lat\":42.755,\"lng\":-7.863}','Charla',10.00,'theater_comedy','asdfasda','asdfas',1,2),(9,'sgy<rgt','2026-06-03 17:35:00','{\"lat\":43.2161858360268,\"lng\":-8.704455102638443}','Taller',120.00,'theater_comedy','sdgfsdgsdgd','sdgsddsgsdg',1,1);
 /*!40000 ALTER TABLE `eventos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -347,7 +347,7 @@ CREATE TABLE `instrumentos` (
   `videoUrl` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `IDX_036e45805327a7afa8ced49e72` (`nome`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -356,6 +356,7 @@ CREATE TABLE `instrumentos` (
 
 LOCK TABLES `instrumentos` WRITE;
 /*!40000 ALTER TABLE `instrumentos` DISABLE KEYS */;
+INSERT INTO `instrumentos` VALUES (25,'Gaita Galega','O instrumento de vento rei da música tradicional galega. Consta dun fol, un punteiro para a melodía e un ou varios roncóns que fan a nota pedal.',NULL,NULL),(26,'Pandeireta','Instrumento de percusión circular con ferriñas. É a base do acompañamento do canto e do baile tradicional en Galicia, tocada tradicionalmente polas mulleres (pandeireteiras).',NULL,NULL),(27,'Tamboril','Tambor tradicional de percusión de tamaño mediano que sempre adoita acompañar á gaita. Tócase con dúas baquetas de madeira.',NULL,NULL),(28,'Bombo','Instrumento grande de percusión que marca o pulso grave da música. Xunto co tamboril e a gaita, forma o cuarteto tradicional básico.',NULL,NULL),(29,'Cunchas de vieira','Instrumento de percusión idiófono moi popular. Úsanse dúas cunchas de vieira que se raspan e baten entre si para marcar o ritmo.',NULL,NULL),(30,'Tarrañolas','Instrumento tradicional feito con dúas pezas de madeira (ou óso) que se colocan entre os dedos dunha man e fanse repenicar mediante movementos de pulso.',NULL,NULL),(31,'Lata','Instrumento de percusión de orixe humilde (reutilizando latas de pemento ou aceite) que se toca de forma similar á pandeireta ou fretando a súa superficie.',NULL,NULL),(32,'Pandeiro','Instrumento membranófono de marco cadrado, cuberto por pel en ambas caras e que adoita levar garavanzos ou cantos rodados no seu interior para darlle un son característico ao golpealo.',NULL,NULL),(33,'Gaita de cana','Instrumento primitivo de vento feito con talos de cana, precursor máis sinxelo da gaita actual.',NULL,NULL),(34,'Culleres','Dúas culleres de madeira ou metal que se golpean sobre as pernas ou entre as mans para levar o ritmo.',NULL,NULL),(35,'Rabel','Instrumento de corda frotada con arco, de orixe medieval, que aínda sobrevive nalgunhas tradicións galegas.',NULL,NULL),(36,'Acordeón','Instrumento de teclas e fol fundamental nas verbenas e festas populares galegas do século XX.',NULL,NULL),(37,'Sarten','Instrumento de percusión que consiste nunha tixola de metal (habitualmente de ferro) que se golpea cunha chave ou un obxecto metálico. O seu son agudo e metálico úsase para marcar o compás en xotas e muiñeiras, especialmente en contextos festivos informais.',NULL,NULL);
 /*!40000 ALTER TABLE `instrumentos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -412,7 +413,7 @@ CREATE TABLE `marcadores_usuarios` (
   PRIMARY KEY (`id`),
   KEY `FK_6190046ca8ee935ec876175f794` (`usuarioId`),
   CONSTRAINT `FK_6190046ca8ee935ec876175f794` FOREIGN KEY (`usuarioId`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -448,6 +449,7 @@ CREATE TABLE `movimiento_puntos` (
 
 LOCK TABLES `movimiento_puntos` WRITE;
 /*!40000 ALTER TABLE `movimiento_puntos` DISABLE KEYS */;
+INSERT INTO `movimiento_puntos` VALUES (12,3),(13,3),(14,3);
 /*!40000 ALTER TABLE `movimiento_puntos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -516,10 +518,12 @@ CREATE TABLE `puntos` (
   `tipo` enum('Muiñeira','Xota','Volta','Tablón','Maneo','Pasodobre','Punto Galaico','Outro') NOT NULL DEFAULT 'Outro',
   `videoUrl` varchar(255) DEFAULT NULL,
   `lugarId` int NOT NULL,
+  `nome` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `IDX_800da4fb035fb704c1100a4127` (`nome`),
   KEY `FK_9ef7b6083365c9ac1d0210ea481` (`lugarId`),
   CONSTRAINT `FK_9ef7b6083365c9ac1d0210ea481` FOREIGN KEY (`lugarId`) REFERENCES `lugares` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -528,6 +532,7 @@ CREATE TABLE `puntos` (
 
 LOCK TABLES `puntos` WRITE;
 /*!40000 ALTER TABLE `puntos` DISABLE KEYS */;
+INSERT INTO `puntos` VALUES (3,'dasgfsdg','Outro','sdgsdg',1,'A Coruña 1');
 /*!40000 ALTER TABLE `puntos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -574,7 +579,7 @@ CREATE TABLE `solicitudes_eventos` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `REL_77dfe9c0eebe3ddd13bff3a122` (`eventoId`),
   CONSTRAINT `FK_77dfe9c0eebe3ddd13bff3a1221` FOREIGN KEY (`eventoId`) REFERENCES `eventos` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -583,7 +588,7 @@ CREATE TABLE `solicitudes_eventos` (
 
 LOCK TABLES `solicitudes_eventos` WRITE;
 /*!40000 ALTER TABLE `solicitudes_eventos` DISABLE KEYS */;
-INSERT INTO `solicitudes_eventos` VALUES (3,'APROBADA',7);
+INSERT INTO `solicitudes_eventos` VALUES (3,'APROBADA',7),(5,'APROBADA',9);
 /*!40000 ALTER TABLE `solicitudes_eventos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -623,4 +628,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-06-02 13:00:49
+-- Dump completed on 2026-06-02 18:34:18

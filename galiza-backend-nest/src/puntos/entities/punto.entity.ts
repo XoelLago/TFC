@@ -9,6 +9,10 @@ export class Punto {
   @PrimaryGeneratedColumn()
   id!: number;
 
+  @Column({ nullable: false,unique: true })
+  nome!: string;
+
+
   @Column({ type: 'text', nullable: false })
   descripcion!: string; // Obligatorio
 

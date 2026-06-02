@@ -2,6 +2,11 @@ import { IsString, IsNotEmpty, IsEnum, IsOptional, IsUrl, IsArray, IsInt } from 
 import { TipoPunto } from '../../common/enums';
 
 export class CreatePuntoDto {
+
+  @IsString()
+  @IsNotEmpty()
+  nome!: string;
+
   @IsString()
   @IsNotEmpty()
   descripcion!: string;
@@ -25,6 +30,6 @@ export class CreatePuntoDto {
 
   @IsArray()
   @IsInt({ each: true })
-  @IsOptional()
+  @IsNotEmpty({message: 'Debe haber al menos un movimiento asociado'}) // Es obligatorio porque la relación ManyToMany no puede estar vacía
   movimientosIds?: number[];
 }

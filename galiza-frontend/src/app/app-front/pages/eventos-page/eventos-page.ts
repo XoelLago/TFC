@@ -4,11 +4,12 @@ import { EventosService } from '../../service/eventos.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FormEvento } from "../../components/form-evento/form-evento";
+import { DetallesGeneral } from "../../components/detalles-general/detalles-general";
 
 @Component({
   selector: 'eventos',
   standalone: true,
-  imports: [CommonModule, FormsModule, FormEvento],
+  imports: [CommonModule, FormsModule, FormEvento, DetallesGeneral],
   templateUrl: './eventos-page.html',
   styleUrl: './eventos-page.css',
 })
@@ -31,6 +32,8 @@ export class EventosPage implements OnInit {
   public diasSemana = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
   public diaSeleccionado: Date | null = null;
 
+  public mostrarDetalles: boolean = false;
+  public eventoSeleccionado: any = null;
   // Leyenda
   public leyenda = [
     { tipo: TipoEvento.ROMERIA, color: '#8B0000', label: 'Romería' },
@@ -46,7 +49,7 @@ export class EventosPage implements OnInit {
   constructor(
     private eventosService: EventosService,
     private cdr: ChangeDetectorRef
-  ){}
+  ) { }
 
   ngOnInit() {
     this.cargarEventos();
@@ -89,8 +92,8 @@ export class EventosPage implements OnInit {
       this.eventosEnLista = this.eventosFiltrados.filter(e => {
         const fechaEvt = new Date(e.fecha);
         return fechaEvt.getDate() === this.diaSeleccionado!.getDate() &&
-               fechaEvt.getMonth() === this.diaSeleccionado!.getMonth() &&
-               fechaEvt.getFullYear() === this.diaSeleccionado!.getFullYear();
+          fechaEvt.getMonth() === this.diaSeleccionado!.getMonth() &&
+          fechaEvt.getFullYear() === this.diaSeleccionado!.getFullYear();
       });
     } else {
       this.eventosEnLista = [...this.eventosFiltrados];
@@ -161,4 +164,16 @@ export class EventosPage implements OnInit {
   abrirForm() { this.mostrarFormulario = true; }
   cerrarForm() { this.mostrarFormulario = false; }
   onGuardado(evento: any) { this.cerrarForm(); this.cargarEventos(); }
+
+  verDetalles(evento: any) {
+  this.eventoSeleccionado = evento;
+  this.mostrarDetalles = true;
+  this.cdr.detectChanges();
+}
+
+cerrarDetalles() {
+  this.mostrarDetalles = false;
+  this.eventoSeleccionado = null;
+  this.cdr.detectChanges();
+}
 }

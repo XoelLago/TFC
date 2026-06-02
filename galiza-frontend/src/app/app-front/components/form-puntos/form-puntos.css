@@ -2,29 +2,29 @@
   position: fixed;
   top: 0; left: 0;
   width: 100vw; height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(5px);
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(3px);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999 !important;
+  z-index: 99999 !important; /* Tapa perfectamente el menú inferior */
+  padding: 16px;
+  box-sizing: border-box;
 }
 
-/* Tarjeta calcada */
 .form-card {
   background: white;
   width: 95%;
   max-width: 500px;
-  margin-bottom: 92px; /* Espacio para el menú inferior */
+  margin-bottom: 92px;
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
-  max-height: 87vh; /* Evita que choque con el header de la web */
+  max-height: 87vh;
 }
 
-/* Cabecera calcada */
 .form-header {
   background: #93331d;
   color: white;
@@ -42,118 +42,19 @@
   gap: 10px;
 }
 
-/* Cuerpo con Scroll para que los detalles no corten el card */
 .form-body {
   padding: 20px;
+  padding-bottom: 25px; /* Un pequeño margen limpio para que no pegue abajo del todo */
   overflow-y: auto;
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
-
-/* 2. Estilo Focus (Mantenido) */
-input:focus, textarea:focus, .custom-select:focus {
-  outline: none;
-  border-color: #93331d !important;
-  box-shadow: 0 0 0 3px rgba(147, 51, 29, 0.1);
-  background-color: #fff;
-}
-
-/* 3. ARREGLO DE INPUTS CORTADOS */
-.row-expand {
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* Dos columnas iguales */
-  gap: 12px;
-  width: 100%;
-}
-
-/* Asegurar que el input no se salga de su celda */
-.input-group input {
-  width: 100% !important;
-  box-sizing: border-box; /* Fundamental para que el padding no sume al ancho */
-}
-
-/* Si la pantalla es muy pequeña, los ponemos uno encima de otro */
-@media (max-width: 400px) {
-  .row-expand {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Resto de estilos */
-.form-footer { padding: 12px 20px; background: #fcfcfc; border-top: 1px solid #eee; display: flex; justify-content: flex-end; gap: 10px; }
-
-.combo-wrapper { position: relative; display: flex; align-items: center; }
-.combo-icon { position: absolute; left: 12px; color: #93331d; pointer-events: none; }
-.custom-select {
-  width: 100%; padding: 12px 12px 12px 40px;
-  border: 2px solid #eee; border-radius: 10px;
-  background: white url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2393331d' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 15px center;
-  background-size: 15px; appearance: none;
-  box-sizing: border-box;
-}
-
-.coords-display {
-  background: #f8f9fa; border-radius: 10px; padding: 10px;
-  display: flex; justify-content: space-around; border: 1px dashed #ccc;
-}
-.coord-item { display: flex; flex-direction: column; align-items: center; }
-.coord-item small { color: #888; font-size: 0.7rem; text-transform: uppercase; }
-.coord-item span { font-family: monospace; font-weight: bold; color: #333; }
-
-#mapPickLugar { height: 180px; width: 100%; border: 2px solid #93331d; border-radius: 12px; }
-
-.btn-advanced-toggle {
-  background: #fdf2f0; border: none; padding: 10px; border-radius: 10px;
-  color: #93331d; font-weight: bold; cursor: pointer;
-  display: flex; align-items: center; justify-content: center; gap: 5px;
-}
-
-.advanced-section { display: flex; flex-direction: column; gap: 12px; padding-top: 10px; }
-.input-group { display: flex; flex-direction: column; gap: 5px; }
-.input-group label { font-weight: bold; color: #444; font-size: 0.9rem; }
-.input-group input, .input-group textarea { padding: 12px; border: 2px solid #eee; border-radius: 10px; outline: none; }
-
-.btn-save { background: #93331d; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 5px; }
-.btn-cancel { background: #eee; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; }
-input:focus, textarea:focus, .custom-select:focus {
-  outline: none;
-  border-color: #93331d !important;
-  background-color: #fff;
-  box-shadow: 0 0 0 3px rgba(147, 51, 29, 0.1);
-  transition: all 0.2s ease;
-}
-.btn-close {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 28px;
-  cursor: pointer;
-  line-height: 1;
-}
-/* --- SECCIÓN AVANZADA Y LAYOUT --- */
-.advanced-section {
+.input-group {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  padding-top: 15px;
-  border-top: 1px solid #f0f0f0;
-}
-
-.row {
-  display: flex;
-  gap: 12px;
-  width: 100%;
-}
-
-.flex-1 {
-  flex: 1;
-}
-
-/* Necesario para que la lista no se salga de su caja */
-.relative-container {
-  position: relative;
+  gap: 5px;
 }
 
 .input-group label {
@@ -164,14 +65,81 @@ input:focus, textarea:focus, .custom-select:focus {
   display: block;
 }
 
-/* --- ESTILOS DEL INPUT (Como en la segunda imagen) --- */
+.input-group input, .input-group textarea {
+  padding: 12px;
+  border: 2px solid #eee;
+  border-radius: 10px;
+  outline: none;
+  width: 100% !important;
+  box-sizing: border-box;
+}
+
+input:focus, textarea:focus, .custom-select:focus {
+  outline: none;
+  border-color: #93331d !important;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(147, 51, 29, 0.1);
+  transition: all 0.2s ease;
+}
+
+.row-expand {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+}
+
+@media (max-width: 400px) {
+  .row-expand {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-footer {
+  padding: 12px 20px;
+  background: #fcfcfc;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.combo-wrapper { position: relative; display: flex; align-items: center; }
+.combo-icon { position: absolute; left: 12px; color: #93331d; pointer-events: none; }
+
+.custom-select {
+  width: 100%; padding: 12px 12px 12px 40px;
+  border: 2px solid #eee; border-radius: 10px;
+  background: white url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2393331d' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 15px center;
+  background-size: 15px; appearance: none;
+  box-sizing: border-box;
+}
+
+.btn-advanced-toggle {
+  background: #fdf2f0; border: none; padding: 10px; border-radius: 10px;
+  color: #93331d; font-weight: bold; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+}
+
+.advanced-section {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.row { display: flex; gap: 12px; width: 100%; }
+.flex-1 { flex: 1; }
+.relative-container { position: relative; }
+
 .search-box-custom {
   background: white;
   display: flex;
   align-items: center;
   padding: 0 12px;
-  border-radius: 8px; /* Borde de formulario normal, no píldora */
-  border: 1px solid #ccc; /* Borde gris estándar */
+  border-radius: 8px;
+  border: 1px solid #ccc;
   transition: all 0.3s ease;
 }
 
@@ -191,52 +159,49 @@ input:focus, textarea:focus, .custom-select:focus {
   box-shadow: 0 0 0 2px rgba(147, 51, 29, 0.1);
 }
 
-/* --- LISTA DESPLEGABLE PEGADA AL INPUT --- */
+/* --- DISEÑO DE LOS DESPLEGABLES PREMIUM ABIERTOS --- */
 .custom-dropdown {
   position: absolute;
-  top: calc(100% + 4px); /* Se pega justo debajo del input (con 4px de respiro) */
+  top: calc(100% + 4px);
   left: 0;
-  right: 0;
-  background: white;
-  border-radius: 8px;
-  list-style: none;
-  padding: 5px 0;
-  margin: 0;
-  max-height: 160px;
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+  max-height: 200px;
   overflow-y: auto;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); /* Sombra elegante */
-  border: 1px solid #ddd;
-  z-index: 2000;
+  padding: 6px;
+  margin: 0;
+  list-style: none;
+  z-index: 100000 !important; /* Evita solaparse con botones o footer */
 }
 
 .custom-dropdown li {
-  padding: 10px 15px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #334155;
   cursor: pointer;
-  font-size: 0.9rem;
-  color: #444;
-  border-bottom: 1px solid #f9f9f9;
-}
-
-.custom-dropdown li:last-child {
   border-bottom: none;
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
 .custom-dropdown li:hover {
-  background-color: #fdf2f0;
+  background: #fdf2f0;
   color: #93331d;
+  font-weight: 500;
 }
 
-/* --- MENSAJE "NO HAY NADA" --- */
 .empty-message {
-  color: #999 !important;
+  color: #94a3b8 !important;
   font-style: italic;
   text-align: center;
-  cursor: default !important; /* Que no parezca que se puede clickar */
+  padding: 16px 0 !important;
+  cursor: default !important;
 }
 
-.empty-message:hover {
-  background-color: transparent !important; /* Quitamos el hover rojo */
-}
+/* --- SECCIÓN DE CHIPS --- */
 .chips-section {
   margin-top: 20px;
   display: flex;
@@ -254,11 +219,7 @@ input:focus, textarea:focus, .custom-select:focus {
   font-weight: 500;
 }
 
-.chips-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
+.chips-container { display: flex; flex-wrap: wrap; gap: 8px; }
 
 .chip {
   display: inline-flex;
@@ -267,12 +228,9 @@ input:focus, textarea:focus, .custom-select:focus {
   border-radius: 16px;
   font-size: 0.85rem;
   font-weight: 500;
-  transition: background-color 0.2s;
 }
 
-/* Colores personalizados por categoría para distinguirlos bien */
 .chip-baile { background-color: #e3f2fd; color: #1565c0; border: 1px solid #bbdefb; }
-.chip-cancion { background-color: #f3e5f5; color: #7b1fa2; border: 1px solid #e1bee7; }
 .chip-evento { background-color: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
 
 .chip-close {
@@ -284,7 +242,8 @@ input:focus, textarea:focus, .custom-select:focus {
   opacity: 0.7;
 }
 
-.chip-close:hover {
-  opacity: 1;
-  background-color: rgba(0, 0, 0, 0.1);
-}
+.chip-close:hover { opacity: 1; background-color: rgba(0, 0, 0, 0.1); }
+
+.btn-close { background: none; border: none; color: white; font-size: 28px; cursor: pointer; line-height: 1; }
+.btn-save { background: #93331d; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+.btn-cancel { background: #eee; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; }

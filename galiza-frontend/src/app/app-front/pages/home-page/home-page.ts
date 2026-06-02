@@ -131,7 +131,7 @@ public menuPrincipalVisible: boolean = false;
         command: () => { this.mostrarFormCancion = true; this.mostrarMenuCultura = false; }
       },
       {
-        icon: 'pi pi-star',
+        icon: 'pi pi-flag-fill',
         tooltipOptions: { tooltipLabel: 'Novo Punto', tooltipPosition: 'left' },
         command: () => { this.mostrarFormPuntos = true; this.mostrarMenuCultura = false; }
       }
@@ -308,14 +308,10 @@ public menuPrincipalVisible: boolean = false;
   }
 
   CrearMarcadorPersonalizado() {
-    this.errorMsg = '';
-    if (!this.nuevoMarcador.nome || this.nuevoMarcador.nome.trim().length === 0) {
-      this.errorMsg = 'O nome do marcador é obrigatorio para poder gardalo.';
-      return;
-    }
+    if (!this.nuevoMarcador.nome) return;
 
     const body = {
-      nome: this.frontUserService.capitalizarNombre(this.nuevoMarcador.nome),
+      nome: this.nuevoMarcador.nome,
       descripcion: this.nuevoMarcador.descripcion || '',
       tipo: 'personalizado',
       icono: 'star',
@@ -326,31 +322,30 @@ public menuPrincipalVisible: boolean = false;
       this.mapaService.actualizarMarcador(this.idMarcadorEditando, body).subscribe({
         next: (res) => {
           const index = this.places.findIndex(p => p.id === this.idMarcadorEditando);
+
           if (index !== -1) {
             this.places[index] = res;
           }
+          this.cargarDatos();
           this.finalizarAccion();
         }
       });
     } else {
+      // --- MODO CREAR ---
       this.mapaService.guardarMarcador(body).subscribe({
         next: (res) => {
           this.places.push(res);
           this.finalizarAccion();
-        },
-        error: (res) => {
-          this.errorMsg = 'Falta el nombre por cubrir';
         }
       });
     }
   }
-
   private finalizarAccion() {
-    this.renderMarkers();
+    this.renderMarkers(); // Dibuja todo de cero (limpiando capas si usas LayerGroup)
     this.cerrarFormulario();
     this.idMarcadorEditando = null;
     this.textoBotonForm = 'Gardar';
-    this.selectedPlace = null;
+    this.selectedPlace = null; // Cerramos la card de info por si el ID cambió
     this.cdr.detectChanges();
   }
 
@@ -430,6 +425,7 @@ public menuPrincipalVisible: boolean = false;
     visible: false,
     mensaje: '',
     icon: 'priority_high',
+    tipo: '',
     txtConfirmar: 'ELIMINAR',
     accion: () => { }
   };
@@ -439,6 +435,7 @@ public menuPrincipalVisible: boolean = false;
       visible: true,
       mensaje: `¿Estás seguro de que queres eliminar "${place.nome}"? Esta acción non se puede desfacer.`,
       icon: 'delete_forever',
+      tipo: 'eliminar',
       txtConfirmar: 'SÍ, ELIMINAR',
       accion: () => {
         this.mapaService.borrarMarcador(place.id).subscribe({

@@ -86,11 +86,11 @@
 
     <div class="events-list">
       @for (evt of eventosEnLista; track evt.id) {
-        <div class="event-row">
+        <div class="event-row" (click)="verDetalles(evt)">
           <div class="event-info">
             <div class="event-name">{{ evt.nome }}</div>
             <div class="event-details" *ngIf="evt.lugar || evt.fecha">
-              <span *ngIf="evt.lugar">{{ evt.lugar }}</span>
+              <span *ngIf="evt.lugar">{{ evt.lugar.nome }}</span>
               <span *ngIf="evt.lugar && evt.fecha"> | </span>
               <span *ngIf="evt.fecha">{{ evt.fecha | date:'dd/MM/yyyy HH:mm' }}</span>
             </div>
@@ -108,4 +108,13 @@
   @if (mostrarFormulario) {
     <form-evento (cancelar)="cerrarForm()" (guardado)="onGuardado($event)"></form-evento>
   }
+
+
+
+  <app-detalles-general
+  [isOpen]="mostrarDetalles"
+  [item]="eventoSeleccionado"
+  (close)="cerrarDetalles()">
+</app-detalles-general>
 </div>
+
