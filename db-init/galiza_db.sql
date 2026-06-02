@@ -113,9 +113,10 @@ CREATE TABLE `asociaciones` (
   `descripcion` text,
   `lugarId` int DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `IDX_94fce403cc20d57c918128e170` (`nome`),
   KEY `FK_3327e56508e489e851e150568ef` (`lugarId`),
   CONSTRAINT `FK_3327e56508e489e851e150568ef` FOREIGN KEY (`lugarId`) REFERENCES `lugares` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -201,7 +202,7 @@ CREATE TABLE `bailes` (
   UNIQUE KEY `IDX_4c9d52db547b809977873c7bce` (`nome`),
   KEY `FK_701f084c39eca5827749f3a93ce` (`lugarId`),
   CONSTRAINT `FK_701f084c39eca5827749f3a93ce` FOREIGN KEY (`lugarId`) REFERENCES `lugares` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -256,7 +257,7 @@ CREATE TABLE `canciones` (
   PRIMARY KEY (`id`),
   KEY `FK_c79bb5b78f68d15f3607c462c67` (`lugarId`),
   CONSTRAINT `FK_c79bb5b78f68d15f3607c462c67` FOREIGN KEY (`lugarId`) REFERENCES `lugares` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -377,6 +378,7 @@ CREATE TABLE `lugares` (
   `eventos` text,
   `provinciaId` int NOT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `IDX_abf2afd9cb463bc71a599633d2` (`nome`),
   KEY `FK_8870a592b189c1e9ff216238c9b` (`provinciaId`),
   CONSTRAINT `FK_8870a592b189c1e9ff216238c9b` FOREIGN KEY (`provinciaId`) REFERENCES `provincias` (`id`) ON DELETE RESTRICT
 ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -459,7 +461,8 @@ DROP TABLE IF EXISTS `movimientos`;
 CREATE TABLE `movimientos` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `IDX_b2e9563f09cdc8bd04d2ec05d2` (`nombre`)
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -469,7 +472,7 @@ CREATE TABLE `movimientos` (
 
 LOCK TABLES `movimientos` WRITE;
 /*!40000 ALTER TABLE `movimientos` DISABLE KEYS */;
-INSERT INTO `movimientos` VALUES (1,'Picado valseado'),(2,'Picado cruzado por detrás'),(3,'Picado cruzado por diante'),(4,'Hop'),(5,'Diante'),(6,'Detrás'),(7,'Diante detrás desprazado'),(8,'Punta-tacón'),(9,'Punta'),(10,'Tacón'),(11,'Diante-atrás'),(12,'Atrás-diante'),(13,'Aire por diante'),(14,'Aire por detrás'),(15,'Paso'),(16,'Punta adiante'),(17,'Punta atrás');
+INSERT INTO `movimientos` VALUES (14,'Aire por detrás'),(13,'Aire por diante'),(12,'Atrás-diante'),(6,'Detrás'),(5,'Diante'),(7,'Diante detrás desprazado'),(11,'Diante-atrás'),(4,'Hop'),(15,'Paso'),(2,'Picado cruzado por detrás'),(3,'Picado cruzado por diante'),(1,'Picado valseado'),(9,'Punta'),(16,'Punta adiante'),(17,'Punta atrás'),(8,'Punta-tacón'),(10,'Tacón');
 /*!40000 ALTER TABLE `movimientos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -542,7 +545,8 @@ CREATE TABLE `recomendacions` (
   `tipo` enum('LIBRO','ARTISTA','CANCION','DOCUMENTAL','WEB','OTRO') NOT NULL DEFAULT 'LIBRO',
   `enlaceExterno` varchar(255) DEFAULT NULL,
   `resumo` text,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `IDX_51ecd95607bd3151a34924aa2d` (`titulo`)
 ) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -619,4 +623,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-06-02  6:55:14
+-- Dump completed on 2026-06-02 13:00:49
