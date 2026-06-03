@@ -63,7 +63,7 @@
 
       <button type="button" class="btn-advanced-toggle" (click)="toggleAvanzado()">
         <span class="material-icons">{{ mostrarAvanzado ? 'expand_less' : 'expand_more' }}</span>
-        {{ mostrarAvanzado ? 'Ocultar detalles' : 'Detalles avanzados' }}
+        {{ mostrarAvanzado ? 'Ocultar detalles' : 'Detalles *' }}
       </button>
 
       @if (mostrarAvanzado) {
@@ -98,17 +98,17 @@
               <div class="search-box-custom">
                 <input
                   type="text"
-                  [(ngModel)]="textoBusquedaMovimiento"
-                  (input)="filtrarMovimientos($event)"
-                  (focus)="mostrarMovimientos = true"
-                  (blur)="ocultarLista('movimientos')"
+                  [(ngModel)]="textoBusquedamovemento"
+                  (input)="filtrarmovementos($event)"
+                  (focus)="mostrarmovementos = true"
+                  (blur)="ocultarLista('movementos')"
                   placeholder="Buscar movemento..."
                 >
               </div>
-              @if (mostrarMovimientos) {
+              @if (mostrarmovementos) {
                 <ul class="custom-dropdown">
-                  @for (m of movimientosFiltrados; track m.id || m._id) {
-                    <li (mousedown)="seleccionarMovimiento(m)">{{ m.nome || m.nombre }}</li>
+                  @for (m of movementosFiltrados; track m.id || m._id) {
+                    <li (mousedown)="seleccionarmovemento(m)">{{ m.nome || m.nombre }}</li>
                   } @empty {
                     <li class="empty-message" (mousedown)="$event.preventDefault()">Non hai resultados</li>
                   }
@@ -134,14 +134,14 @@
             </div>
           }
 
-          @if (punto.movimientos && punto.movimientos.length > 0) {
+          @if (punto.movementos && punto.movementos.length > 0) {
             <div class="chip-group">
-              <label>Movementos vinculados:</label>
+              <label>movementos vinculados:</label>
               <div class="chips-container">
-                @for (m of punto.movimientos; track $index) {
+                @for (m of punto.movementos; track $index) {
                   <div class="chip chip-evento">
                     {{ m.nome || m.nombre }}
-                    <span class="material-icons chip-close" (click)="removerMovimiento(m)">close</span>
+                    <span class="material-icons chip-close" (click)="removermovemento(m)">close</span>
                   </div>
                 }
               </div>

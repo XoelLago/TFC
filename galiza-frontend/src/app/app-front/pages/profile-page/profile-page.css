@@ -628,9 +628,15 @@
 
 @keyframes fadeIn {
 
-  from { opacity: 0; transform: translateY(10px); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
 
-  to { opacity: 1; transform: translateY(0); }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
 }
 
@@ -716,7 +722,8 @@
 
   padding: 16px 0;
 
-  border-bottom: 2px solid #8b2b1a; /* La línea granate de tu captura */
+  border-bottom: 2px solid #8b2b1a;
+  /* La línea granate de tu captura */
 
   cursor: pointer;
 
@@ -738,7 +745,8 @@
 
   padding-right: 10px;
 
-  gap: 4px; /* Separación natural entre elementos */
+  gap: 4px;
+  /* Separación natural entre elementos */
 
 }
 
@@ -752,7 +760,8 @@
 
   font-size: 1.6rem;
 
-  color: #8b2b1a; /* Granate */
+  color: #8b2b1a;
+  /* Granate */
 
   font-weight: 500;
 
@@ -786,7 +795,8 @@
 
   font-family: 'Montserrat', sans-serif;
 
-  margin-bottom: 8px; /* Hueco antes del estado */
+  margin-bottom: 8px;
+  /* Hueco antes del estado */
 
 }
 
@@ -794,7 +804,8 @@
 
 .location-icon {
 
-  color: #c91028; /* Rojo vivo del pin */
+  color: #c91028;
+  /* Rojo vivo del pin */
 
   font-size: 1.1rem;
 
@@ -824,11 +835,19 @@
 
 }
 
-.status-pendiente { color: #b45309; } /* Naranja/Marrón */
+.status-pendiente {
+  color: #b45309;
+}
 
-.status-aprobada { color: #047857; }
+/* Naranja/Marrón */
 
-.status-rechazada { color: #b91c1c; }
+.status-aprobada {
+  color: #047857;
+}
+
+.status-rechazada {
+  color: #b91c1c;
+}
 
 
 
@@ -850,7 +869,8 @@
 
   padding: 8px 16px;
 
-  border-radius: 4px; /* Bordes ligeramente redondeados */
+  border-radius: 4px;
+  /* Bordes ligeramente redondeados */
 
   cursor: pointer;
 
@@ -876,7 +896,8 @@
 
 .btn-aceptar {
 
-  background-color: #1a3673; /* Azul oscuro de tu captura */
+  background-color: #1a3673;
+  /* Azul oscuro de tu captura */
 
   color: white;
 
@@ -884,7 +905,8 @@
 
 .btn-rechazar {
 
-  background-color: #b51a22; /* Rojo oscuro de tu captura */
+  background-color: #b51a22;
+  /* Rojo oscuro de tu captura */
 
   color: white;
 
@@ -896,4 +918,260 @@
 
   color: white;
 
+}
+
+
+
+
+
+.section-main-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.65rem;
+  color: #999;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 8px;
+  text-align: left;
+}
+
+.uppercase-label {
+  margin-top: 20px;
+  margin-bottom: 12px;
+}
+
+/* --- CONTENEDOR BUSCADOR --- */
+.search-container {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 0 15px;
+  height: 46px;
+  width: 100%;
+  margin-bottom: 14px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.01);
+}
+
+.search-container:focus-within {
+  border-color: #93331d;
+  box-shadow: 0 0 5px rgba(147, 51, 29, 0.2);
+}
+
+.input-buscar {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 10px 0;
+  font-size: 0.9rem;
+  font-family: 'Montserrat', sans-serif;
+  color: #333;
+  width: 100%;
+}
+
+.input-buscar:focus {
+  outline: none;
+}
+
+.search-icon {
+  color: #93331d;
+  font-size: 1.4rem;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* --- BOTONES EN FORMA DE PÍLDORA (FILTROS DE ESTADO) --- */
+.filter-pills {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 15px;
+  width: 100%;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.pill-btn {
+  border: none;
+  padding: 7px 16px;
+  border-radius: 20px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  background: #eceae3;
+  color: #666;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.pill-btn:active {
+  transform: scale(0.96);
+}
+
+.pill-btn.active {
+  background: #93331d;
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(147, 51, 29, 0.15);
+}
+
+/* --- CONTENEDOR PRINCIPAL DE SOLICITUDES --- */
+.solicitudes-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* --- FILA / TARJETA DE SOLICITUD --- */
+.solicitud-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #8b2b1a !important; /* Línea granate fina del diseño */
+  padding: 18px 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.solicitud-card:active {
+  transform: scale(0.99);
+}
+
+/* --- BLOQUE DE INFORMACIÓN (IZQUIERDA) --- */
+.solicitud-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  text-align: left;
+  padding-right: 15px;
+}
+
+.solicitud-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #8b2b1a; /* Tono granate principal */
+  display: block;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.solicitud-asociacion {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  color: #666;
+  font-weight: 500;
+  margin-bottom: 8px;
+  display: block;
+}
+
+/* Fila de metadatos (Ubicación y Estado) */
+.solicitud-meta-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.solicitud-location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  color: #777;
+}
+
+.location-icon {
+  font-size: 1.1rem;
+  color: #93331d;
+}
+
+/* --- TEXTOS DE ESTADO --- */
+.text-status {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-pendiente {
+  color: #83521d; /* Tono ámbar/marrón suave */
+}
+
+.status-aprobada {
+  color: #0b512e; /* Tono verde elegante */
+}
+
+/* --- BLOQUE DE ACCIONES (BOTONES DERECHA) --- */
+.solicitud-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.badge-btn {
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.badge-btn:active {
+  transform: scale(0.95);
+}
+
+.btn-aceptar {
+  background: #eef8f1;
+  color: #0b512e;
+  border: 1px solid rgba(15, 100, 41, 0.2);
+}
+
+.btn-aceptar:hover {
+  background: #dbf2df;
+}
+
+.btn-rechazar {
+  background: #fff2f1;
+  color: #93331d;
+  border: 1px solid rgba(82, 29, 26, 0.2);
+}
+
+.btn-rechazar:hover {
+  background: #ffe1df;
+}
+
+.btn-eliminar {
+  background-color: #4b5563;
+
+  color: white;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.btn-eliminar:hover {
+  background: #e5e7eb;
+}
+
+/* --- ESTADOS DE CARGA Y VACÍOS (.static-data) --- */
+.static-data {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  background: #eceae3;
+  padding: 14px 15px;
+  border-radius: 8px;
+  color: #554a43;
+  text-align: center;
+  margin-top: 10px;
 }

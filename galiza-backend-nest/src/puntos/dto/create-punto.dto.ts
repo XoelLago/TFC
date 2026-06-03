@@ -30,6 +30,6 @@ export class CreatePuntoDto {
 
   @IsArray()
   @IsInt({ each: true })
-  @IsNotEmpty({message: 'Debe haber al menos un movimiento asociado'}) // Es obligatorio porque la relación ManyToMany no puede estar vacía
-  movimientosIds?: number[];
+  @IsNotEmpty({message: 'Debe ter polo menos un movemento asociado'}) // Es obligatorio porque la relación ManyToMany no puede estar vacía
+  movementosIds?: number[];
 }

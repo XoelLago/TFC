@@ -1,6 +1,6 @@
 import { IsString, IsNotEmpty, IsArray, IsInt, ArrayMinSize } from 'class-validator';
 
-export class CreateMovimientoDto {
+export class CreatemovementoDto {
   @IsString()
   @IsNotEmpty()
   nombre!: string;

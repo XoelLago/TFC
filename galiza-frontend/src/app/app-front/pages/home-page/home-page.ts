@@ -433,7 +433,7 @@ public menuPrincipalVisible: boolean = false;
   borrarMarcador(place: any) {
     this.toastConfig = {
       visible: true,
-      mensaje: `¿Estás seguro de que queres eliminar "${place.nome}"? Esta acción non se puede desfacer.`,
+      mensaje: `¿Estás seguro de que queres eliminar "${place.nome}"? Esta acción non se pode desfacer.`,
       icon: 'delete_forever',
       tipo: 'eliminar',
       txtConfirmar: 'SÍ, ELIMINAR',

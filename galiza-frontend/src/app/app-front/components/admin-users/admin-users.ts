@@ -15,7 +15,7 @@ export class AdminUsersComponent implements OnInit, OnChanges {
   @Input() cargando: boolean = false;
   @Input() miRol: string = '';
   @Input() miId: number | null = null;
-  @Input() tituloLista: string = 'GESTIÓN';
+  @Input() tituloLista: string = 'XESTIÓN';
 
   @Output() accionRealizada = new EventEmitter<{ tipo: string, item: UsuarioMapeado }>();
 

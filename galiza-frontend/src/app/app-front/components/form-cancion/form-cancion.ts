@@ -10,7 +10,7 @@ import { FrontUserService } from '../../service/front-user.service';
 
 // Modelos
 import { Lugar } from '../../models/lugar.model';
-import { CancionService } from '../../service/canciones.service';
+import { CancionService } from '../../service/cancions.service';
 
 @Component({
   selector: 'app-form-cancion',
@@ -59,7 +59,7 @@ export class FormCancion implements OnInit {
 
   constructor(
     private cdr: ChangeDetectorRef,
-    private cancionesService: CancionService,
+    private cancionsService: CancionService,
     private lugaresService: LugaresService,
     private instrumentosService: InstrumentosService,
     private asociacionesService: AsociacionesService,
@@ -125,8 +125,8 @@ export class FormCancion implements OnInit {
     }
 
     if (!this.datos || !this.datos.id) {
-      this.cancionesService.findAll().subscribe(canciones => {
-        const existe = canciones.find(c => this.frontUserService.capitalizarNombre(c.nome) === nombreNormalizado);
+      this.cancionsService.findAll().subscribe(cancions => {
+        const existe = cancions.find(c => this.frontUserService.capitalizarNombre(c.nome) === nombreNormalizado);
         if (existe) {
           this.errorMsg = 'Esta canción xa existe no sistema.';
           this.cdr.detectChanges();
@@ -169,8 +169,8 @@ export class FormCancion implements OnInit {
     const idCancion = this.datos?.id || this.datos?._id || this.cancion.id;
 
     const obs = idCancion
-      ? this.cancionesService.actualizarCancion(idCancion, payload)
-      : this.cancionesService.crearCancion(payload);
+      ? this.cancionsService.actualizarCancion(idCancion, payload)
+      : this.cancionsService.crearCancion(payload);
 
     obs.subscribe({
       next: (res) => {

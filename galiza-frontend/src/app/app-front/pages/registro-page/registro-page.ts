@@ -34,7 +34,7 @@ export class RegistroPage {
  onRegistrar() {
   // Validación inicial (Frontend)
   if (!this.usuario.nombre || !this.usuario.contrasena) {
-    this.errorMsg = 'Debes rellenar todos los campos';
+    this.errorMsg = 'Debes encher todos os campos';
     return;
   }
 
@@ -66,7 +66,7 @@ this.usuario.nombre = this.usuario.nombre.toLowerCase();
         }
       } else {
         // Fallback por si el servidor se cae o no responde el JSON esperado
-        this.errorMsg = 'No se pudo conectar con el servidor';
+        this.errorMsg = 'Non se puido conectar co servidor';
       }
 
       console.error('Error detallado:', err);

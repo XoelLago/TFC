@@ -14,13 +14,13 @@ export class JwtAuthGuard implements CanActivate {
     const authHeader = request.headers.authorization;
 
     if (!authHeader) {
-      throw new UnauthorizedException('No has enviado el cabezal de autorización');
+      throw new UnauthorizedException('Non enviaches o cabezal de autorización');
     }
 
     const [type, token] = authHeader.split(' ');
 
     if (type !== 'Bearer' || !token) {
-      throw new UnauthorizedException('Formato de token inválido (debe ser Bearer)');
+      throw new UnauthorizedException('Formato do token inválido (debe ser Bearer)');
     }
 
     try {
@@ -34,7 +34,7 @@ export class JwtAuthGuard implements CanActivate {
       request['user'] = payload; 
       
     } catch (error) {
-      throw new UnauthorizedException('Token inválido, manipulado o caducado');
+      throw new UnauthorizedException('Token inválido, manipulado ou caducado');
     }
     
     return true;

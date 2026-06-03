@@ -18,7 +18,6 @@ export class CreateEventoDto {
   descripcion!: string;
 
   @IsNumber()
-  @IsNotEmpty({ message: 'O prezo é obrigatorio (pode ser 0)' })
   precio!: number;
 
   @IsNumber()

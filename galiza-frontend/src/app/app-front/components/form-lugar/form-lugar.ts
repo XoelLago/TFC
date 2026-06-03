@@ -8,13 +8,13 @@ import { LugaresService } from '../../service/lugares.service';
 import { EventosService } from '../../service/eventos.service';
 import { ProvinciaService } from '../../service/provincias.service';
 import { BaileService } from '../../service/bailes.service';
-import { CancionService } from '../../service/canciones.service';
 import { Lugar } from '../../models/lugar.model';
 import { Provincia } from '../../models/provincia.model';
 import { Baile } from '../../models/baile.model';
 import { Cancion } from '../../models/cancion.model';
 import { Evento } from '../../models/evento.model';
 import { FrontUserService } from '../../service/front-user.service';
+import { CancionService } from '../../service/cancions.service';
 
 @Component({
   selector: 'app-form-lugar',

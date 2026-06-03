@@ -16,11 +16,11 @@ async login(loginDto: LoginUsuarioDto) {
 
   const user = await this.usuariosService.findByNombreWithPassword(nombre);
 
-  if (!user) throw new UnauthorizedException('Usuario no encontrado');
+  if (!user) throw new UnauthorizedException('Usuario non atopado');
 
   const isMatch = await bcrypt.compare(contrasena, user.contrasena); 
 
-  if (!isMatch) throw new UnauthorizedException('Contraseña incorrecta');
+  if (!isMatch) throw new UnauthorizedException('Contrasinal incorrecto');
 
   const payload = { 
     id: user.id, 
@@ -39,7 +39,7 @@ async login(loginDto: LoginUsuarioDto) {
       }
     };
   } catch (jwtError) {
-    throw new InternalServerErrorException('Error al generar el acceso');
+    throw new InternalServerErrorException('Erro ao xerar o acceso');
   }
 }
 }

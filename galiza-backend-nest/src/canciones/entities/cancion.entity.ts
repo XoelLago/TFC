@@ -3,7 +3,7 @@ import { Lugar } from '../../lugares/entities/lugare.entity';
 import { Instrumento } from '../../instrumentos/entities/instrumento.entity';
 import { Asociacion } from '../../asociaciones/entities/asociacione.entity';
 
-@Entity('canciones')
+@Entity('cancions')
 export class Cancion {
 
   @PrimaryGeneratedColumn()
@@ -24,7 +24,7 @@ export class Cancion {
   lugar!: Lugar;
 
   // RELACIÓN MUCHOS A MUCHOS CON INSTRUMENTOS
-  @ManyToMany(() => Instrumento, (instrumento) => instrumento.canciones)
+  @ManyToMany(() => Instrumento, (instrumento) => instrumento.cancions)
   @JoinTable({ name: 'cancion_instrumentos' }) // Tabla intermedia
   instrumentos?: Instrumento[];
 

@@ -6,8 +6,8 @@ import { FormsModule } from '@angular/forms';
 import { PuntosService } from '../../service/puntos.service';
 import { LugaresService } from '../../service/lugares.service';
 import { BaileService } from '../../service/bailes.service';
-import { MovimientosService } from '../../service/movimientos.service';
 import { TipoPunto } from '../../models/enums';
+import { movementosService } from '../../service/movementos.service';
 
 @Component({
   selector: 'app-form-punto',
@@ -27,17 +27,17 @@ export class FormPunto implements OnInit {
   // Listas de datos maestros
   public listaLugares: any[] = [];
   public listaBailes: any[] = [];
-  public listaMovimientos: any[] = [];
+  public listamovementos: any[] = [];
 
   // Listas filtradas que se pintan en los desplegables
   public lugaresFiltrados: any[] = [];
   public bailesFiltrados: any[] = [];
-  public movimientosFiltrados: any[] = [];
+  public movementosFiltrados: any[] = [];
 
   // Textos vinculados a los inputs de búsqueda
   public textoBusquedaLugar: string = '';
   public textoBusquedaBaile: string = '';
-  public textoBusquedaMovimiento: string = '';
+  public textoBusquedamovemento: string = '';
 
   public lugarSeleccionadoId: string | number = '';
   public tiposPunto = Object.values(TipoPunto);
@@ -45,7 +45,7 @@ export class FormPunto implements OnInit {
   // Variables de control de visibilidad de los desplegables
   public mostrarLugares = false;
   public mostrarBailes = false;
-  public mostrarMovimientos = false;
+  public mostrarmovementos = false;
 
   // Modelo único del Punto
   public punto: any = {
@@ -55,7 +55,7 @@ export class FormPunto implements OnInit {
     videoUrl: '',
     lugar: undefined,
     bailes: [],
-    movimientos: []
+    movementos: []
   };
 
   constructor(
@@ -63,7 +63,7 @@ export class FormPunto implements OnInit {
     private puntoService: PuntosService,
     private lugarService: LugaresService,
     private baileService: BaileService,
-    private movimientoService: MovimientosService
+    private movementoService: movementosService
   ) {}
 
   ngOnInit(): void {
@@ -73,7 +73,7 @@ export class FormPunto implements OnInit {
       this.punto = {
         ...this.datos,
         bailes: this.datos.bailes || [],
-        movimientos: this.datos.movimientos || []
+        movementos: this.datos.movementos || []
       };
       if (this.datos.lugar) {
         this.lugarSeleccionadoId = this.datos.lugar.id;
@@ -101,9 +101,9 @@ export class FormPunto implements OnInit {
       this.bailesFiltrados = res;
     });
 
-    this.movimientoService.findAll().subscribe(res => {
-      this.listaMovimientos = res;
-      this.movimientosFiltrados = res;
+    this.movementoService.findAll().subscribe(res => {
+      this.listamovementos = res;
+      this.movementosFiltrados = res;
     });
   }
 
@@ -132,9 +132,9 @@ export class FormPunto implements OnInit {
     );
   }
 
-  filtrarMovimientos(event: any) {
+  filtrarmovementos(event: any) {
     const valor = event.target.value.toLowerCase();
-    this.movimientosFiltrados = this.listaMovimientos.filter(m =>
+    this.movementosFiltrados = this.listamovementos.filter(m =>
       (m.nome && m.nome.toLowerCase().includes(valor)) || (m.nombre && m.nombre.toLowerCase().includes(valor))
     );
   }
@@ -166,12 +166,12 @@ export class FormPunto implements OnInit {
     this.bailesFiltrados = this.listaBailes;
   }
 
-  seleccionarMovimiento(mov: any) {
-    this.mostrarMovimientos = false;
-    if (!this.punto.movimientos) this.punto.movimientos = [];
+  seleccionarmovemento(mov: any) {
+    this.mostrarmovementos = false;
+    if (!this.punto.movementos) this.punto.movementos = [];
 
     // Control seguro: evita que propiedades vacías rompan el filtro
-    const existe = this.punto.movimientos.some((m: any) => {
+    const existe = this.punto.movementos.some((m: any) => {
       if (m.id && mov.id && m.id === mov.id) return true;
       if (m._id && mov._id && m._id === mov._id) return true;
       if (m.nome && mov.nome && m.nome === mov.nome) return true;
@@ -180,10 +180,10 @@ export class FormPunto implements OnInit {
     });
 
     if (!existe) {
-      this.punto.movimientos.push(mov);
+      this.punto.movementos.push(mov);
     }
-    this.textoBusquedaMovimiento = '';
-    this.movimientosFiltrados = this.listaMovimientos;
+    this.textoBusquedamovemento = '';
+    this.movementosFiltrados = this.listamovementos;
   }
 
   // --- ELIMINACIÓN DE CHIPS COMPATIBLE ---
@@ -197,8 +197,8 @@ export class FormPunto implements OnInit {
     });
   }
 
-  removerMovimiento(mov: any) {
-    this.punto.movimientos = this.punto.movimientos?.filter((m: any) => {
+  removermovemento(mov: any) {
+    this.punto.movementos = this.punto.movementos?.filter((m: any) => {
       if (m.id && mov.id) return m.id !== mov.id;
       if (m._id && mov._id) return m._id !== mov._id;
       const mNome = m.nome || m.nombre;
@@ -210,7 +210,7 @@ export class FormPunto implements OnInit {
     setTimeout(() => {
       if (tipo === 'lugares') this.mostrarLugares = false;
       if (tipo === 'bailes') this.mostrarBailes = false;
-      if (tipo === 'movimientos') this.mostrarMovimientos = false;
+      if (tipo === 'movementos') this.mostrarmovementos = false;
     }, 150);
   }
 
@@ -238,7 +238,7 @@ export class FormPunto implements OnInit {
       nome: `${nombreBase} ${this.lugarSeleccionadoId}`,
       lugar: lugarEncontrado,
       bailes: this.punto.bailes || [],
-      movimientos: this.punto.movimientos || []
+      movementos: this.punto.movementos || []
     };
 
     const idPunto = this.datos?.id || this.punto.id;

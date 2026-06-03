@@ -5,6 +5,17 @@
   padding-bottom: 140px; /* Más espacio abajo para que el scroll termine limpio */
   position: relative;
 }
+.header {
+  padding: 10px;
+  text-align: center;
+}
+
+.main-title {
+  font-family: 'Georgia', serif;
+  color: #93331d;
+  margin: 0;
+  font-size: 1.6rem;
+}
 .calendar-card, .legend-card {
   background: white;
   border-radius: 15px;
@@ -119,8 +130,8 @@
 
 /* --- LISTA DE EVENTOS --- */
 .events-list-section {
-  margin-top: 30px;
-  padding: 10px 0 40px 0;
+  margin-top: 10px;
+  padding: 0px 0 40px 0;
 }
 
 .list-title {

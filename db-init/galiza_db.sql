@@ -51,11 +51,11 @@ DROP TABLE IF EXISTS `asociacion_cancions`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `asociacion_cancions` (
   `asociacionesId` int NOT NULL,
-  `cancionesId` int NOT NULL,
-  PRIMARY KEY (`asociacionesId`,`cancionesId`),
+  `cancionsId` int NOT NULL,
+  PRIMARY KEY (`asociacionesId`,`cancionsId`),
   KEY `IDX_47e0299e60c0beaf22a6921697` (`asociacionesId`),
-  KEY `IDX_1adf8f7193af1589805c573651` (`cancionesId`),
-  CONSTRAINT `FK_1adf8f7193af1589805c573651d` FOREIGN KEY (`cancionesId`) REFERENCES `canciones` (`id`),
+  KEY `IDX_1adf8f7193af1589805c573651` (`cancionsId`),
+  CONSTRAINT `FK_1adf8f7193af1589805c573651d` FOREIGN KEY (`cancionsId`) REFERENCES `cancions` (`id`),
   CONSTRAINT `FK_47e0299e60c0beaf22a6921697a` FOREIGN KEY (`asociacionesId`) REFERENCES `asociaciones` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -222,12 +222,12 @@ DROP TABLE IF EXISTS `cancion_instrumentos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cancion_instrumentos` (
-  `cancionesId` int NOT NULL,
+  `cancionsId` int NOT NULL,
   `instrumentosId` int NOT NULL,
-  PRIMARY KEY (`cancionesId`,`instrumentosId`),
-  KEY `IDX_3119869d9a24788de9ebcb4c2a` (`cancionesId`),
+  PRIMARY KEY (`cancionsId`,`instrumentosId`),
+  KEY `IDX_3119869d9a24788de9ebcb4c2a` (`cancionsId`),
   KEY `IDX_a764ee33b4a0689b9d3aa57a70` (`instrumentosId`),
-  CONSTRAINT `FK_3119869d9a24788de9ebcb4c2a1` FOREIGN KEY (`cancionesId`) REFERENCES `canciones` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_3119869d9a24788de9ebcb4c2a1` FOREIGN KEY (`cancionsId`) REFERENCES `cancions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_a764ee33b4a0689b9d3aa57a70b` FOREIGN KEY (`instrumentosId`) REFERENCES `instrumentos` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -242,13 +242,13 @@ LOCK TABLES `cancion_instrumentos` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `canciones`
+-- Table structure for table `cancions`
 --
 
-DROP TABLE IF EXISTS `canciones`;
+DROP TABLE IF EXISTS `cancions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `canciones` (
+CREATE TABLE `cancions` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nome` varchar(255) NOT NULL,
   `letra` text,
@@ -261,12 +261,12 @@ CREATE TABLE `canciones` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `canciones`
+-- Dumping data for table `cancions`
 --
 
-LOCK TABLES `canciones` WRITE;
-/*!40000 ALTER TABLE `canciones` DISABLE KEYS */;
-/*!40000 ALTER TABLE `canciones` ENABLE KEYS */;
+LOCK TABLES `cancions` WRITE;
+/*!40000 ALTER TABLE `cancions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cancions` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -426,41 +426,41 @@ LOCK TABLES `marcadores_usuarios` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `movimiento_puntos`
+-- Table structure for table `movemento_puntos`
 --
 
-DROP TABLE IF EXISTS `movimiento_puntos`;
+DROP TABLE IF EXISTS `movemento_puntos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `movimiento_puntos` (
-  `movimientosId` int NOT NULL,
+CREATE TABLE `movemento_puntos` (
+  `movementosId` int NOT NULL,
   `puntosId` int NOT NULL,
-  PRIMARY KEY (`movimientosId`,`puntosId`),
-  KEY `IDX_d9b6e11dfbf53107820352554c` (`movimientosId`),
+  PRIMARY KEY (`movementosId`,`puntosId`),
+  KEY `IDX_d9b6e11dfbf53107820352554c` (`movementosId`),
   KEY `IDX_2db63f75a81cc05cb5a53a390f` (`puntosId`),
   CONSTRAINT `FK_2db63f75a81cc05cb5a53a390f2` FOREIGN KEY (`puntosId`) REFERENCES `puntos` (`id`),
-  CONSTRAINT `FK_d9b6e11dfbf53107820352554c9` FOREIGN KEY (`movimientosId`) REFERENCES `movimientos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `FK_d9b6e11dfbf53107820352554c9` FOREIGN KEY (`movementosId`) REFERENCES `movementos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `movimiento_puntos`
+-- Dumping data for table `movemento_puntos`
 --
 
-LOCK TABLES `movimiento_puntos` WRITE;
-/*!40000 ALTER TABLE `movimiento_puntos` DISABLE KEYS */;
-INSERT INTO `movimiento_puntos` VALUES (12,3),(13,3),(14,3);
-/*!40000 ALTER TABLE `movimiento_puntos` ENABLE KEYS */;
+LOCK TABLES `movemento_puntos` WRITE;
+/*!40000 ALTER TABLE `movemento_puntos` DISABLE KEYS */;
+INSERT INTO `movemento_puntos` VALUES (12,3),(13,3),(14,3);
+/*!40000 ALTER TABLE `movemento_puntos` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `movimientos`
+-- Table structure for table `movementos`
 --
 
-DROP TABLE IF EXISTS `movimientos`;
+DROP TABLE IF EXISTS `movementos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `movimientos` (
+CREATE TABLE `movementos` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
@@ -469,13 +469,13 @@ CREATE TABLE `movimientos` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `movimientos`
+-- Dumping data for table `movementos`
 --
 
-LOCK TABLES `movimientos` WRITE;
-/*!40000 ALTER TABLE `movimientos` DISABLE KEYS */;
-INSERT INTO `movimientos` VALUES (14,'Aire por detrás'),(13,'Aire por diante'),(12,'Atrás-diante'),(6,'Detrás'),(5,'Diante'),(7,'Diante detrás desprazado'),(11,'Diante-atrás'),(4,'Hop'),(15,'Paso'),(2,'Picado cruzado por detrás'),(3,'Picado cruzado por diante'),(1,'Picado valseado'),(9,'Punta'),(16,'Punta adiante'),(17,'Punta atrás'),(8,'Punta-tacón'),(10,'Tacón');
-/*!40000 ALTER TABLE `movimientos` ENABLE KEYS */;
+LOCK TABLES `movementos` WRITE;
+/*!40000 ALTER TABLE `movementos` DISABLE KEYS */;
+INSERT INTO `movementos` VALUES (14,'Aire por detrás'),(13,'Aire por diante'),(12,'Atrás-diante'),(6,'Detrás'),(5,'Diante'),(7,'Diante detrás desprazado'),(11,'Diante-atrás'),(4,'Hop'),(15,'Paso'),(2,'Picado cruzado por detrás'),(3,'Picado cruzado por diante'),(1,'Picado valseado'),(9,'Punta'),(16,'Punta adiante'),(17,'Punta atrás'),(8,'Punta-tacón'),(10,'Tacón');
+/*!40000 ALTER TABLE `movementos` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --

@@ -31,7 +31,7 @@ export class RecomendacionPage implements OnInit {
     { label: 'TODOS', value: 'TODOS' },
     { label: 'LIBROS', value: TipoRecomendacion.LIBRO },
     { label: 'MÚSICA', value: TipoRecomendacion.CANCION },
-    { label: 'DOCUMENTALES', value: TipoRecomendacion.DOCUMENTAL },
+    { label: 'DOCUMENTAIS', value: TipoRecomendacion.DOCUMENTAL },
     { label: 'ARTISTAS', value: TipoRecomendacion.ARTISTA }
   ];
 
@@ -56,7 +56,7 @@ export class RecomendacionPage implements OnInit {
         this.recomendaciones = data;
         this.cdr.detectChanges();
       },
-      error: (err) => console.error('Error al cargar recomendaciones:', err)
+      error: (err) => console.error('Erro ao cargar recomendacions:', err)
     });
   }
 
@@ -108,7 +108,7 @@ export class RecomendacionPage implements OnInit {
         this.cargarRecomendaciones();
         this.cerrarFormulario();
       },
-      error: (err) => console.error('Error al crear recomendación:', err)
+      error: (err) => console.error('Erro ao crear recomendación:', err)
     });
   }
 }

@@ -1,4 +1,16 @@
 /* --- CONTENEDOR PRINCIPAL --- */
+
+.header {
+  padding: 10px;
+  text-align: center;
+}
+
+.main-title {
+  font-family: 'Georgia', serif;
+  color: #93331d;
+  margin: 0;
+  font-size: 1.6rem;
+}
 .search-wrapper {
   width: 100%;
   max-width: 600px;
@@ -235,7 +247,7 @@
       &.INSTRUMENTO {
         background-color: #0f766e; /* Azul verdoso / Turquesa oscuro */
       }
-      &.MOVIMIENTO {
+      &.MOVEMENTO {
         background-color: #c2410c; /* Naranja quemado */
       }
       &.PROVINCIA {

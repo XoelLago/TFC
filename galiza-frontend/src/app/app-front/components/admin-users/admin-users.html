@@ -1,5 +1,6 @@
 <div class="info-group">
-  <label>{{ tituloLista }}</label>
+  <div class="spacer"></div>
+  <label class="section-main-label">{{ tituloLista }}</label>
 
   <div class="input-edit">
     <input type="text" placeholder="Buscar..." [(ngModel)]="terminoBusqueda" (input)="aplicarFiltros()">
@@ -14,7 +15,7 @@
   </div>
 
   <div class="fixed-list-wrapper">
-    <label style="margin-top: 10px; display: block;">RESULTADOS ({{ itemsFiltrados.length }})</label>
+    <label class="section-main-label" style="margin-top: 10px; display: block;">RESULTADOS ({{ itemsFiltrados.length }})</label>
 
     <div class="user-list-container">
       @if (cargando) {
@@ -44,7 +45,7 @@
 <div class="modal-overlay" (click)="cerrarCard()">
   <div class="action-card menu-fade" (click)="$event.stopPropagation()">
     <div class="card-header">
-      <h3 style="font-family: 'Georgia', serif; font-size: 2.2rem; color: #311c18; text-align: center;">Gestionar {{ itemSeleccionado.titulo }}</h3>
+      <h3 style="font-family: 'Georgia', serif; font-size: 2.2rem; color: #311c18; text-align: center;">Xestionar {{ itemSeleccionado.titulo }}</h3>
       <p style="font-family: 'Montserrat', sans-serif; font-size: 1rem; color: #554a43; text-align: center; margin-top: 5px;">{{ itemSeleccionado.etiqueta }}</p>
     </div>
 
@@ -52,7 +53,7 @@
 
       @if (miRol === 'superuser') {
         @if (itemSeleccionado.id === miId || itemSeleccionado.etiqueta.toLowerCase() === 'superuser') {
-          <div class="no-actions-msg">Nada que hacer con este rango</div>
+          <div class="no-actions-msg">Nada que facer con este rango</div>
         } @else {
           <button class="action-card-btn ascender" (click)="emitirAccion('ascender')">
             <span class="btn-icon-wrapper">

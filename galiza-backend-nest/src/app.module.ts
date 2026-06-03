@@ -5,16 +5,16 @@ import { UsuariosModule } from './usuarios/usuarios.module';
 import { InstrumentosModule } from './instrumentos/instrumentos.module';
 import { EventosModule } from './eventos/eventos.module';
 import { AsociacionesModule } from './asociaciones/asociaciones.module';
-import { CancionesModule } from './canciones/canciones.module';
 import { BailesModule } from './bailes/bailes.module';
 import { LugaresModule } from './lugares/lugares.module';
 import { ProvinciasModule } from './provincias/provincias.module';
 import { AuthModule } from './auth/auth.module';
 import { MarcadoresModule } from './marcadores/marcadores.module';
 import { SolicitudesEventoModule } from './solicitudes-evento/solicitudes-evento.module';
-import { MovimientosModule } from './movimientos/movimientos.module';
 import { PuntosModule } from './puntos/puntos.module';
 import { RecomendacionesModule } from './recomendaciones/recomendaciones.module';
+import { movementosModule } from './movimientos/movementos.module';
+import { cancionsModule } from './canciones/cancions.module';
 // Importa aquí los módulos según los vayas actualizando
 
 @Module({
@@ -41,13 +41,13 @@ import { RecomendacionesModule } from './recomendaciones/recomendaciones.module'
     ProvinciasModule,
     LugaresModule,
     BailesModule,
-    CancionesModule,
+    cancionsModule,
     AsociacionesModule,
     EventosModule,
     InstrumentosModule,
     MarcadoresModule,
     SolicitudesEventoModule,
-    MovimientosModule,
+    movementosModule,
     PuntosModule,
     RecomendacionesModule
     

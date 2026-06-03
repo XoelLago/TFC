@@ -48,7 +48,7 @@ export class InicioPage implements OnInit {
     },
     error: (err) => {
       this.loading = false;
-      this.errorMsg = 'Usuario o contraseña incorrectos';
+      this.errorMsg = 'Usuario ou contrasinal incorrectos';
 
       // Aseguramos que el mensaje de error se muestre inmediatamente
       this.cdr.detectChanges();

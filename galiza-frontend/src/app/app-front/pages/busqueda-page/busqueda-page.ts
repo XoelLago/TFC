@@ -10,10 +10,10 @@ import { AsociacionesService } from '../../service/asociaciones.service';
 import { PuntosService } from '../../service/puntos.service';
 import { LugaresService } from '../../service/lugares.service';
 import { InstrumentosService } from '../../service/instrumentos.service';
-import { MovimientosService } from '../../service/movimientos.service';
+import { movementosService } from '../../service/movementos.service';
 import { BaileService } from '../../service/bailes.service';
-import { CancionService } from '../../service/canciones.service';
 import { normalizarTexto } from '../../utils/text-utils';
+import { CancionService } from '../../service/cancions.service';
 
 
 
@@ -37,8 +37,8 @@ export class BusquedaPage implements OnInit {
   mostrarAvanzados: boolean = false;
 
   filtrosDisponibles: string[] = [
-    'Asociaciones', 'Bailes', 'Puntos', 'Lugares',
-    'Canciones', 'Instrumentos', 'Movimientos'
+    'Asociacions', 'Bailes', 'Puntos', 'Lugares',
+    'Cancions', 'Instrumentos', 'Movementos'
   ];
 
   filtrosSeleccionados: string[] = [];
@@ -61,9 +61,9 @@ export class BusquedaPage implements OnInit {
     private bailesService: BaileService,
     private puntosService: PuntosService,
     private lugaresService: LugaresService,
-    private cancionesService: CancionService,
+    private cancionsService: CancionService,
     private instrumentosService: InstrumentosService,
-    private movimientosService: MovimientosService,
+    private movementosService: movementosService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -95,9 +95,9 @@ export class BusquedaPage implements OnInit {
       this.mapService(this.bailesService.findAll(), 'BAILE'),
       this.mapService(this.puntosService.findAll(), 'PUNTO'),
       this.mapService(this.lugaresService.findAll(), 'LUGAR'),
-      this.mapService(this.cancionesService.findAll(), 'CANCIÓN'),
+      this.mapService(this.cancionsService.findAll(), 'CANCIÓN'),
       this.mapService(this.instrumentosService.findAll(), 'INSTRUMENTO'),
-      this.mapService(this.movimientosService.findAll(), 'MOVIMIENTO')
+      this.mapService(this.movementosService.findAll(), 'MOVEMENTO')
     ]).subscribe({
       next: (resultadosMultiples) => {
         this.resultadosBrutos = resultadosMultiples.flat();
@@ -138,8 +138,8 @@ export class BusquedaPage implements OnInit {
     const buscarLocalidad = normalizarTexto(this.busquedaAvanzada.localidad);
 
     const mapaFiltros: { [key: string]: string } = {
-      'Asociaciones': 'ASOCIACIÓN', 'Bailes': 'BAILE', 'Puntos': 'PUNTO', 'Lugares': 'LUGAR',
-      'Canciones': 'CANCIÓN', 'Instrumentos': 'INSTRUMENTO', 'Movimientos': 'MOVIMIENTO'
+      'Asociacions': 'ASOCIACIÓN', 'Bailes': 'BAILE', 'Puntos': 'PUNTO', 'Lugares': 'LUGAR',
+      'Cancions': 'CANCIÓN', 'Instrumentos': 'INSTRUMENTO', 'Movementos': 'MOVEMENTO'
     };
 
     const tiposPermitidos = this.filtrosSeleccionados.map(f => mapaFiltros[f]);

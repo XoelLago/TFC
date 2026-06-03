@@ -20,13 +20,13 @@
       <p class="form-subtitle">
         {{
         seccionActual === 'principal' ? 'Dancer & Storyteller' :
-        seccionActual === 'cuenta' ? 'Gestión de Cuenta y Seguridad' :
-        seccionActual === 'cuenta-nombre' ? 'Cambiar Nombre de Usuario' :
-        seccionActual === 'cuenta-password' ? 'Cambiar Contraseña' :
+        seccionActual === 'cuenta' ? 'Xestión da Conta e Seguridade' :
+        seccionActual === 'cuenta-nombre' ? 'Cambiar Nome de Usuario' :
+        seccionActual === 'cuenta-password' ? 'Cambiar Contrasinal' :
         seccionActual === 'admin' ? 'Panel de Administración' :
         seccionActual === 'admin-solicitudes' ? 'Solicitudes de Eventos Recibidas' :
-        seccionActual === 'ver-solicitud' ? 'Revisión y Decisión de Solicitud' :
-        'Gestión de perfil'
+        seccionActual === 'ver-solicitud' ? 'Revisión e Decisión de Solicitude' :
+        'Xestión de perfil'
         }}
       </p>
     </div>
@@ -37,7 +37,7 @@
         <div class="spacer"></div>
         <div class="options-bottom">
           <button class="settings-btn" (click)="cambiarSeccion('cuenta')">
-            <span class="material-icons icon-left">settings</span> Mi Cuenta
+            <span class="material-icons icon-left">settings</span> Miña Conta
             <span class="material-icons icon-right">chevron_right</span>
           </button>
 
@@ -57,32 +57,34 @@
         <div class="spacer"></div>
         <div class="options-bottom">
           <button class="settings-btn back-btn" (click)="volver()">
-            <span class="material-icons icon-left">arrow_back</span> Volver al menú
+            <span class="material-icons icon-left">arrow_back</span> Volver ao menú
           </button>
 
           <button class="settings-btn" (click)="cambiarSeccion('cuenta-nombre')">
-            <span class="material-icons icon-left">badge</span> Cambiar Nombre
+            <span class="material-icons icon-left">badge</span> Cambiar Nome
             <span class="material-icons icon-right">chevron_right</span>
           </button>
 
           <button class="settings-btn" (click)="cambiarSeccion('cuenta-password')">
-            <span class="material-icons icon-left">lock</span> Cambiar Contraseña
+            <span class="material-icons icon-left">lock</span> Cambiar Contrasinal
             <span class="material-icons icon-right">chevron_right</span>
           </button>
         </div>
       </div>
 
       <div *ngSwitchCase="'cuenta-nombre'" class="menu-layout menu-fade">
+        <div class="spacer"></div>
+
         <button class="settings-btn back-btn" (click)="cambiarSeccion('cuenta')">
-          <span class="material-icons icon-left">arrow_back</span> Volver a Mi Cuenta
+          <span class="material-icons icon-left">arrow_back</span> Volver á miña Conta
         </button>
 
         <div class="login-form">
           <div class="form-group">
-            <label>NUEVO NOMBRE DE USUARIO</label>
+            <label>NOVO NOME DE USUARIO</label>
             <div class="input-container">
               <span class="material-icons icon-left" style="color: #93331d;">person</span>
-              <input type="text" [(ngModel)]="usuarioEditado.nome" placeholder="Tu nuevo nombre">
+              <input type="text" [(ngModel)]="usuarioEditado.nome" placeholder="Teu novo nome">
             </div>
           </div>
         </div>
@@ -90,25 +92,26 @@
         <p *ngIf="errorMsg" style="color:red; margin-top:5px; text-align: center;">{{errorMsg}}</p>
 
         <button class="settings-btn save-btn" (click)="actualizarCuenta()" [disabled]="cargando">
-          <span class="material-icons icon-left">save</span> {{ cargando ? 'Guardando...' : 'Confirmar Nombre' }}
+          <span class="material-icons icon-left">save</span> {{ cargando ? 'Gardando...' : 'Confirmar Nome' }}
         </button>
       </div>
 
       <div *ngSwitchCase="'cuenta-password'" class="menu-layout menu-fade">
+        <div class="spacer"></div>
         <button class="settings-btn back-btn" (click)="cambiarSeccion('cuenta')">
-          <span class="material-icons icon-left">arrow_back</span> Volver a Mi Cuenta
+          <span class="material-icons icon-left">arrow_back</span> Volver á miña Conta
         </button>
 
         <div class="login-form">
           <div class="form-group">
-            <label>NUEVA CONTRASEÑA</label>
+            <label>NOVO CONTRASINAL</label>
             <div class="input-container">
               <span class="material-icons icon-left" style="color: #93331d;">lock</span>
               <input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="usuarioEditado.contrasena"
-                placeholder="Escribe tu nueva contraseña...">
+                placeholder="Escribe a túa nova contrasinal...">
               <span class="material-icons icon-right" style="cursor: pointer; color: #666;"
                 (click)="showPassword = !showPassword"
-                title="{{ showPassword ? 'Ocultar contraseña' : 'Ver contraseña' }}">
+                title="{{ showPassword ? 'Ocultar contrasinal' : 'Ver contrasinal' }}">
                 {{ showPassword ? 'visibility_off' : 'visibility' }}
               </span>
             </div>
@@ -118,7 +121,7 @@
         <p *ngIf="errorMsg" style="color:red; margin-top:5px; text-align: center;">{{errorMsg}}</p>
 
         <button class="settings-btn save-btn" (click)="actualizarCuenta()" [disabled]="cargando">
-          <span class="material-icons icon-left">save</span> {{ cargando ? 'Guardando...' : 'Confirmar Contraseña' }}
+          <span class="material-icons icon-left">save</span> {{ cargando ? 'Gardando...' : 'Confirmar Contrasinal' }}
         </button>
       </div>
 
@@ -126,10 +129,10 @@
         <div class="spacer"></div>
         <div class="options-bottom">
           <button class="settings-btn back-btn" (click)="volver()">
-            <span class="material-icons icon-left">arrow_back</span> Volver al menú
+            <span class="material-icons icon-left">arrow_back</span> Volver ao menú
           </button>
           <button class="settings-btn" (click)="cambiarSeccion('admin-usuarios')">
-            <span class="material-icons icon-left">group</span> Gestionar Usuarios
+            <span class="material-icons icon-left">group</span> Xestionar Usuarios
             <span class="material-icons icon-right">chevron_right</span>
           </button>
           <button class="settings-btn" (click)="cambiarSeccion('admin-solicitudes')">
@@ -148,7 +151,7 @@
           </button>
 
           <div class="info-group">
-            <label class="section-main-label">GESTIÓN</label>
+            <label class="section-main-label">XESTIÓN</label>
 
             <div class="search-container">
               <input type="text" [(ngModel)]="terminoBusqueda" placeholder="Buscar..." class="input-buscar">
@@ -169,7 +172,7 @@
             <div *ngIf="cargando" class="static-data">Cargando solicitudes...</div>
 
             <ng-container *ngIf="!cargando">
-              <div *ngIf="obtenerSolicitudesFiltradas().length === 0" class="static-data">No se encontraron solicitudes.</div>
+              <div *ngIf="obtenerSolicitudesFiltradas().length === 0" class="static-data">Non se encontraron solicitudes.</div>
 
               <div *ngIf="obtenerSolicitudesFiltradas().length > 0" class="solicitudes-container">
 
@@ -223,6 +226,7 @@
       </div>
 
       <div *ngSwitchCase="'admin-usuarios'" class="menu-layout menu-fade">
+        <div class="spacer"></div>
         <button class="settings-btn back-btn" (click)="cambiarSeccion('admin')">
           <span class="material-icons icon-left">arrow_back</span> Volver a Admin
         </button>

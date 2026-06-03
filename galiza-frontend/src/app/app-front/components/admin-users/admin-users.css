@@ -1,4 +1,10 @@
 /* --- TAMAÑO FIJO Y ESTRUCTURA --- */
+
+.spacer {
+
+  flex: 1;
+
+}
 .fixed-list-wrapper {
   height: 320px;
   display: flex;
@@ -27,6 +33,17 @@
 
 .user-name { font-weight: 600; color: #93331d; display: block; }
 
+.section-main-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.65rem;
+  color: #999;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 8px;
+  text-align: left;
+}
 /* --- FILTROS --- */
 .filter-chips { display: flex; gap: 8px; margin-top: 10px; overflow-x: auto; padding-bottom: 5px; }
 .filter-chips span {

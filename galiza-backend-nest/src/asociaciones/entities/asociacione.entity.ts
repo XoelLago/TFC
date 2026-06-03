@@ -2,10 +2,10 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { Lugar } from '../../lugares/entities/lugare.entity';
 import { ManyToOne } from 'typeorm';
 import { Baile } from '../../bailes/entities/baile.entity';
-import { Cancion } from '../../canciones/entities/cancione.entity';
 import { Evento } from '../../eventos/entities/evento.entity';
 import { ManyToMany } from 'typeorm';
 import { JoinTable } from 'typeorm';
+import { Cancion } from '../../canciones/entities/cancion.entity';
 
 @Entity('asociaciones')
 export class Asociacion {

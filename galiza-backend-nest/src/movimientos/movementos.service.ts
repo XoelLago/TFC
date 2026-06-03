@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Movimiento } from './entities/movimiento.entity';
+import { movemento } from './entities/movemento.entity';
 
 @Injectable()
-export class MovimientosService {
+export class movementosService {
   constructor(
-    @InjectRepository(Movimiento)
-    private readonly repository: Repository<Movimiento>,
+    @InjectRepository(movemento)
+    private readonly repository: Repository<movemento>,
   ) {}
 
   async create(dto: any) {

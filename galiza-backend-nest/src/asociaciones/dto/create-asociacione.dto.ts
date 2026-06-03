@@ -43,10 +43,10 @@ export class CreateAsociacionDto {
   @IsOptional()
   bailesIds?: number[]; // IDs de los bailes que practican
 
-  // 3. ARREGLADO: Mapeo de canciones adaptado al backend
+  // 3. ARREGLADO: Mapeo de cancions adaptado al backend
   @IsArray()
   @IsOptional()
-  cancionesIds?: number[];
+  cancionsIds?: number[];
 
   // Por si acaso en el Front envías 'eventos' y los quieres capturar en el DTO:
   @IsArray()

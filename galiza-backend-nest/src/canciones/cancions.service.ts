@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Cancion } from './entities/cancione.entity';
+import { Cancion } from './entities/cancion.entity';
 
 @Injectable()
-export class CancionesService {
+export class cancionsService {
   constructor(
     @InjectRepository(Cancion)
     private readonly repository: Repository<Cancion>,
@@ -26,7 +26,7 @@ export class CancionesService {
 
   async findAll() {
     return await this.repository.find({
-    relations: ['lugar', 'asociaciones', 'instrumentos'] 
+    relations: ['lugar', 'asociaciones', 'instrumentos', 'lugar.provincia'] 
   });
   }
 
@@ -43,7 +43,7 @@ export class CancionesService {
   // 1. Buscamos la canción con sus relaciones para ver si tiene datos
   const cancion = await this.repository.findOne({
     where: { id },
-    relations: ['asociaciones', 'instrumentos']
+    relations: [ 'lugar.provincia','asociaciones', 'instrumentos']
   });
 
   if (!cancion) return;

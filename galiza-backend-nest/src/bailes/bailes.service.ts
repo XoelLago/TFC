@@ -17,7 +17,7 @@ export class BailesService {
 
   async findAll() {
     return await this.repository.find({
-    relations: ['lugar', 'asociaciones', 'instrumentos', 'puntos'] 
+    relations: ['lugar', 'lugar.provincia', 'asociaciones', 'instrumentos', 'puntos'] 
   });
   }
 

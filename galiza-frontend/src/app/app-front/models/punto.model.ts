@@ -1,5 +1,5 @@
 import { Lugar } from './lugar.model';
-import { Movemento } from './movemento.model';
+import { movemento } from './movemento.model';
 
 export interface Punto {
 _id: string;
@@ -7,5 +7,5 @@ _id: string;
   tipo?: string;          // giro, salto, desplazamiento...
   videoUrl?: string;
   lugar?: Lugar;
-  movementos?: Movemento[];
+  movementos?: movemento[];
 }

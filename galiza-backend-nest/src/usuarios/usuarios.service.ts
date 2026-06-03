@@ -28,8 +28,8 @@ export class UsuariosService {
       });
       return await this.usuarioRepository.save(nuevo);
     } catch (error) {
-      if ((error as any).code === 'ER_DUP_ENTRY') throw new ConflictException('Nombre de usuario ya existe');
-      throw new InternalServerErrorException('Error al crear usuario');
+      if ((error as any).code === 'ER_DUP_ENTRY') throw new ConflictException('Nome de usuario xa existe');
+      throw new InternalServerErrorException('Erro ao crear usuario');
     }
   }
 
@@ -39,7 +39,7 @@ export class UsuariosService {
 
   async findOne(id: number): Promise<Usuario> {
     const user = await this.usuarioRepository.findOneBy({ id });
-    if (!user) throw new NotFoundException('Usuario no encontrado');
+    if (!user) throw new NotFoundException('Usuario non atopado');
     return user;
   }
 
@@ -47,7 +47,7 @@ export class UsuariosService {
     const user = await this.findOne(id);
     if (user.rol === Rol.USER) user.rol = Rol.ADMIN;
     else if (user.rol === Rol.ADMIN) user.rol = Rol.SUPERUSER;
-    else throw new BadRequestException('Ya tiene el rango máximo');
+    else throw new BadRequestException('Xa ten o rango máximo');
     return await this.usuarioRepository.save(user);
   }
 
@@ -55,7 +55,7 @@ export class UsuariosService {
     const user = await this.findOne(id);
     if (user.rol === Rol.SUPERUSER) user.rol = Rol.ADMIN;
     else if (user.rol === Rol.ADMIN) user.rol = Rol.USER;
-    else throw new BadRequestException('Ya tiene el rango mínimo');
+    else throw new BadRequestException('Xa ten o rango mínimo');
     return await this.usuarioRepository.save(user);
   }
 
@@ -75,14 +75,14 @@ export class UsuariosService {
       return this.findOne(id);
 
     } catch (error) {
-      if ((error as any).code === 'ER_DUP_ENTRY') throw new ConflictException('Nombre de usuario ya existe');
-      throw new InternalServerErrorException('Error al actualizar usuario');
+      if ((error as any).code === 'ER_DUP_ENTRY') throw new ConflictException('Nome de usuario xa existe');
+      throw new InternalServerErrorException('Erro ao actualizar usuario');
     }
   }
 
   async remove(id: number): Promise<{ deleted: boolean }> {
     const user = await this.findOne(id);
-    if (user.rol === Rol.SUPERUSER) throw new ForbiddenException('No puedes eliminar un Superuser');
+    if (user.rol === Rol.SUPERUSER) throw new ForbiddenException('Non podes eliminar un Superuser');
     await this.usuarioRepository.delete(id);
     return { deleted: true };
   }

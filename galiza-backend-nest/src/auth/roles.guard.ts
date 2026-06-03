@@ -31,7 +31,7 @@ export class RolesGuard implements CanActivate {
 
     // Verificamos si el usuario existe (por si acaso el guard de JWT falló)
     if (!user) {
-      throw new UnauthorizedException('Usuario no encontrado en la petición');
+      throw new UnauthorizedException('Usuario non atopado na petición');
     }
 
     // Si el usuario tiene el rol de SUPERUSER, tiene acceso total siempre.
@@ -46,7 +46,7 @@ export class RolesGuard implements CanActivate {
 
     if (!tienePermiso) {
       throw new ForbiddenException(
-        `Tu rol (${user.rol}) no tiene permisos suficientes para realizar esta acción`
+        `O teu rol (${user.rol}) non ten permisos suficientes para realizar esta acción`
       );
     }
 

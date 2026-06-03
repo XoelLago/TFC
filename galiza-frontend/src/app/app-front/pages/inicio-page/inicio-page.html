@@ -6,13 +6,13 @@
       </div>
 
       <h2 class="form-title">Ritual & Rhythm</h2>
-      <p class="form-subtitle">Inicia sesión para continuar tu viaje cultural.</p>
+      <p class="form-subtitle">Inicia sesión para continuar a túa viaxe cultural.</p>
     </div>
 
     <form class="login-form" (ngSubmit)="onLogin()">
 
       <div class="form-group">
-        <label>NOMBRE DE USUARIO</label>
+        <label>NOME DE USUARIO</label>
         <div class="input-container">
           <span class="material-symbols-outlined icon-left">person</span>
           <input type="text" placeholder="ej. dancer_ritual" [(ngModel)]="credenciales.nombre" name="nombre" required>
@@ -20,7 +20,7 @@
       </div>
 
       <div class="form-group">
-        <label>CONTRASEÑA</label>
+        <label>CONTRASINAL</label>
         <div class="input-container">
           <span class="material-symbols-outlined icon-left">lock</span>
 
@@ -28,7 +28,7 @@
             [(ngModel)]="credenciales.contrasena" name="contrasena" required>
 
           <span class="material-symbols-outlined icon-right" style="cursor: pointer;" (click)="togglePassword()"
-            title="{{ showPassword ? 'Ocultar contraseña' : 'Ver contraseña' }}">
+            title="{{ showPassword ? 'Ocultar contrasinal' : 'Ver contrasinal' }}">
             {{ showPassword ? 'visibility_off' : 'visibility' }}
           </span>
         </div>
@@ -38,7 +38,7 @@
         <label class="checkbox-label">
           <input type="checkbox"> Recordarme
         </label>
-        <a href="javascript:void(0)" class="forgot-link">¿Olvidaste tu contraseña?</a>
+        <a href="javascript:void(0)" class="forgot-link">¿Olvidaches o teu contrasinal?</a>
       </div>
 
       <div class="footer">
@@ -59,7 +59,7 @@
         </button>
 
         <p class="footer-text">
-          ¿No tienes una cuenta? <a routerLink="/registro" class="register-link">Regístrate</a>
+          ¿No tes conta? <a routerLink="/registro" class="register-link">Rexístrate</a>
         </p>
       </div>
     </form>

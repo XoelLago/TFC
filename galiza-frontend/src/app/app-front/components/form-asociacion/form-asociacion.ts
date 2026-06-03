@@ -8,7 +8,6 @@ import { AsociacionesService } from '../../service/asociaciones.service';
 import { LugaresService } from '../../service/lugares.service';
 import { EventosService } from '../../service/eventos.service';
 import { BaileService } from '../../service/bailes.service';
-import { CancionService } from '../../service/canciones.service';
 import { FrontUserService } from '../../service/front-user.service';
 
 // Modelos
@@ -16,6 +15,7 @@ import { Lugar } from '../../models/lugar.model';
 import { Baile } from '../../models/baile.model';
 import { Cancion } from '../../models/cancion.model';
 import { Evento } from '../../models/evento.model';
+import { CancionService } from '../../service/cancions.service';
 
 @Component({
   selector: 'app-form-asociacion',
@@ -221,9 +221,9 @@ export class FormAsociacion implements OnInit {
       payload.bailesIds = this.asociacion.bailes.map((b: any) => Number(b.id || b._id));
     }
 
-    // CORRECCIÓN CRUCIAL: 'cancionesIds' con "e" para emparejar con el @IsArray() del DTO
+    // CORRECCIÓN CRUCIAL: 'cancionsIds' con "e" para emparejar con el @IsArray() del DTO
     if (this.asociacion.cancions && this.asociacion.cancions.length > 0) {
-      payload.cancionesIds = this.asociacion.cancions.map((c: any) => Number(c.id || c._id));
+      payload.cancionsIds = this.asociacion.cancions.map((c: any) => Number(c.id || c._id));
     }
 
     if (this.asociacion.eventos && this.asociacion.eventos.length > 0) {

@@ -118,7 +118,7 @@ export class ProfilePage implements OnInit {
   // --- GESTIÓN DE CUENTA ---
   actualizarCuenta(): void {
     if (!this.usuarioEditado.nome || this.usuarioEditado.nome.trim().length < 3) {
-      this.errorMsg = 'El nombre debe tener al menos 3 caracteres';
+      this.errorMsg = 'O nome debe ter polo menos 3 caracteres';
       return;
     }
     this.cargando = true;
@@ -131,12 +131,12 @@ export class ProfilePage implements OnInit {
         localStorage.setItem('user_nombre', res.nombre);
         this.usuarioEditado.contrasena = '';
         this.cargando = false;
-        this.mostrarToastExito('¡Cambios guardados con éxito!');
+        this.mostrarToastExito('¡Cambios gardados con éxito!');
         this.volver();
       },
       error: (err) => {
         this.cargando = false;
-        this.errorMsg = err.error?.message || 'Error al actualizar';
+        this.errorMsg = err.error?.message || 'Erro ao actualizar';
         this.cdr.detectChanges();
       }
     });
@@ -174,18 +174,18 @@ export class ProfilePage implements OnInit {
     const tipoAccion = evento.tipo.toLowerCase().trim();
 
     if (tipoAccion === 'ascender' && user.rol === 'ADMIN') {
-      this.mostrarToastExito(`El usuario ${user.nombre} ya es Administrador.`);
+      this.mostrarToastExito(`O usuario ${user.nombre} xa é Administrador.`);
       return;
     }
 
     if (tipoAccion === 'descender' && user.rol === 'USER') {
-      this.mostrarToastExito(`El usuario ${user.nombre} ya tiene el rango mínimo.`);
+      this.mostrarToastExito(`O usuario ${user.nombre} xa ten o rango mínimo.`);
       return;
     }
 
     const mensajes: Record<string, string> = {
-      'ascender': `¿Deseas ascender a ${user.nombre} a Administrador?`,
-      'descender': `¿Deseas quitar los privilegios a ${user.nombre}?`,
+      'ascender': `¿Desexas ascender a ${user.nombre} a Administrador?`,
+      'descender': `¿Desexas quitar os privilexios a ${user.nombre}?`,
       'eliminar': `¿Eliminar permanentemente a ${user.nombre}?`
     };
 
@@ -208,7 +208,7 @@ export class ProfilePage implements OnInit {
       },
       error: (err) => {
         this.cargando = false;
-        this.errorMsg = err.error?.message || 'Error en la operación';
+        this.errorMsg = err.error?.message || 'Erro na operación';
         this.cdr.detectChanges();
       }
     });
@@ -250,16 +250,16 @@ export class ProfilePage implements OnInit {
   // Preparadores de confirmación para solicitudes (vinculados al HTML)
   prepararAceptar(sol: any): void {
     const nombre = sol.evento?.nome || sol.evento?.nombre || 'este evento';
-    this.pedirConfirmacion(`¿Aprobar y publicar ${nombre}?`, 'aceptar-solicitud', sol.id);
+    this.pedirConfirmacion(`¿Aprobar e publicar ${nombre}?`, 'aceptar-solicitud', sol.id);
   }
 
   prepararRechazar(sol: any): void {
     const nombre = sol.evento?.nome || sol.evento?.nombre || 'este evento';
-    this.pedirConfirmacion(`¿Rechazar la solicitud para ${nombre}?`, 'rechazar-solicitud', sol.id);
+    this.pedirConfirmacion(`¿Rechazar a solicitude para ${nombre}?`, 'rechazar-solicitud', sol.id);
   }
 
   prepararEliminarSol(sol: any): void {
-    this.pedirConfirmacion(`¿Eliminar esta solicitud permanentemente?`, 'eliminar-solicitud', sol.id);
+    this.pedirConfirmacion(`¿Eliminar esta solicitude permanentemente?`, 'eliminar-solicitud', sol.id);
   }
 
   // Ejecutores reales tras confirmar
@@ -276,7 +276,7 @@ export class ProfilePage implements OnInit {
       switchMap(() => this.eventosService.actualizarEvento(sol.eventoId, { publicado: true }))
     ).subscribe({
       next: () => {
-        this.mostrarToastExito('Solicitud aprobada y evento publicado.');
+        this.mostrarToastExito('Solicitude aprobada e evento publicado.');
         this.listarSolicitudes();
       },
       error: () => {
@@ -300,7 +300,7 @@ export class ProfilePage implements OnInit {
       switchMap(() => this.eventosService.eliminarEvento(solicitud.eventoId))
     ).subscribe({
       next: () => {
-        this.mostrarToastExito(esRechazo ? 'Solicitud rechazada.' : 'Solicitud eliminada.');
+        this.mostrarToastExito(esRechazo ? 'Solicitude rechazada.' : 'Solicitude eliminada.');
         this.listarSolicitudes();
       },
       error: (err) => {
@@ -367,27 +367,27 @@ export class ProfilePage implements OnInit {
   if (evento) {
     const nombreAsociacion = (evento.asociaciones && evento.asociaciones.length > 0)
       ? evento.asociaciones[0].nome
-      : 'No especificada';
+      : 'Non especificada';
 
     this.eventoDeSolicitudFormateado = {
-      nombre: evento.nome || evento.nombre || 'Solicitud de Evento',
-      tipo: 'SOLICITUD DE EVENTO',
+      nombre: evento.nome || evento.nombre || 'Solicitude de Evento',
+      tipo: 'SOLICITUDE DE EVENTO',
       estado: sol.estado,
       organización: nombreAsociacion,
       fecha: evento.fecha ? new Date(evento.fecha).toLocaleString('es-ES', {
         day: '2-digit', month: '2-digit', year: 'numeric',
         hour: '2-digit', minute: '2-digit'
-      }) : 'Sin fecha',
+      }) : 'Sen fecha',
       ubicación: evento.lugar?.nome || 'A Coruña, Desconocida',
       descripción: evento.descripcion
     };
   } else {
     // Si por alguna razón sol.evento no existe, mantenemos el fallback
     this.eventoDeSolicitudFormateado = {
-      nombre: 'Error al cargar',
-      tipo: 'SOLICITUD DE EVENTO',
+      nombre: 'Error ao cargar',
+      tipo: 'SOLICITUDE DE EVENTO',
       estado: sol.estado,
-      organización: 'No especificada'
+      organización: 'Non especificada'
     };
   }
 

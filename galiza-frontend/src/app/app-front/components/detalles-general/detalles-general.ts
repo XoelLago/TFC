@@ -19,7 +19,7 @@ export class DetallesGeneral {
 
   get tituloPrincipal(): string {
     if (!this.item) return '';
-    return this.item.nombre || this.item.titulo || 'Detalle del rexistro';
+    return this.item.nombre || this.item.titulo || 'Detalle do rexistro';
   }
 
   get propiedadesDinamicas(): { clave: string, valor: any }[] {
@@ -52,7 +52,7 @@ export class DetallesGeneral {
       }
     }
 
-    // 2. Si es una lista (Bailes, Canciones, Eventos, etc.)
+    // 2. Si es una lista (Bailes, cancions, Eventos, etc.)
     if (Array.isArray(valor)) {
       return valor.map(item => {
         // Si el elemento de la lista es un objeto, extraemos solo su nombre
