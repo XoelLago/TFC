@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.46, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.45, for Linux (x86_64)
 --
 -- Host: localhost    Database: galiza_db
 -- ------------------------------------------------------
--- Server version	8.0.46
+-- Server version	8.0.45
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -54,8 +54,8 @@ CREATE TABLE `asociacion_cancions` (
   `cancionsId` int NOT NULL,
   PRIMARY KEY (`asociacionesId`,`cancionsId`),
   KEY `IDX_47e0299e60c0beaf22a6921697` (`asociacionesId`),
-  KEY `IDX_1adf8f7193af1589805c573651` (`cancionsId`),
-  CONSTRAINT `FK_1adf8f7193af1589805c573651d` FOREIGN KEY (`cancionsId`) REFERENCES `cancions` (`id`),
+  KEY `IDX_437aba828738deecf77d0e5edf` (`cancionsId`),
+  CONSTRAINT `FK_437aba828738deecf77d0e5edfa` FOREIGN KEY (`cancionsId`) REFERENCES `cancions` (`id`),
   CONSTRAINT `FK_47e0299e60c0beaf22a6921697a` FOREIGN KEY (`asociacionesId`) REFERENCES `asociaciones` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -66,6 +66,7 @@ CREATE TABLE `asociacion_cancions` (
 
 LOCK TABLES `asociacion_cancions` WRITE;
 /*!40000 ALTER TABLE `asociacion_cancions` DISABLE KEYS */;
+INSERT INTO `asociacion_cancions` VALUES (2,1);
 /*!40000 ALTER TABLE `asociacion_cancions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -202,7 +203,7 @@ CREATE TABLE `bailes` (
   UNIQUE KEY `IDX_4c9d52db547b809977873c7bce` (`nome`),
   KEY `FK_701f084c39eca5827749f3a93ce` (`lugarId`),
   CONSTRAINT `FK_701f084c39eca5827749f3a93ce` FOREIGN KEY (`lugarId`) REFERENCES `lugares` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -211,6 +212,7 @@ CREATE TABLE `bailes` (
 
 LOCK TABLES `bailes` WRITE;
 /*!40000 ALTER TABLE `bailes` DISABLE KEYS */;
+INSERT INTO `bailes` VALUES (3,'Wydsrfyasderf','jdfsgjs','Muiñeira Nova','dzfadsfas','fasfasfd',1);
 /*!40000 ALTER TABLE `bailes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -225,10 +227,10 @@ CREATE TABLE `cancion_instrumentos` (
   `cancionsId` int NOT NULL,
   `instrumentosId` int NOT NULL,
   PRIMARY KEY (`cancionsId`,`instrumentosId`),
-  KEY `IDX_3119869d9a24788de9ebcb4c2a` (`cancionsId`),
   KEY `IDX_a764ee33b4a0689b9d3aa57a70` (`instrumentosId`),
-  CONSTRAINT `FK_3119869d9a24788de9ebcb4c2a1` FOREIGN KEY (`cancionsId`) REFERENCES `cancions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_a764ee33b4a0689b9d3aa57a70b` FOREIGN KEY (`instrumentosId`) REFERENCES `instrumentos` (`id`)
+  KEY `IDX_b07f7a8ed995773f27a268be5d` (`cancionsId`),
+  CONSTRAINT `FK_a764ee33b4a0689b9d3aa57a70b` FOREIGN KEY (`instrumentosId`) REFERENCES `instrumentos` (`id`),
+  CONSTRAINT `FK_b07f7a8ed995773f27a268be5de` FOREIGN KEY (`cancionsId`) REFERENCES `cancions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -238,6 +240,7 @@ CREATE TABLE `cancion_instrumentos` (
 
 LOCK TABLES `cancion_instrumentos` WRITE;
 /*!40000 ALTER TABLE `cancion_instrumentos` DISABLE KEYS */;
+INSERT INTO `cancion_instrumentos` VALUES (1,33);
 /*!40000 ALTER TABLE `cancion_instrumentos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -255,8 +258,8 @@ CREATE TABLE `cancions` (
   `audioUrl` varchar(255) DEFAULT NULL,
   `lugarId` int NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `FK_c79bb5b78f68d15f3607c462c67` (`lugarId`),
-  CONSTRAINT `FK_c79bb5b78f68d15f3607c462c67` FOREIGN KEY (`lugarId`) REFERENCES `lugares` (`id`)
+  KEY `FK_f7af311bda399bac89c9cd1e1a9` (`lugarId`),
+  CONSTRAINT `FK_f7af311bda399bac89c9cd1e1a9` FOREIGN KEY (`lugarId`) REFERENCES `lugares` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -266,6 +269,7 @@ CREATE TABLE `cancions` (
 
 LOCK TABLES `cancions` WRITE;
 /*!40000 ALTER TABLE `cancions` DISABLE KEYS */;
+INSERT INTO `cancions` VALUES (1,'Qwfaas','FASFdASDF','asDFasdf',1);
 /*!40000 ALTER TABLE `cancions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -436,10 +440,10 @@ CREATE TABLE `movemento_puntos` (
   `movementosId` int NOT NULL,
   `puntosId` int NOT NULL,
   PRIMARY KEY (`movementosId`,`puntosId`),
-  KEY `IDX_d9b6e11dfbf53107820352554c` (`movementosId`),
-  KEY `IDX_2db63f75a81cc05cb5a53a390f` (`puntosId`),
-  CONSTRAINT `FK_2db63f75a81cc05cb5a53a390f2` FOREIGN KEY (`puntosId`) REFERENCES `puntos` (`id`),
-  CONSTRAINT `FK_d9b6e11dfbf53107820352554c9` FOREIGN KEY (`movementosId`) REFERENCES `movementos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `IDX_ef8bc86cc4b66e1734e7648163` (`movementosId`),
+  KEY `IDX_14f9c4598f2a39504dcf944489` (`puntosId`),
+  CONSTRAINT `FK_14f9c4598f2a39504dcf9444897` FOREIGN KEY (`puntosId`) REFERENCES `puntos` (`id`),
+  CONSTRAINT `FK_ef8bc86cc4b66e1734e76481630` FOREIGN KEY (`movementosId`) REFERENCES `movementos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -464,7 +468,7 @@ CREATE TABLE `movementos` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `IDX_b2e9563f09cdc8bd04d2ec05d2` (`nombre`)
+  UNIQUE KEY `IDX_21c4b8492d028c414a90da143c` (`nombre`)
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -628,4 +632,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-06-02 18:34:18
+-- Dump completed on 2026-06-03 10:36:12
