@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseGuards } from '@nestjs/common'; // <-- Asegúrate de importar ParseIntPipe
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseGuards } from '@nestjs/common'; 
 import { SolicitudesEventoService } from './solicitudes-evento.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
@@ -23,7 +23,6 @@ export class SolicitudesEventoController {
     return this.solicitudesEventoService.findAll();
   }
 
-  // AQUÍ ESTÁ EL TRUCO: Añadir ParseIntPipe en el @Param
     @Roles(Rol.ADMIN, Rol.SUPERUSER)
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {

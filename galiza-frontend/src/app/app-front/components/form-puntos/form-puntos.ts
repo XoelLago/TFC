@@ -2,7 +2,6 @@ import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } fro
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-// Servicios
 import { PuntosService } from '../../service/puntos.service';
 import { LugaresService } from '../../service/lugares.service';
 import { BaileService } from '../../service/bailes.service';
@@ -24,17 +23,14 @@ export class FormPunto implements OnInit {
   public errorMsg: string = '';
   public mostrarAvanzado: boolean = false;
 
-  // Listas de datos maestros
   public listaLugares: any[] = [];
   public listaBailes: any[] = [];
   public listamovementos: any[] = [];
 
-  // Listas filtradas que se pintan en los desplegables
   public lugaresFiltrados: any[] = [];
   public bailesFiltrados: any[] = [];
   public movementosFiltrados: any[] = [];
 
-  // Textos vinculados a los inputs de búsqueda
   public textoBusquedaLugar: string = '';
   public textoBusquedaBaile: string = '';
   public textoBusquedamovemento: string = '';
@@ -42,12 +38,10 @@ export class FormPunto implements OnInit {
   public lugarSeleccionadoId: string | number = '';
   public tiposPunto = Object.values(TipoPunto);
 
-  // Variables de control de visibilidad de los desplegables
   public mostrarLugares = false;
   public mostrarBailes = false;
   public mostrarmovementos = false;
 
-  // Modelo único del Punto
   public punto: any = {
     id: '',
     descripcion: '',
@@ -117,7 +111,6 @@ export class FormPunto implements OnInit {
     }, 100);
   }
 
-  // --- MÉTODOS DE FILTRADO IDÉNTICOS ---
   filtrarLugares(event: any) {
     const valor = event.target.value.toLowerCase();
     this.lugaresFiltrados = this.listaLugares.filter(l =>
@@ -139,7 +132,6 @@ export class FormPunto implements OnInit {
     );
   }
 
-  // --- MÉTODOS DE SELECCIÓN ---
   seleccionarLugar(lugar: any) {
     this.mostrarLugares = false;
     this.lugarSeleccionadoId = lugar.id;
@@ -150,7 +142,6 @@ export class FormPunto implements OnInit {
     this.mostrarBailes = false;
     if (!this.punto.bailes) this.punto.bailes = [];
 
-    // Control seguro: evita que propiedades vacías rompan el filtro
     const existe = this.punto.bailes.some((b: any) => {
       if (b.id && baile.id && b.id === baile.id) return true;
       if (b._id && baile._id && b._id === baile._id) return true;
@@ -170,7 +161,6 @@ export class FormPunto implements OnInit {
     this.mostrarmovementos = false;
     if (!this.punto.movementos) this.punto.movementos = [];
 
-    // Control seguro: evita que propiedades vacías rompan el filtro
     const existe = this.punto.movementos.some((m: any) => {
       if (m.id && mov.id && m.id === mov.id) return true;
       if (m._id && mov._id && m._id === mov._id) return true;
@@ -186,7 +176,6 @@ export class FormPunto implements OnInit {
     this.movementosFiltrados = this.listamovementos;
   }
 
-  // --- ELIMINACIÓN DE CHIPS COMPATIBLE ---
   removerBaile(baile: any) {
     this.punto.bailes = this.punto.bailes?.filter((b: any) => {
       if (b.id && baile.id) return b.id !== baile.id;

@@ -3,14 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import * as L from 'leaflet';
 
-// Servicios
 import { AsociacionesService } from '../../service/asociaciones.service';
 import { LugaresService } from '../../service/lugares.service';
 import { EventosService } from '../../service/eventos.service';
 import { BaileService } from '../../service/bailes.service';
 import { FrontUserService } from '../../service/front-user.service';
 
-// Modelos
 import { Lugar } from '../../models/lugar.model';
 import { Baile } from '../../models/baile.model';
 import { Cancion } from '../../models/cancion.model';
@@ -32,7 +30,6 @@ export class FormAsociacion implements OnInit {
   public errorMsg: string = '';
   public mostrarAvanzado: boolean = false;
 
-  // Listas de datos
   public listaLugares: Lugar[] = [];
   public listaBailes: Baile[] = [];
   public listaCancions: Cancion[] = [];
@@ -48,11 +45,9 @@ export class FormAsociacion implements OnInit {
   public textoBusquedaCancion: string = '';
   public textoBusquedaEvento: string = '';
 
-  // Mapa
   private mapPick!: L.Map;
   private pickMarker: L.Marker | null = null;
 
-  // Modelo interno blindado
   public asociacion: any = {
     id: '',
     tipo: 'asociacion',
@@ -85,7 +80,6 @@ export class FormAsociacion implements OnInit {
     this.eventosFiltrados = this.listaEventos;
 
     if (this.datos) {
-      // Copiamos datos pero aseguramos que las coords nunca se vuelvan null (mismo patrón que FormLugar)
       this.asociacion = {
         ...this.asociacion,
         ...this.datos,
@@ -202,7 +196,6 @@ export class FormAsociacion implements OnInit {
       return;
     }
 
-    // ARREGLADO: Mapeamos absolutamente todo lo que soporta la base de datos y el DTO nuevo
     const payload: any = {
       nome: this.frontUserService.capitalizarNombre(this.asociacion.nome),
       lugarId: lugarId,
@@ -212,7 +205,6 @@ export class FormAsociacion implements OnInit {
       descripcion: this.asociacion.descripcion || ''
     };
 
-    // Si manejas campo opcional email en el formulario, se incluye aquí
     if (this.asociacion.email) {
       payload.email = this.asociacion.email;
     }
@@ -221,7 +213,6 @@ export class FormAsociacion implements OnInit {
       payload.bailesIds = this.asociacion.bailes.map((b: any) => Number(b.id || b._id));
     }
 
-    // CORRECCIÓN CRUCIAL: 'cancionsIds' con "e" para emparejar con el @IsArray() del DTO
     if (this.asociacion.cancions && this.asociacion.cancions.length > 0) {
       payload.cancionsIds = this.asociacion.cancions.map((c: any) => Number(c.id || c._id));
     }

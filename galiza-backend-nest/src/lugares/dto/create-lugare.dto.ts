@@ -16,5 +16,5 @@ export class CreateLugarDto {
 
   @IsString()
   @IsOptional()
-  audioUrl?: string; // Por si decides hacerlo opcional al final
+  audioUrl?: string;
 }

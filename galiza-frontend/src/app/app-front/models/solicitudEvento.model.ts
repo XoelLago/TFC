@@ -6,12 +6,12 @@ export interface SolicitudEvento {
 _id: string;
   nome?: string;
   descripcion?: string;
-  fecha?: string;            // ISO 8601
-  tipo?: string;             // curso, foliada, festival...
+  fecha?: string;
+  tipo?: string;
   gratuito?: boolean;
   prezo?: number;
   enlaceExterno?: string;
   lugar?: Lugar;
-  estado?: EstadoSolicitud;  // 'PENDIENTE' | 'APROBADA' | 'RECHAZADA'
+  estado?: EstadoSolicitud;
   usuario?: Usuario;
 }

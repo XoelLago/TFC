@@ -7,28 +7,24 @@ import { Asociacion } from '../../asociaciones/entities/asociacione.entity';
 export class Cancion {
 
   @PrimaryGeneratedColumn()
-  id!: number; // PK
+  id!: number;
 
   @Column({ nullable: false })
-  nome!: string; // Obligatorio
+  nome!: string;
 
   @Column('text', { nullable: true })
-  letra?: string; // Opcional (usamos 'text' por la longitud)
+  letra?: string;
 
   @Column({ nullable: true })
-  audioUrl?: string; // Opcional (URL a un archivo .mp3 o Spotify/Soundcloud)
+  audioUrl?: string; 
 
-  // RELACIÓN OBLIGATORIA CON LUGAR
-  // Para saber de dónde es originaria la canción
   @ManyToOne(() => Lugar, { nullable: false })
   lugar!: Lugar;
 
-  // RELACIÓN MUCHOS A MUCHOS CON INSTRUMENTOS
   @ManyToMany(() => Instrumento, (instrumento) => instrumento.cancions)
-  @JoinTable({ name: 'cancion_instrumentos' }) // Tabla intermedia
+  @JoinTable({ name: 'cancion_instrumentos' })
   instrumentos?: Instrumento[];
 
-  // Relación inversa con Asociaciones
   @ManyToMany(() => Asociacion, (asociacion) => asociacion.cancions)
   asociaciones?: Asociacion[];
 }

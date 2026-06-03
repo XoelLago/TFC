@@ -15,8 +15,8 @@ export class MarcadoresService {
   async crear(dto: CreateMarcadorDto, usuarioId: number): Promise<Marcador> {
     const nuevo = this.repo.create({
       ...dto,
-      tipo: 'personalizado', // Forzado
-      icono: 'star',        // Forzado (siempre estrella)
+      tipo: 'personalizado',
+      icono: 'star',        
       usuario: { id: usuarioId } as any
     });
     return await this.repo.save(nuevo);
@@ -29,18 +29,14 @@ export class MarcadoresService {
   }
 
 async update(id: number, updateMarcadorDto: UpdateMarcadorDto): Promise<Marcador> {
-  // 1. Buscamos si existe realmente
   const marcadorExistente = await this.repo.findOneBy({ id });
 
   if (!marcadorExistente) {
     throw new NotFoundException(`O marcador con ID ${id} non existe`);
   }
 
-  // 2. FUSIONAMOS los datos nuevos sobre el objeto que ya tiene el ID
-  // Esto es CLAVE: merge mete los datos del DTO dentro del objeto con ID
   const marcadorActualizado = this.repo.merge(marcadorExistente, updateMarcadorDto);
 
-  // 3. Al hacer save de un objeto QUE YA TIENE ID, TypeORM hace un UPDATE, no un INSERT
   return await this.repo.save(marcadorActualizado);
 }
 

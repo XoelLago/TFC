@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, JoinTable } from 'typeorm';// El enum que definimos
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
 import { TipoEvento } from '../../common/enums';
 import { Lugar } from '../../lugares/entities/lugare.entity';
 import { Asociacion } from '../../asociaciones/entities/asociacione.entity';
@@ -15,7 +15,6 @@ export class Evento {
   @Column({ type: 'timestamp', nullable: false })
   fecha!: Date;
 
-  // Coordenadas específicas del evento (opcionales)
   @Column('simple-json', { nullable: true })
   coords?: { lat: number; lng: number } | null = null;
 
@@ -36,19 +35,17 @@ export class Evento {
   descripcion?: string;
 
   @Column({ nullable: true })
-  enlaceExterno?: string; // Web oficial, entradas, etc.
+  enlaceExterno?: string; 
 
-  @Column({ default: false }) // Por defecto nadie lo ve hasta que se acepte la solicitud
+  @Column({ default: false }) 
   publicado!: boolean;
 
-  // RELACIÓN OBLIGATORIA: Un evento ocurre en un Lugar
   @ManyToOne(() => Lugar, (lugar) => lugar.eventos, { 
     nullable: false, 
     onDelete: 'CASCADE' 
   })
   lugar!: Lugar;
 
-  // RELACIÓN: Muchas asociaciones pueden organizar un mismo evento
   @ManyToMany(() => Asociacion, (asociacion) => asociacion.eventos)
   @JoinTable({ 
     name: 'asociacion_eventos', 

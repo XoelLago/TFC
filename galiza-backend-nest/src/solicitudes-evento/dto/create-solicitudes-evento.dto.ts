@@ -6,7 +6,7 @@ export class CreateSolicitudEventoDto {
 
   @IsEnum(EstadoSolicitud)
   @IsNotEmpty({ message: 'O estado da solicitude é obrigatorio' })
-  estado!: EstadoSolicitud; // Pendente, Aceptada o Rexeitada
+  estado!: EstadoSolicitud;
   
   
   @IsInt({ message: 'O ID do evento vinculado debe ser un número' })

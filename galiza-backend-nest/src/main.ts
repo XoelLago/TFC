@@ -21,6 +21,6 @@ async function bootstrap() {
   });
 
   await app.listen(3000);
-  console.log(`🚀 Servidor listo en: http://localhost:3000/api`);
+  console.log(`Servidor listo en: http://localhost:3000/api`);
 }
 bootstrap();

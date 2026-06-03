@@ -11,31 +11,30 @@ import { Cancion } from '../../canciones/entities/cancion.entity';
 export class Asociacion {
   
   @PrimaryGeneratedColumn()
-  id!: number; // PK Autoincremental
-
+  id!: number; 
   @Column({ nullable: false, unique: true })
-  nome!: string; // Obligatorio
+  nome!: string; 
 
   @Column('simple-json', { nullable: true })
-  coords?: { lat: number; lng: number } | null = null; // No obligatorio
+  coords?: { lat: number; lng: number } | null = null; 
 
   @Column({ default: 'asociacion' })
-  tipo: string = 'asociacion'; // Siempre asociacion
+  tipo: string = 'asociacion'; 
 
   @ManyToOne(() => Lugar, (lugar) => lugar.asociaciones, { 
-    nullable: true, // Por si una asociación aún no tiene sede fija
-    onDelete: 'SET NULL' // Si borras el lugar, la asociación no se borra, solo queda sin lugar
+    nullable: true, 
+    onDelete: 'SET NULL' 
   })
   lugar?: Lugar | null;
 
   @Column({ default: 'groups' })
-  icono: string = 'groups'; // Siempre groups
+  icono: string = 'groups';
 
   @Column('text', { nullable: true })
-  descripcion?: string = ''; // Opcional
+  descripcion?: string = '';
 
   @ManyToMany(() => Baile, (baile) => baile.asociaciones)
-  @JoinTable({ name: 'asociacion_bailes' }) // Crea la tabla intermedia en MySQL
+  @JoinTable({ name: 'asociacion_bailes' })
   bailes?: Baile[];
 
   @ManyToMany(() => Cancion, (cancion) => cancion.asociaciones)

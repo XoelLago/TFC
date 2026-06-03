@@ -110,9 +110,7 @@ export class BusquedaPage implements OnInit {
   private mapService(request: Observable<any[]>, tipo: string): Observable<ResultadoBusqueda[]> {
   return request.pipe(
     map(items => items.map(item => {
-      // Lógica inteligente:
-      // Si el tipo es 'LUGAR', la provincia está en 'item.provincia'
-      // Si el tipo es otra cosa, buscamos dentro de 'item.lugar.provincia'
+
       const provincia = (tipo === 'LUGAR')
                         ? item.provincia
                         : item.lugar?.provincia;
@@ -122,7 +120,6 @@ export class BusquedaPage implements OnInit {
         nombre: item.nome || item.nombre || item.titulo || 'Sin nombre',
         provincia: provincia?.nome || 'Sin provincia',
         provinciaId: provincia?.id ? provincia.id.toString() : '',
-        // Si es lugar, su nombre es el propio nombre, si no, es el del lugar asociado
         localidad: (tipo === 'LUGAR') ? item.nome : (item.lugar?.nome || 'Desconocida'),
         datosOriginales: item
       };

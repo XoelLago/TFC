@@ -8,7 +8,7 @@ import { UsuariosModule } from '../usuarios/usuarios.module';
 @Module({
   imports: [
     TypeOrmModule.forFeature([Provincia]),
-    UsuariosModule, // <--- Al importar esto, ya tiene acceso al JwtModule que exportaste
+    UsuariosModule,
   ],
   controllers: [ProvinciasController],
   providers: [ProvinciasService],

@@ -1,12 +1,14 @@
 {
 "folders": [
-
-{
-"path": "galiza-backend-nest"
-},
-{
-"path": "galiza-frontend"
-}
+    {
+        "path": "galiza-backend-nest"
+    },
+    {
+        "path": "galiza-frontend"
+    },
+    {
+        "path": "."
+    }
 ],
 "settings": {}
 }

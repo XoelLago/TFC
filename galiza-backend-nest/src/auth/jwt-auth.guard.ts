@@ -24,13 +24,10 @@ export class JwtAuthGuard implements CanActivate {
     }
 
     try {
-      // Verificamos el token usando el secreto de nuestra configuración
       const payload = await this.jwtService.verifyAsync(token, {
         secret: this.configService.get<string>('JWT_SECRET'),
       });
 
-      // Guardamos el payload (que incluye el sub: user.id numérico) en la petición
-      // Esto permite que en los controladores uses @Req() req y accedas a req.user
       request['user'] = payload; 
       
     } catch (error) {

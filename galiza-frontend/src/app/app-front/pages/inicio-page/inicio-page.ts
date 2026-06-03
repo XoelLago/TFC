@@ -19,23 +19,22 @@ export class InicioPage implements OnInit {
 
   errorMsg = '';
   loading = false;
-  showPassword = false; // Variable para controlar la visibilidad de la contraseña
+  showPassword = false;
 
   constructor(
     private frontUserService: FrontUserService,
     private router: Router,
-    private cdr: ChangeDetectorRef // Inyectamos el detector de cambios
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
-    // Si ya está logueado, lo mandamos al home directamente
     if (this.frontUserService.isLoggedIn()) {
       this.router.navigate(['/home']);
     }
   }
 
   onLogin() {
-  if (this.loading) return; // Evita múltiples clics si ya está cargando
+  if (this.loading) return;
 
   this.loading = true;
   this.errorMsg = '';
@@ -43,20 +42,17 @@ export class InicioPage implements OnInit {
   this.frontUserService.login(this.credenciales).subscribe({
     next: (res) => {
       this.loading = false;
-      // Navegamos directamente. El FrontUserService ya se encargó de guardar token y user.
       this.router.navigate(['/home']);
     },
     error: (err) => {
       this.loading = false;
       this.errorMsg = 'Usuario ou contrasinal incorrectos';
 
-      // Aseguramos que el mensaje de error se muestre inmediatamente
       this.cdr.detectChanges();
     }
   });
 }
 
-  // Función para alternar ver/ocultar contraseña
   togglePassword() {
     this.showPassword = !this.showPassword;
   }

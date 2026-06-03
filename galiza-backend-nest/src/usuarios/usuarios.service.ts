@@ -86,7 +86,6 @@ export class UsuariosService {
     await this.usuarioRepository.delete(id);
     return { deleted: true };
   }
-  // src/usuarios/usuarios.service.ts
 
   async findByNombreWithPassword(nombre: string): Promise<Usuario | null> {
     return await this.usuarioRepository

@@ -2,13 +2,11 @@ import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } fro
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-// Servicios
 import { LugaresService } from '../../service/lugares.service';
 import { InstrumentosService } from '../../service/instrumentos.service';
 import { AsociacionesService } from '../../service/asociaciones.service';
 import { FrontUserService } from '../../service/front-user.service';
 
-// Modelos
 import { Lugar } from '../../models/lugar.model';
 import { CancionService } from '../../service/cancions.service';
 
@@ -26,27 +24,22 @@ export class FormCancion implements OnInit {
 
   public errorMsg: string = '';
 
-  // Listas maestras para autocompletados
   public listaLugares: Lugar[] = [];
   public listaInstrumentos: any[] = [];
   public listaAsociaciones: any[] = [];
 
-  // Listas filtradas para la interfaz de usuario
   public lugaresFiltrados: Lugar[] = [];
   public instrumentosFiltrados: any[] = [];
   public asociacionesFiltrados: any[] = [];
 
-  // Modelos de búsqueda para los inputs de texto
   public textoBusquedaLugar: string = '';
   public textoBusquedaInstrumento: string = '';
   public textoBusquedaAsociacion: string = '';
 
-  // Controladores visuales de dropdowns
   public mostrarLugares = false;
   public mostrarInstrumentos = false;
   public mostrarAsociaciones = false;
 
-  // Estructura interna del modelo de datos de canción
   public cancion: any = {
     id: '',
     nome: '',
@@ -157,7 +150,6 @@ export class FormCancion implements OnInit {
     };
     console.log('Payload enviado al back:', payload)
 
-    // Arrays de IDs para las tablas intermedias ManyToMany
     payload.instrumentosIds = this.cancion.instrumentos && this.cancion.instrumentos.length > 0
       ? this.cancion.instrumentos.map((i: any) => Number(i.id || i._id))
       : [];
@@ -191,7 +183,6 @@ export class FormCancion implements OnInit {
     });
   }
 
-  // Filtrados dinámicos de autocompletado
   filtrarLugares(event: any) {
     const valor = event.target.value.toLowerCase();
     this.lugaresFiltrados = this.listaLugares.filter(l => l.nome.toLowerCase().includes(valor));
@@ -210,7 +201,6 @@ export class FormCancion implements OnInit {
     this.cdr.detectChanges();
   }
 
-  // Selección de elementos
   seleccionarLugar(lugarSeleccionado: Lugar) {
     this.mostrarLugares = false;
     this.cancion.lugar = lugarSeleccionado;
@@ -244,7 +234,6 @@ export class FormCancion implements OnInit {
     this.cdr.detectChanges();
   }
 
-  // Eliminación de elementos (Removers para UI Chips)
   removerLugar() {
     this.cancion.lugar = null;
     this.textoBusquedaLugar = '';

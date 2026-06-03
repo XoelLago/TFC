@@ -27,7 +27,6 @@ export class FormEvento implements OnInit {
   public errorMsg: string = '';
   public Tipos = Object.values(TipoEvento);
 
-  // Modelo del formulario
   public evento: any = {
     nome: '',
     fecha: '',
@@ -40,7 +39,6 @@ export class FormEvento implements OnInit {
     asociaciones: []
   };
 
-  // Listados para buscadores
   public listaLugares: Lugar[] = [];
   public lugaresFiltrados: Lugar[] = [];
   public textoBusquedaLugar = '';
@@ -102,7 +100,6 @@ export class FormEvento implements OnInit {
     setTimeout(() => this.mapPick.invalidateSize(), 400);
   }
 
-  // --- Buscador LUGAR (Selección única) ---
   filtrarLugares(event: any) {
     const v = event.target.value.toLowerCase();
     this.lugaresFiltrados = this.listaLugares.filter(l => l.nome.toLowerCase().includes(v));
@@ -119,7 +116,6 @@ export class FormEvento implements OnInit {
     this.textoBusquedaLugar = '';
   }
 
-  // --- Buscador ASOCIACIONES (Selección múltiple / Chips) ---
   filtrarAsociaciones(event: any) {
     const v = event.target.value.toLowerCase();
     this.asociacionesFiltradas = this.listaAsociaciones.filter(a => a.nome.toLowerCase().includes(v));
@@ -172,10 +168,8 @@ export class FormEvento implements OnInit {
       publicado: false
     };
 
-    // 1. Crear Evento
     this.eventosService.crearEvento(payload).subscribe({
       next: (evtCreado) => {
-        // 2. Crear Solicitud Automáticamente
         const solicitud = {
           estado: 'PENDIENTE',
           eventoId:  evtCreado.id

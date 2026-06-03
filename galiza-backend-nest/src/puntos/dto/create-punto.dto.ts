@@ -12,7 +12,7 @@ export class CreatePuntoDto {
   descripcion!: string;
 
   @IsEnum(TipoPunto)
-  @IsOptional() // Puede ser opcional porque la entidad tiene un valor por defecto
+  @IsOptional()
   tipo?: TipoPunto;
 
   @IsUrl()
@@ -20,7 +20,7 @@ export class CreatePuntoDto {
   videoUrl?: string;
 
   @IsInt()
-  @IsNotEmpty() // Es obligatorio por la relación ManyToOne
+  @IsNotEmpty()
   lugarId!: number;
 
   @IsArray()
@@ -30,6 +30,6 @@ export class CreatePuntoDto {
 
   @IsArray()
   @IsInt({ each: true })
-  @IsNotEmpty({message: 'Debe ter polo menos un movemento asociado'}) // Es obligatorio porque la relación ManyToMany no puede estar vacía
+  @IsNotEmpty({message: 'Debe ter polo menos un movemento asociado'}) 
   movementosIds?: number[];
 }

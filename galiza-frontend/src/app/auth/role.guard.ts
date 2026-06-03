@@ -8,10 +8,10 @@ export class RoleGuard implements CanActivate {
 
   canActivate(): boolean {
     if (this.FrontUserService.esAdmin()) {
-      return true; // Es admin, puede pasar
+      return true;
     }
 
-    this.router.navigate(['/mapa']); // No es admin, lo mandamos al mapa
+    this.router.navigate(['/mapa']);
     return false;
   }
 }

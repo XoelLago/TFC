@@ -6,7 +6,7 @@ import { Cancion } from '../../canciones/entities/cancion.entity';
 export class Instrumento {
 
   @PrimaryGeneratedColumn()
-  id!: number; // PK
+  id!: number;
 
   @Column({ unique: true, nullable: false })
   nome!: string;

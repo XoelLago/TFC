@@ -5,7 +5,7 @@ import { TipoRecomendacion } from '../../common/enums';
 export class Recomendacion {
 
   @PrimaryGeneratedColumn()
-  id!: number; // PK
+  id!: number;
 
   @Column({ nullable: false,  unique: true  })
   titulo!: string;

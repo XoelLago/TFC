@@ -1,4 +1,3 @@
-// src/marcadores/dto/create-marcador.dto.ts
 import { Type } from 'class-transformer';
 import { IsString, IsNotEmpty, IsOptional, IsNumber, ValidateNested } from 'class-validator';
 class CoordsDto {
@@ -7,7 +6,6 @@ class CoordsDto {
   @IsNumber()
   lng!: number;
 }
-// En el backend: create-marcador.dto.ts
 export class CreateMarcadorDto {
   @IsString()
   @IsNotEmpty( {message: 'O nome é obrigatorio' })
@@ -25,7 +23,7 @@ export class CreateMarcadorDto {
   @IsOptional()
   icono?: string;
 
-  @ValidateNested() // Esto le dice que valide el objeto de dentro
+  @ValidateNested()
   @Type(() => CoordsDto) 
   coords!: CoordsDto;
 }

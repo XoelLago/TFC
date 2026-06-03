@@ -14,27 +14,23 @@ export class Punto {
 
 
   @Column({ type: 'text', nullable: false })
-  descripcion!: string; // Obligatorio
+  descripcion!: string; 
 
   @Column({
     type: 'enum',
     enum: TipoPunto,
     default: TipoPunto.OUTRO
   })
-  tipo!: TipoPunto; // Viene del Enum
-
+  tipo!: TipoPunto; 
   @Column({ nullable: true })
-  videoUrl?: string; // Opcional
+  videoUrl?: string; 
 
-  // RELACIÓN: Muchos puntos pertenecen a un Lugar (obligatorio)
   @ManyToOne(() => Lugar, (lugar) => lugar.puntos, { nullable: false })
   lugar!: Lugar;
 
-  // RELACIÓN: Un punto en varios movementos; un movemento en varios puntos
   @ManyToMany(() => movemento, (movemento) => movemento.puntos)
   movementos?: movemento[];
 
-  // RELACIÓN: Un punto en varios bailes; un baile en varios puntos
   @ManyToMany(() => Baile, (baile) => baile.puntos)
   bailes?: Baile[];
 }

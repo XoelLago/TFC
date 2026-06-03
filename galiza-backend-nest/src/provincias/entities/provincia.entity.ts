@@ -5,18 +5,17 @@ import { Lugar } from '../../lugares/entities/lugare.entity';
 export class Provincia {
 
   @PrimaryGeneratedColumn()
-  id!: number; // PK
+  id!: number; 
 
   @Column({ unique: true, nullable: false })
-  nome!: string; // 'Pontevedra', 'A Coruña', 'Lugo', 'Ourense'
+  nome!: string; 
 
   @Column('text', { nullable: true })
-  descripcion?: string = 'Provincia de la comunidad autónoma de Galicia'; // Opcional
+  descripcion?: string = 'Provincia de la comunidad autónoma de Galicia'; 
 
   @Column({ nullable: true })
-  image?: string; // Opcional (aquí guardas la URL de la imagen)
+  image?: string; 
 
-  // RELACIÓN: Una provincia tiene muchos lugares
   @OneToMany(() => Lugar, (lugar) => lugar.provincia)
   lugares?: Lugar[];
 }

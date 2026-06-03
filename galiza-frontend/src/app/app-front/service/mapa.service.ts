@@ -33,12 +33,10 @@ getTodoElMapa(): Observable<DatosMapa[]> {
     return this.http.post<DatosMapa>(`${this.apiUrl}/marcadores`, dto);
   }
 
-  // Actualizar un marcador existente (PUT o PATCH)
   actualizarMarcador(id: number | string, marcador: any): Observable<DatosMapa> {
     return this.http.put<DatosMapa>(`${this.apiUrl}/marcadores/${id}`, marcador);
   }
 
-  // Borrar un marcador (DELETE)
   borrarMarcador(id: number | string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/marcadores/${id}`);
   }

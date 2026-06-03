@@ -12,7 +12,6 @@ export class LugaresService {
   ) {}
 
   async create(dto: any) {
-    // Si el DTO viene con coords: {lat, lng}, lo mapeamos a las columnas planas
     const data = {
       ...dto,
       lat: dto.coords?.lat,

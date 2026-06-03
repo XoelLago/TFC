@@ -5,11 +5,9 @@ import { FormsModule } from '@angular/forms';
 import { switchMap } from 'rxjs/operators';
 import { forkJoin, of } from 'rxjs';
 
-// Modelos e Interfaces
 import { Usuario, UsuarioMapeado } from '../../models/usuario.model';
 import { Rol } from '../../models/rol.model';
 
-// Servicios y Componentes
 import { FrontUserService } from '../../service/front-user.service';
 import { EventosService } from '../../service/eventos.service';
 import { AdminUsersComponent } from '../../components/admin-users/admin-users';
@@ -26,33 +24,27 @@ import { DetallesGeneral } from "../../components/detalles-general/detalles-gene
 })
 export class ProfilePage implements OnInit {
 
-  // Usuario principal tipado
   usuario: Usuario = {
     id: 0,
     nombre: localStorage.getItem('user_nombre') || '',
     rol: (localStorage.getItem('user_rol') as Rol),
   };
 
-  // Estado de edición
   usuarioEditado = { nome: '', contrasena: '' };
   showPassword = false;
 
-  // Estado de la UI
   seccionActual: string = 'principal';
   cargando: boolean = false;
   errorMsg: string = '';
 
-  // ADMIN USUARIOS
   usuariosMapeados: UsuarioMapeado[] = [];
 
-  // ADMIN SOLICITUDES
   solicitudes: any[] = [];
   solicitudSeleccionada: any = null;
   eventoDeSolicitud: any = null;
   terminoBusqueda: string = '';
   filtroEstado: 'TODOS' | 'PENDIENTE' | 'APROBADA' = 'TODOS';
 
-  // Sistema de confirmación / Toast
   confirmacion = {
     visible: false,
     mensaje: '',
@@ -115,7 +107,6 @@ export class ProfilePage implements OnInit {
     this.errorMsg = '';
   }
 
-  // --- GESTIÓN DE CUENTA ---
   actualizarCuenta(): void {
     if (!this.usuarioEditado.nome || this.usuarioEditado.nome.trim().length < 3) {
       this.errorMsg = 'O nome debe ter polo menos 3 caracteres';
@@ -147,7 +138,6 @@ export class ProfilePage implements OnInit {
     this.router.navigate(['/login']);
   }
 
-  // --- ADMINISTRACIÓN DE USUARIOS ---
   listarUsuarios(): void {
     this.cargando = true;
     this.frontUserService.getUsuarios().subscribe({
@@ -214,12 +204,11 @@ export class ProfilePage implements OnInit {
     });
   }
 
-  // --- ADMINISTRACIÓN DE SOLICITUDES ---
   listarSolicitudes(): void {
     this.cargando = true;
     forkJoin({
       solicitudes: this.eventosService.obtenerSolicitudes(),
-      eventos: this.eventosService.findAll() // Necesitas este método
+      eventos: this.eventosService.findAll()
     }).subscribe({
       next: (res: any) => {
         this.solicitudes = res.solicitudes.map((sol: any) => ({
@@ -247,7 +236,6 @@ export class ProfilePage implements OnInit {
 
 
 
-  // Preparadores de confirmación para solicitudes (vinculados al HTML)
   prepararAceptar(sol: any): void {
     const nombre = sol.evento?.nome || sol.evento?.nombre || 'este evento';
     this.pedirConfirmacion(`¿Aprobar e publicar ${nombre}?`, 'aceptar-solicitud', sol.id);
@@ -262,7 +250,6 @@ export class ProfilePage implements OnInit {
     this.pedirConfirmacion(`¿Eliminar esta solicitude permanentemente?`, 'eliminar-solicitud', sol.id);
   }
 
-  // Ejecutores reales tras confirmar
   private ejecutarAceptarSolicitud(solId: number): void {
     this.cargando = true;
     const sol = this.solicitudes.find(s => s.id === solId);
@@ -295,7 +282,6 @@ export class ProfilePage implements OnInit {
       return;
     }
 
-    // Usamos switchMap para encadenar: primero borra evento, luego solicitud
     this.eventosService.eliminarSolicitud(solId).pipe(
       switchMap(() => this.eventosService.eliminarEvento(solicitud.eventoId))
     ).subscribe({
@@ -311,14 +297,10 @@ export class ProfilePage implements OnInit {
     });
   }
 
-  // --- NUEVO SISTEMA DE TOAST / CONFIRMACIÓN ---
-
-  // Para mensajes de éxito (Sin botones, cierre automático)
   private mostrarToastExito(msg: string): void {
     this.confirmacion = { visible: true, mensaje: msg, tipo: 'info', id: null };
     this.cdr.detectChanges();
 
-    // Se cierra solo tras 2 segundos (2000 ms)
     setTimeout(() => {
       if (this.confirmacion.visible && this.confirmacion.tipo === 'info') {
         this.cancelarConfirmacion();
@@ -326,7 +308,6 @@ export class ProfilePage implements OnInit {
     }, 2000);
   }
 
-  // Para acciones que requieren confirmación (Con botones SI/NO)
   private pedirConfirmacion(msg: string, tipo: string, id: number): void {
     this.confirmacion = { visible: true, mensaje: msg, tipo: tipo, id: id };
     this.cdr.detectChanges();
@@ -361,7 +342,6 @@ export class ProfilePage implements OnInit {
   this.cargando = true;
   this.solicitudSeleccionada = sol;
 
-  // Usamos el evento que ya tienes en la solicitud (ya viene con asociaciones del listarSolicitudes)
   const evento = sol.evento;
 
   if (evento) {
@@ -382,7 +362,6 @@ export class ProfilePage implements OnInit {
       descripción: evento.descripcion
     };
   } else {
-    // Si por alguna razón sol.evento no existe, mantenemos el fallback
     this.eventoDeSolicitudFormateado = {
       nombre: 'Error ao cargar',
       tipo: 'SOLICITUDE DE EVENTO',
@@ -396,7 +375,6 @@ export class ProfilePage implements OnInit {
   this.cdr.detectChanges();
 }
 
-  // --- AÑADE ESTE MÉTODO PARA CERRAR EL MODAL ---
   cerrarModalDetalle(): void {
     this.modalDetalleAbierto = false;
     this.eventoDeSolicitudFormateado = null;

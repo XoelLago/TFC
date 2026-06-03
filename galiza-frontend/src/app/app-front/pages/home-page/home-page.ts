@@ -74,7 +74,6 @@ export class HomePage implements AfterViewInit, OnInit {
     rol: (localStorage.getItem('user_rol') as Rol),
   };
 
-  // Variables para el control de los menús SpeedDial flotantes
   public mostrarMenuCultura: boolean = false;
   public menuPrincipal: MenuItem[] = [];
   public menuCultura: MenuItem[] = [];
@@ -89,7 +88,6 @@ public menuPrincipalVisible: boolean = false;
     private frontUserService: FrontUserService
   ) {
 
-    // Configuración del Menú Principal
     this.menuPrincipal = [
       {
         icon: 'pi pi-star',
@@ -113,7 +111,6 @@ public menuPrincipalVisible: boolean = false;
       }
     ];
 
-    // Configuración del Menú Cultura (Secundario)
     this.menuCultura = [
       {
         icon: 'pi pi-arrow-left',
@@ -331,7 +328,6 @@ public menuPrincipalVisible: boolean = false;
         }
       });
     } else {
-      // --- MODO CREAR ---
       this.mapaService.guardarMarcador(body).subscribe({
         next: (res) => {
           this.places.push(res);
@@ -341,11 +337,11 @@ public menuPrincipalVisible: boolean = false;
     }
   }
   private finalizarAccion() {
-    this.renderMarkers(); // Dibuja todo de cero (limpiando capas si usas LayerGroup)
+    this.renderMarkers();
     this.cerrarFormulario();
     this.idMarcadorEditando = null;
     this.textoBotonForm = 'Gardar';
-    this.selectedPlace = null; // Cerramos la card de info por si el ID cambió
+    this.selectedPlace = null;
     this.cdr.detectChanges();
   }
 

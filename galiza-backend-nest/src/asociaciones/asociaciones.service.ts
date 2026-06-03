@@ -13,7 +13,7 @@ export class AsociacionesService {
   async create(dto: any) {
     const data = {
       ...dto,
-      nombre: dto.nome || dto.nombre, // Por si viene como 'nome' en el JSON
+      nombre: dto.nome || dto.nombre,
       lat: dto.coords?.lat,
       lng: dto.coords?.lng
     };

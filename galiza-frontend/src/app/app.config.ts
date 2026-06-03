@@ -11,7 +11,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient(withInterceptors([authInterceptor])), // Habilita el servicio HttpClient en toda la app
+    provideHttpClient(withInterceptors([authInterceptor])),
     importProvidersFrom(FormsModule),
     provideAnimations(),
     providePrimeNG({

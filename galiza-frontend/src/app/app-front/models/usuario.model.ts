@@ -4,10 +4,9 @@ export interface Usuario {
   id: number;
   nombre: string;
   rol: Rol;
-  marcadores?: any[]; // Puedes tipar Marcador luego si quieres
+  marcadores?: any[];
 }
 
-// Interfaz para que el componente AdminUsers sea reutilizable
 export interface UsuarioMapeado {
   id: number;
   titulo: string;

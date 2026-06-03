@@ -12,11 +12,10 @@ export interface DatosMapa {
   descripcion?: string;
 
 
-  bailes?: string[];   // El '?' significa que es opcional
+  bailes?: string[];
   cancions?: string[];
 }
 
-// Para el formulario de creación
 export interface CreateMarcadorForm {
   nome: string;
   descripcion?: string;

@@ -13,7 +13,6 @@ export class SolicitudesEventoService {
   async create(dto: any) {
     console.log('DTO recibido en backend:', dto);
 
-    // Mapeo manual: obligamos a TypeORM a entender que es una relación
     const nuevaSolicitud = this.repository.create({
       estado: dto.estado || 'PENDIENTE',
       evento: { id: dto.eventoId || (dto.evento && dto.evento.id) }
@@ -28,7 +27,7 @@ export class SolicitudesEventoService {
     });
   }
 
-  async findOne(id: number) { // MySQL usa IDs numéricos
+  async findOne(id: number) {
     console.log('DTO recibido en backend:', id);
 
     return await this.repository.findOneBy({ id });

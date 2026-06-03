@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { FrontUserService } from '../../service/front-user.service';
-import { ActionToastComponent } from "../../components/action-toast/action-toast";
 
 @Component({
   selector: 'app-registro-page',
@@ -20,7 +19,7 @@ export class RegistroPage {
 
   loading = false;
   errorMsg = '';
-  showPassword = false; // Para el ojito de la contraseña
+  showPassword = false;
 
   mostrarToast: boolean = false;
   mensajeToast: string = '';
@@ -32,7 +31,6 @@ export class RegistroPage {
   ) {}
 
  onRegistrar() {
-  // Validación inicial (Frontend)
   if (!this.usuario.nombre || !this.usuario.contrasena) {
     this.errorMsg = 'Debes encher todos os campos';
     return;
@@ -51,21 +49,14 @@ this.usuario.nombre = this.usuario.nombre.toLowerCase();
     error: (err) => {
       this.loading = false;
 
-      /**
-       * Captura de mensajes dinámicos:
-       * err.error.message es donde NestJS guarda el texto que pusimos
-       * en los "throw new ...Exception('Texto')" del Backend.
-       */
+
       if (err.error && err.error.message) {
-        // Si es un array (pasa cuando usas ValidationPipe con varias reglas)
         if (Array.isArray(err.error.message)) {
           this.errorMsg = err.error.message[0];
         } else {
-          // Si es un string único (nuestros ConflictException o BadRequestException)
           this.errorMsg = err.error.message;
         }
       } else {
-        // Fallback por si el servidor se cae o no responde el JSON esperado
         this.errorMsg = 'Non se puido conectar co servidor';
       }
 

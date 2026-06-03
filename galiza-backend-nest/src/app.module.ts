@@ -15,7 +15,6 @@ import { PuntosModule } from './puntos/puntos.module';
 import { RecomendacionesModule } from './recomendaciones/recomendaciones.module';
 import { movementosModule } from './movimientos/movementos.module';
 import { cancionsModule } from './canciones/cancions.module';
-// Importa aquí los módulos según los vayas actualizando
 
 @Module({
   imports: [

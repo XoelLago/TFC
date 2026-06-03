@@ -15,7 +15,7 @@ export class Baile {
   nome!: string; 
 
   @Column('text', { nullable: true })
-  descripcion?: string = 'Baile tradicional gallego'; // Opcional
+  descripcion?: string = 'Baile tradicional gallego';
 
   @Column({
     type: 'enum',
@@ -25,26 +25,22 @@ export class Baile {
   compas!: Compas;
 
   @Column({ nullable: true })
-  image?: string; // URL de imagen opcional
+  image?: string; 
 
   @Column({ nullable: true })
-  video?: string; // URL de video (YouTube/Vimeo) opcional
+  video?: string; 
 
-  // RELACIÓN OBLIGATORIA CON LUGAR
-  // Un lugar puede tener muchos bailes típicos, pero un baile se asocia a un lugar de origen
   @ManyToOne(() => Lugar, { nullable: false })
   lugar!: Lugar;
 
-  // RELACIÓN MUCHOS A MUCHOS CON INSTRUMENTOS
   @ManyToMany(() => Instrumento, (instrumento) => instrumento.bailes)
-  @JoinTable({ name: 'baile_instrumentos' }) // Tabla intermedia
+  @JoinTable({ name: 'baile_instrumentos' }) 
   instrumentos?: Instrumento[];
 
-  // Relación inversa con Asociaciones (ya la definimos en la otra entidad)
   @ManyToMany(() => Asociacion, (asociacion) => asociacion.bailes)
   asociaciones?: Asociacion[];
 
   @ManyToMany(() => Punto, (punto) => punto.bailes)
-  @JoinTable({ name: 'baile_puntos' }) // Tabla intermedia en la DB
+  @JoinTable({ name: 'baile_puntos' })
   puntos?: Punto[];
 }

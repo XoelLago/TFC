@@ -18,7 +18,6 @@ constructor(private router: Router) {
   ).subscribe((event: any) => {
     const url = event.urlAfterRedirects;
 
-    // El menú solo se muestra si NO es login Y NO es registro
     this.showMenu = !url.includes('/login') && !url.includes('/registro');
 
   });

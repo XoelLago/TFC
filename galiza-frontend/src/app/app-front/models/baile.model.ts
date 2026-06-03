@@ -1,8 +1,6 @@
-// src/app/models/baile.model.ts
 
 import { Instrumento } from "./instrumento.model";
 import { Lugar } from "./lugar.model";
-import { Provincia } from "./provincia.model";
 
 
 export interface Baile {

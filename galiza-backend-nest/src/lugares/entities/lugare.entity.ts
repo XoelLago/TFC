@@ -8,31 +8,29 @@ import { Punto } from '../../puntos/entities/punto.entity';
 export class Lugar {
 
   @PrimaryGeneratedColumn()
-  id!: number; // PK
+  id!: number;
 
   @Column({ nullable: false, unique: true  })
-  nome!: string; // Obligatorio
+  nome!: string;
 
-  // Coordenadas (Igual que en asociación, pero obligatorias según lo hablado)
   @Column('simple-json', { nullable: false })
   coords!: { lat: number; lng: number };
 
   @Column({ default: 'lugar' })
-  tipo: string = 'lugar'; // Siempre lugar
+  tipo: string = 'lugar';
 
   @Column({ default: 'castle' })
-  icono: string = 'castle'; // Siempre location_on
+  icono: string = 'castle';
 
   @Column('text', { nullable: true })
-  descripcion?: string = 'Lugar de interés cultural'; // Opcional
+  descripcion?: string = 'Lugar de interés cultural'; 
 
   @ManyToOne(() => Provincia, (provincia) => provincia.lugares, {
-    nullable: false, // Obligatorio que un lugar esté en una provincia
-    onDelete: 'RESTRICT' // No deja borrar la provincia si tiene lugares dentro
+    nullable: false,
+    onDelete: 'RESTRICT'
   })
   provincia!: Provincia;
 
-  // Listas opcionales (inicializadas vacías para evitar errores)
   @Column('simple-json', { nullable: true })
   bailes?: string[] = [];
 
@@ -42,7 +40,6 @@ export class Lugar {
   @Column('simple-json', { nullable: true })
   eventos?: string[] = [];
 
-  // RELACIÓN: Un lugar puede tener muchas asociaciones
   @OneToMany(() => Asociacion, (asociacion: Asociacion) => asociacion.lugar)
   asociaciones?: Asociacion[];
 

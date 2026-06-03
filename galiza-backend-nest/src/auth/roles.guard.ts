@@ -35,11 +35,9 @@ export class RolesGuard implements CanActivate {
     }
 
     // Si el usuario tiene el rol de SUPERUSER, tiene acceso total siempre.
-    // Esto evita tener que poner Rol.SUPERUSER en todos los controladores.
     if (user.rol === Rol.SUPERUSER) {
       return true;
     }
-    // --------------------------------
 
     //  Comprobamos si el rol del usuario está dentro de los permitidos
     const tienePermiso = requiredRoles.includes(user.rol);

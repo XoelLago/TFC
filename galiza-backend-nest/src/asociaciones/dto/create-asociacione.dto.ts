@@ -1,7 +1,7 @@
 import { IsString, IsNotEmpty, IsNumber, IsOptional, IsEmail, IsArray, IsObject, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
-// Sub-DTO para validar correctamente la estructura del objeto de coordenadas
+
 export class CoordsDto {
   @IsNumber()
   @IsNotEmpty()
@@ -37,18 +37,16 @@ export class CreateAsociacionDto {
 
   @IsNumber()
   @IsNotEmpty({ message: 'O lugar é obrigatorio' })
-  lugarId!: number; // Sede de la asociación
+  lugarId!: number; 
 
   @IsArray()
   @IsOptional()
-  bailesIds?: number[]; // IDs de los bailes que practican
+  bailesIds?: number[];
 
-  // 3. ARREGLADO: Mapeo de cancions adaptado al backend
   @IsArray()
   @IsOptional()
   cancionsIds?: number[];
 
-  // Por si acaso en el Front envías 'eventos' y los quieres capturar en el DTO:
   @IsArray()
   @IsOptional()
   eventosIds?: number[];

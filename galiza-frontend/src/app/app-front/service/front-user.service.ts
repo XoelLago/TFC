@@ -28,7 +28,6 @@ esAdmin(): boolean {
   if (!user?.rol) return false;
 
   const rol = user.rol.toLowerCase();
-  // Ahora "es admin" significa ser Admin O ser Superusuario
   return rol === 'admin' || rol === 'superuser';
 }
 
@@ -46,7 +45,7 @@ esSuperuser(): boolean {
       tap(res => {
         if (res.access_token && res.user) {
           localStorage.setItem('access_token', res.access_token);
-          localStorage.setItem('user', JSON.stringify(res.user)); // Guardamos el objeto entero
+          localStorage.setItem('user', JSON.stringify(res.user));
           const userData = {
             rol: res.user.rol,
             nombre: res.user.nombre,
@@ -110,12 +109,10 @@ eliminarUsuario(id: number): Observable<any> {
 }
 
 hasToken(): boolean {
-    // Devuelve true si existe el token y no es una cadena vacía
     return !!localStorage.getItem('token');
   }
 
 
-// Llama a esto cuando el login sea exitoso
 notificarLogin() {
   this.loginStatus.next(true);
 }

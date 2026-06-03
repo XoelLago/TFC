@@ -9,7 +9,6 @@ export class AuthGuard implements CanActivate {
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
-  // En auth.guard.ts
 canActivate(route: ActivatedRouteSnapshot): boolean | UrlTree {
   if (isPlatformBrowser(this.platformId)) {
     const token = localStorage.getItem('access_token');
@@ -22,11 +21,9 @@ try {
   const user = JSON.parse(userJson);
   const userRol = user.rol?.toLowerCase();
 
-  // Si la ruta pide un rol específico
   if (route.data['role']) {
     const roleRequerido = route.data['role'].toLowerCase();
 
-    // Pasa si tiene el rol exacto O si es superuser
     if (userRol !== roleRequerido && userRol !== 'superuser') {
       return this.router.parseUrl('/home');
     }

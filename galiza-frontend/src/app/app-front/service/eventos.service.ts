@@ -27,7 +27,6 @@ export class EventosService {
     return this.http.get(`${this.URL_EVENTOS}/${id}`);
   }
 
-  // Métodos para Solicitudes
   crearSolicitud(solicitud: any): Observable<any> {
     return this.http.post(this.URL_SOLICITUDES, solicitud);
   }

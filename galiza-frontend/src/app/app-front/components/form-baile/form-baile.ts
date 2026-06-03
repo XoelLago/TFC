@@ -2,15 +2,12 @@ import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef } fro
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-// Servicios
 import { BaileService } from '../../service/bailes.service';
 import { LugaresService } from '../../service/lugares.service';
 import { FrontUserService } from '../../service/front-user.service';
-// NOTA: Asegúrate de importar los servicios correspondientes de instrumentos y puntos
 import { InstrumentosService } from '../../service/instrumentos.service';
 import { PuntosService } from '../../service/puntos.service';
 
-// Modelos y Enums
 import { Lugar } from '../../models/lugar.model';
 import { Compas } from '../../models/enums';
 
@@ -27,29 +24,24 @@ export class FormBaile implements OnInit {
   @Output() guardado = new EventEmitter<any>();
 
   public errorMsg: string = '';
-  public listaCompas = Object.values(Compas); // Array para el <select> de opciones de compás
+  public listaCompas = Object.values(Compas);
 
-  // Listas maestras para autocompletados
   public listaLugares: Lugar[] = [];
   public listaInstrumentos: any[] = [];
   public listaPuntos: any[] = [];
 
-  // Listas filtradas para la interfaz de usuario
   public lugaresFiltrados: Lugar[] = [];
   public instrumentosFiltrados: any[] = [];
   public puntosFiltrados: any[] = [];
 
-  // Modelos de búsqueda para los inputs de texto
   public textoBusquedaLugar: string = '';
   public textoBusquedaInstrumento: string = '';
   public textoBusquedaPunto: string = '';
 
-  // Controladores visuales de dropdowns
   public mostrarLugares = false;
   public mostrarInstrumentos = false;
   public mostrarPuntos = false;
 
-  // Estructura interna del modelo de datos de baile
   public baile: any = {
     id: '',
     nome: '',
@@ -154,7 +146,6 @@ export class FormBaile implements OnInit {
       return;
     }
 
-    // PAYLOAD TOTALMENTE ACORDE AL DTO SOLICITADO POR EL ENDPOINT
     const payload: any = {
       nome: this.frontUserService.capitalizarNombre(this.baile.nome),
       descripcion: this.baile.descripcion || '',
@@ -201,7 +192,6 @@ export class FormBaile implements OnInit {
     });
   }
 
-  // Filtrados dinámicos de autocompletado
   filtrarLugares(event: any) {
     const valor = event.target.value.toLowerCase();
     this.lugaresFiltrados = this.listaLugares.filter(l => l.nome.toLowerCase().includes(valor));
@@ -220,7 +210,6 @@ export class FormBaile implements OnInit {
     this.cdr.detectChanges();
   }
 
-  // Selección de elementos
   seleccionarLugar(lugarSeleccionado: Lugar) {
     this.mostrarLugares = false;
     this.baile.lugar = lugarSeleccionado;
@@ -254,7 +243,6 @@ export class FormBaile implements OnInit {
     this.cdr.detectChanges();
   }
 
-  // Eliminación de elementos (Removers para UI Chips)
   removerLugar() {
     this.baile.lugar = null;
     this.textoBusquedaLugar = '';

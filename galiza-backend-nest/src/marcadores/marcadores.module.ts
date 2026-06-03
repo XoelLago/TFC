@@ -9,6 +9,6 @@ import { AuthModule } from '../auth/auth.module';
 AuthModule],
   controllers: [MarcadoresController],
   providers: [MarcadoresService],
-  exports: [MarcadoresService], // Por si lo necesitas en otros módulos
+  exports: [MarcadoresService],
 })
 export class MarcadoresModule {}

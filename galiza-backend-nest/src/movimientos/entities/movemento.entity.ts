@@ -7,10 +7,9 @@ export class movemento {
   id!: number;
 
   @Column({ nullable: false, unique: true  })
-  nombre!: string; // Obligatorio
+  nombre!: string;
 
-  // RELACIÓN: Un movemento tiene varios puntos
   @ManyToMany(() => Punto, (punto) => punto.movementos)
-  @JoinTable({ name: 'movemento_puntos' }) // Creamos la tabla intermedia
+  @JoinTable({ name: 'movemento_puntos' })
   puntos?: Punto[];
 }

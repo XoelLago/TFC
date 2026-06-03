@@ -7,7 +7,6 @@ id: number;
   tipo: TipoRecomendacion;
   enlaceExterno: string;
   resumo: string;
-  // Campos extra solo para la UI hardcodeada
   imagenUrl?: string;
   etiquetas?: string[];
 }

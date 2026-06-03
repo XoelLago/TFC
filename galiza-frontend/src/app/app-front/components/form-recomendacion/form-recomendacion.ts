@@ -20,7 +20,6 @@ export class FormRecomendacion implements OnInit {
   public errorMsg: string = '';
   public tipos: string[] = Object.values(TipoRecomendacion);
 
-  // Modelo limpio basado en tu entidad TypeORM
   public recomendacion: any = {
     id: undefined,
     titulo: '',
@@ -45,17 +44,14 @@ export class FormRecomendacion implements OnInit {
   }
 
   guardar() {
-    // Normalización de textos usando tu servicio común
     const tituloNormalizado = this.frontUserService.capitalizarNombre(this.recomendacion.titulo);
     const autorNormalizado = this.frontUserService.capitalizarNombre(this.recomendacion.autor);
 
-    // Validación estricta de campos obligatorios
     if (!tituloNormalizado || !autorNormalizado) {
       this.errorMsg = 'O título e o autor son obrigatorios.';
       return;
     }
 
-    // Control preventivo de duplicados (solo en altas nuevas)
     if (!this.datos) {
       this.recomendacionService.findAll().subscribe({
         next: (lista) => {
@@ -77,7 +73,6 @@ export class FormRecomendacion implements OnInit {
   }
 
   private ejecutarGuardado(titulo: string, autor: string) {
-    // Construcción limpia del Payload para TypeORM
     const payload: any = {
       titulo: titulo,
       autor: autor,

@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import * as L from 'leaflet';
 
-// Servicios
 import { LugaresService } from '../../service/lugares.service';
 import { EventosService } from '../../service/eventos.service';
 import { ProvinciaService } from '../../service/provincias.service';
@@ -31,7 +30,6 @@ export class FormLugar implements OnInit {
   public errorMsg: string = '';
   public mostrarAvanzado: boolean = false;
 
-  // Listas de datos
   public provincias: Provincia[] = [];
   public listaBailes: Baile[] = [];
   public listaCancions: Cancion[] = [];
@@ -45,11 +43,9 @@ public textoBusquedaCancion: string = '';
 public textoBusquedaEvento: string = '';
 
 public provinciaSeleccionadaId: string = '';
-  // Mapa
   private mapPick!: L.Map;
   private pickMarker: L.Marker | null = null;
 
-  // Modelo
   public lugar: Lugar = {
     id: '',
     tipo: 'lugar',
@@ -114,7 +110,6 @@ public provinciaSeleccionadaId: string = '';
       draggable: true
     }).addTo(this.mapPick);
 
-    // eventps de actualizacion (NgZone + Objeto nuevo para detección de cambios)
     this.pickMarker.on('drag', (e: any) => {
       this.zone.run(() => {
         const pos = e.target.getLatLng();
@@ -136,7 +131,6 @@ public provinciaSeleccionadaId: string = '';
 
   toggleAvanzado() {
     this.mostrarAvanzado = !this.mostrarAvanzado;
-    // Pequeño timeout para esperar que el DOM se renderice y bajar el scroll
     setTimeout(() => {
       if(this.mapPick) this.mapPick.invalidateSize();
       const body = document.querySelector('.form-body');
@@ -149,14 +143,12 @@ public provinciaSeleccionadaId: string = '';
 guardar() {
   const nombreNormalizado = this.frontUserService.capitalizarNombre(this.lugar.nome);
 
-  // Validación de campos obligatorios
   if (!nombreNormalizado || !this.provinciaSeleccionadaId) {
     this.errorMsg = 'O nome e a provincia son obrigatorios.';
     return;
   }
 
-  // Control de duplicados (solo si es un registro nuevo)
-  // Esto asume que tienes la lista de lugares cargada o el servicio tiene un buscador
+
   if (!this.datos) {
      this.lugaresService.findAll().subscribe(lugares => {
         const existe = lugares.find(l => this.frontUserService.capitalizarNombre(l.nome) === nombreNormalizado);
@@ -172,7 +164,6 @@ guardar() {
 }
 
 private ejecutarGuardado() {
-  // Buscamos el objeto provincia. Forzamos comparación de string/number
   const provEncontrada = this.provincias.find(p =>
     String(p.id) === String(this.provinciaSeleccionadaId) ||
     String(p.id) === String(this.provinciaSeleccionadaId)
@@ -183,22 +174,18 @@ private ejecutarGuardado() {
     return;
   }
 
-  // Construcción del Payload exacto para TypeORM
   const payload: any = {
     nome: this.frontUserService.capitalizarNombre(this.lugar.nome),
     coords: this.lugar.coords,
     tipo: 'lugar',
     icono: this.lugar.icono || 'castle',
     descripcion: this.lugar.descripcion || '',
-    // Enviamos el objeto completo para que TypeORM rellene 'provinciaId'
     provincia: provEncontrada,
-    // Aseguramos que los arrays de relaciones JSON no vayan como null
     bailes: this.lugar.bailes || [],
     cancions: this.lugar.cancions || [],
     eventos: this.lugar.eventos || []
   };
 
-  // Determinamos el ID para saber si es UPDATE o CREATE
   const idLugar = this.datos?.id || this.datos?._id || this.lugar.id;
 
   const obs = idLugar
@@ -212,7 +199,6 @@ private ejecutarGuardado() {
     },
     error: (err) => {
       console.error('Error en el servidor:', err);
-      // Capturamos el error de duplicado si viene del backend (Unique constraint)
       if (err.status === 409 || err.error?.message?.includes('duplicate')) {
         this.errorMsg = 'Este lugar xa está rexistrado.';
       } else {
@@ -241,7 +227,6 @@ filtrarEventos(event: any) {
     e.nome.toLowerCase().includes(valor)
   );
 }
-// Variables de control de visibilidad
 mostrarBailes = false;
 mostrarCancions = false;
 mostrarEventos = false;
@@ -251,15 +236,13 @@ seleccionarBaile(nome: string) {
   const baileCompleto = this.listaBailes.find(b => b.nome === nome);
 
   if (baileCompleto) {
-    if (!this.lugar.bailes) this.lugar.bailes = []; // Por si acaso es null
+    if (!this.lugar.bailes) this.lugar.bailes = [];
 
-    // Evitamos duplicados
     const existe = this.lugar.bailes.some(b => b._id === baileCompleto._id || b.nome === baileCompleto.nome);
     if (!existe) {
       this.lugar.bailes.push(baileCompleto);
     }
   }
-  // Vaciamos el input para que pueda buscar otro
   this.textoBusquedaBaile = '';
   this.bailesFiltrados = this.listaBailes;
 }
@@ -296,8 +279,6 @@ seleccionarEvento(nome: string) {
   this.eventosFiltrados = this.listaEventos;
 }
 
-// --- FUNCIONES PARA QUITAR CHIPS ---
-
 removerBaile(nome: string) {
   this.lugar.bailes = this.lugar.bailes?.filter(b => b.nome !== nome);
 }
@@ -309,12 +290,11 @@ removerCancion(nome: string) {
 removerEvento(nome: string) {
   this.lugar.eventos = this.lugar.eventos?.filter(e => e.nome !== nome);
 }
-// Función para cerrar la lista al pinchar fuera
 ocultarLista(tipo: string) {
   setTimeout(() => {
     if (tipo === 'bailes') this.mostrarBailes = false;
     if (tipo === 'cancions') this.mostrarCancions = false;
     if (tipo === 'eventos') this.mostrarEventos = false;
-  }, 150); // Un pequeño retraso para permitir que el click registre primero
+  }, 150);
 }
 }

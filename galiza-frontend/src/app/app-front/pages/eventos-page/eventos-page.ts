@@ -16,17 +16,15 @@ import { DetallesGeneral } from "../../components/detalles-general/detalles-gene
 export class EventosPage implements OnInit {
 
   public eventos: any[] = [];
-  public eventosFiltrados: any[] = []; // Eventos para pintar en el calendario
-  public eventosEnLista: any[] = [];   // Eventos que se muestran en la lista final
+  public eventosFiltrados: any[] = [];
+  public eventosEnLista: any[] = [];
 
-  // Variables de filtros
   public textoBusqueda: string = '';
   public filtroLugar: string = '';
   public filtroTipo: string = '';
 
   public mostrarFormulario: boolean = false;
 
-  // Lógica del calendario
   public mesActual: Date = new Date();
   public diasCalendario: any[] = [];
   public diasSemana = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
@@ -34,7 +32,6 @@ export class EventosPage implements OnInit {
 
   public mostrarDetalles: boolean = false;
   public eventoSeleccionado: any = null;
-  // Leyenda
   public leyenda = [
     { tipo: TipoEvento.ROMERIA, color: '#8B0000', label: 'Romería' },
     { tipo: TipoEvento.FESTIVAL, color: '#E65100', label: 'Festival' },
@@ -62,7 +59,6 @@ export class EventosPage implements OnInit {
     });
   }
 
-  // Aplica los filtros de búsqueda (Texto, Lugar, Tipo)
   filtrarEventos() {
     const busqueda = this.textoBusqueda.toLowerCase();
     const lugarStr = this.filtroLugar.toLowerCase();
@@ -80,13 +76,11 @@ export class EventosPage implements OnInit {
     this.cdr.detectChanges();
   }
 
-  // Se ejecuta al hacer clic en cualquier píldora de tipo
   seleccionarTipo(tipo: string) {
     this.filtroTipo = tipo;
     this.filtrarEventos();
   }
 
-  // Decide qué mostrar en la lista (Todos o solo los del día seleccionado)
   actualizarLista() {
     if (this.diaSeleccionado) {
       this.eventosEnLista = this.eventosFiltrados.filter(e => {
@@ -118,7 +112,6 @@ export class EventosPage implements OnInit {
     return this.diaSeleccionado.getTime() === dia.fecha.getTime();
   }
 
-  // --- LÓGICA DEL CALENDARIO ---
   generarCalendario() {
     const año = this.mesActual.getFullYear();
     const mes = this.mesActual.getMonth();

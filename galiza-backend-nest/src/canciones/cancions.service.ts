@@ -11,7 +11,6 @@ export class cancionsService {
   ) {}
 
   async create(dto: any) {
-  // Extraemos el lugarId y los arrays de IDs
   const { lugarId, instrumentosIds, asociacionesIds, ...datosCancion } = dto;
 
   const nueva = this.repository.create({
@@ -40,7 +39,6 @@ export class cancionsService {
   }
 
   async remove(id: number) {
-  // 1. Buscamos la canción con sus relaciones para ver si tiene datos
   const cancion = await this.repository.findOne({
     where: { id },
     relations: [ 'lugar.provincia','asociaciones', 'instrumentos']
@@ -48,14 +46,11 @@ export class cancionsService {
 
   if (!cancion) return;
 
-  // 2. Limpiamos las relaciones manualmente
-  // Al dejar los arrays vacíos y guardar, TypeORM borra las filas en las tablas intermedias
   cancion.asociaciones = [];
   cancion.instrumentos = [];
   
   await this.repository.save(cancion);
 
-  // 3. Ahora que ya no tiene relaciones, podemos borrar la canción sin error
   return await this.repository.delete(id);
 }
 }
